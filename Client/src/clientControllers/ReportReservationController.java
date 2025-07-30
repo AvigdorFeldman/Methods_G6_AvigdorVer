@@ -3,7 +3,6 @@ package clientControllers;
 import java.io.File;
 import java.time.Year;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;

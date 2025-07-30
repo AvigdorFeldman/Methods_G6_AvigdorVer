@@ -375,7 +375,7 @@ public class SendObjectHandler {
 				checkEmail = con.checkUserEmailDuplicates(user);
 				if (!checkEmail) {
 					Object codeAndTag[] = new Object[2];
-					codeAndTag[0] = (Integer) generateCode(con);
+					codeAndTag[0] = (Integer) generateCode(con, "Subscriber");
 					codeAndTag[1] = (String) generateTag(con);
 					user.setCode((Integer) codeAndTag[0]);
 					user.setTag((String) codeAndTag[1]);
@@ -409,9 +409,12 @@ public class SendObjectHandler {
 				if (spot != null) {
 					spot.setStatus(SpotStatus.RESERVED);
 					con.updateParkingSpotInDatabase(spot);
+					int reservationCode = generateCode(con,"Reservation");
 					Reservation reservationToBeSent = new Reservation(spot.getSpotId(), reservation.getSubscriberId(),
-							reservation.getDate(), reservation.getStartTime(), reservation.getEndTime());
-					int reservationCode = con.createReservationInDatabase(reservationToBeSent); 
+							reservation.getDate(), reservation.getStartTime(), reservation.getEndTime(),reservationCode);
+					int reservationId = con.createReservationInDatabase(reservationToBeSent);
+					reservationToBeSent.setCode(reservationId);
+					con.updateReservationInDatabase(reservationId, reservationToBeSent);
 					return new SendObject<T1>("Reservation",
 							(T1) (String) String.format("Created with code:%d", reservationCode));
 				} else {
@@ -452,13 +455,16 @@ public class SendObjectHandler {
      * @param con Database connector
      * @return A unique integer code
 	 */
-	private static Integer generateCode(DataBaseQuery con) {
+	private static Integer generateCode(DataBaseQuery con, String type) {
 		int code;
 		Random random = new Random(); // Generate code
 		boolean isDifferent = false;
 		do {
 			code = 100000 + random.nextInt(900000);
-			isDifferent = con.checkCodeDifferentFromAllSubscribers(code);
+			if(type.equals("Subscriber"))
+				isDifferent = con.checkCodeDifferentFromAllSubscribers(code);
+			else
+				isDifferent = con.checkCodeDifferentFromAllReservations(code);
 		} while (!isDifferent);
 		return code;
 	}

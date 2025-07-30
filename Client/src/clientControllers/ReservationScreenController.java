@@ -1,7 +1,6 @@
 package clientControllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 
 /**
@@ -42,19 +41,5 @@ public class ReservationScreenController extends ReservationController{
     @FXML
     private void submitCancellation() {
         onCancel();
-    }
-
-    /**
-     * Optionally override how confirmations or errors are shown.
-     * 
-     * This override allows customizing the alert behavior for this screen
-     * while still calling the superclass implementation.
-     *
-     * @param type The type of alert to show (e.g., INFORMATION, ERROR)
-     * @param text The message text to display
-     */
-    @Override
-    protected void showAlert(AlertType type, String text) {
-        super.showAlert(type, text);
     }
 }

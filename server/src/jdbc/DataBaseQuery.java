@@ -127,7 +127,8 @@ public class DataBaseQuery extends MySQLConnection {
                     	java.time.LocalDate date = rs.getDate("date").toLocalDate();
                         String startTime   = rs.getString("start_time");
                         String endTime     = rs.getString("end_time");
-                        Reservation r = new Reservation(spotId, subscriber_id ,date, startTime, endTime);
+                        int    code        = rs.getInt("reservation_code");
+                        Reservation r = new Reservation(subscriber_id, spotId ,date, startTime, endTime, code);
 
                         //Add it to our list.
                         reservationListOfSubscriber.add(r);
@@ -734,13 +735,15 @@ public class DataBaseQuery extends MySQLConnection {
                     LocalDate date      = rs.getDate("date").toLocalDate();
                     String startTime = rs.getString("start_time");
                     String endTime   = rs.getString("end_time");
+                    int       code   = rs.getInt("reservation_code");
 
                     reservation = new Reservation(
                     	spotId,
                         subId,
                         date,
                         startTime,
-                        endTime
+                        endTime,
+                        code
                     );
                 }
             }
@@ -973,6 +976,29 @@ public class DataBaseQuery extends MySQLConnection {
 
         return unique;
     }
+    
+    public boolean checkCodeDifferentFromAllReservations(int code) {
+    	boolean unique = true;
+        String sql =
+            "SELECT 1 " +
+            "FROM reservations " +
+            "WHERE code = ? " +
+            "LIMIT 1";
+
+        try (PreparedStatement ps = getCon().prepareStatement(sql)) {
+            ps.setInt(1, code);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    unique = false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return unique;
+	}
 
     /**
      * Retrieves a list of all reservations stored in the system.
@@ -988,13 +1014,15 @@ public class DataBaseQuery extends MySQLConnection {
         try (PreparedStatement ps = getCon().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                int        subscriberId = rs.getInt("subscriber_id");
+                int        reservationId = rs.getInt("reservation_id");
+            	int        subscriberId = rs.getInt("subscriber_id");
                 int        spotId       = rs.getInt("spot_id");
                 LocalDate  date         = rs.getDate("date").toLocalDate();
                 String  startTime    = rs.getString("start_time");
                 String  endTime      = rs.getString("end_time");
+                int        code      = rs.getInt("reservation_code");
 
-                list.add(new Reservation(subscriberId, spotId, date, startTime, endTime));
+                list.add(new Reservation(subscriberId, spotId, date, startTime, endTime, code));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1073,5 +1101,7 @@ public class DataBaseQuery extends MySQLConnection {
 
         return list;
     }
+
+	
 
 }

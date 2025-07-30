@@ -8,7 +8,6 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -49,8 +48,52 @@ public class ReservationController extends Controller{
         colDate .setCellValueFactory(new PropertyValueFactory<>("date"));
         colStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         colEnd  .setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        
+        // Add HH:MM formatting listeners
+        addTimeFieldFormatter(startTimeField);
+        addTimeFieldFormatter(endTimeField);
     }
 
+    /**
+     * Makes sure the input of HH:MM is kept
+     * 
+     * @param timeField
+     */
+    private void addTimeFieldFormatter(TextField timeField) {
+        timeField.textProperty().addListener((obs, oldText, newText) -> {
+            // Keep only digits
+            String digits = newText.replaceAll("[^\\d]", "");
+            if (digits.length() > 4) {
+                digits = digits.substring(0, 4);
+            }
+
+            // Format to HH:MM
+            StringBuilder formatted = new StringBuilder();
+            for (int i = 0; i < digits.length(); i++) {
+                if (i == 2) formatted.append(':');
+                formatted.append(digits.charAt(i));
+            }
+
+            // Avoid recursive loop
+            if (!formatted.toString().equals(timeField.getText())) {
+                timeField.setText(formatted.toString());
+                timeField.positionCaret(formatted.length());
+            }
+        });
+
+        // Optional: Validate format and value when field loses focus
+        timeField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (!isFocused) {
+                String value = timeField.getText();
+                if (!value.matches("([01]\\d|2[0-3]):[0-5]\\d")) {
+                    timeField.setStyle("-fx-border-color: red;");
+                } else {
+                    timeField.setStyle(null);
+                }
+            }
+        });
+    }
+    
     /**
      * Validates the reservation form input.
      * 
@@ -67,7 +110,7 @@ public class ReservationController extends Controller{
 
         // Basic non‐empty check
         if (date == null || start.isEmpty() || end.isEmpty()) {
-            showAlert(AlertType.ERROR, "Date, start time and end time are required.");
+        	ShowAlert.showAlert("Validation failed", "Date, start time and end time are required.", AlertType.ERROR);
             return false;
         }
 
@@ -76,13 +119,13 @@ public class ReservationController extends Controller{
             startT = LocalTime.parse(start);
             endT   = LocalTime.parse(end);
         } catch (DateTimeParseException ex) {
-            showAlert(AlertType.ERROR, "Time must be in HH:MM format.");
+        	ShowAlert.showAlert("Validation failed", "Time must be in HH:MM format. hours:0-23, minutes:0-59", AlertType.ERROR);
             return false;
         }
 
         // Ensure start < end
         if (!startT.isBefore(endT)) {
-            showAlert(AlertType.ERROR, "Start time must be before end time.");
+            ShowAlert.showAlert("Validation failed", "Start time must be before end time.", AlertType.ERROR);
             return false;
         }
 
@@ -92,13 +135,13 @@ public class ReservationController extends Controller{
 
         // Must be at least 24h in the future
         if (reservationStart.isBefore(now.plusHours(24))) {
-            showAlert(AlertType.ERROR, "Reservations must be placed at least 24 hours in advance.");
+        	ShowAlert.showAlert("Validation failed", "Reservations must be placed at least 24 hours in advance.", AlertType.ERROR);
             return false;
         }
 
         // Must be no more than 7 days ahead
         if (reservationStart.isAfter(now.plusDays(7))) {
-            showAlert(AlertType.ERROR, "Reservations cannot be made more than 7 days in advance.");
+        	ShowAlert.showAlert("Validation failed", "Reservations cannot be made more than 7 days in advance.", AlertType.ERROR);
             return false;
         }
 
@@ -121,22 +164,18 @@ public class ReservationController extends Controller{
         // Build a simple payload like "2025-06-10 09:00 11:00"
 
         Reservation reservation = new Reservation(0, sub.getId(), datePicker.getValue(),
-                startTimeField.getText().trim(), endTimeField.getText().trim());
+                startTimeField.getText().trim(), endTimeField.getText().trim(),0);
         String payload = String.format("Create Reservation: %s %s %s", datePicker.getValue(),
                 startTimeField.getText().trim(), endTimeField.getText().trim());
         if (!ShowAlert.showConfirmation("Confirm Reservation",
                 "Are you sure you want to " +payload+" ?")) {
-            clearForm();
             return; // user clicked Cancel
         }
         // Wrap <payload, subscriberId> in a SendObject<Integer>
         SendObject<Reservation> req = new SendObject<>(payload, reservation);
         client.sendToServerSafely(req);
 
-        showAlert(AlertType.INFORMATION,
-                "Reservation request sent for subscriber #" + sub.getId() + ":\n" + payload);
-
-        clearForm();
+        
         getFutureReservationsFor(); // Immediately refresh the table
     }
 
@@ -191,29 +230,22 @@ public class ReservationController extends Controller{
         } else if (message instanceof SendObject<?>) {
             SendObject<?> sendObject = (SendObject<?>)message;
             if(sendObject.getObj() instanceof String)
-                Platform.runLater(() -> showAlert(AlertType.INFORMATION, sendObject.getObjectMessage()+" "+sendObject.getObj()));
-            else if(sendObject.getObj() instanceof List<?>) {
+            	if(((String)sendObject.getObj()).contains("Not"))
+            		Platform.runLater(() -> ShowAlert.showAlert("Failed", sendObject.getObjectMessage()+" "+sendObject.getObj(), AlertType.ERROR));
+            	else {
+            		Platform.runLater(() -> ShowAlert.showSuccessAlert("Success", sendObject.getObjectMessage()+" "+sendObject.getObj()));
+            		clearForm();
+            	}
+            	else if(sendObject.getObj() instanceof List<?>) {
                 @SuppressWarnings("unchecked")
                 List<Reservation> list = (List<Reservation>) sendObject.getObj();
                 Platform.runLater(() -> futureReservationsTable.getItems().setAll(list));
             }
         } else {
-            Platform.runLater(() -> showAlert(AlertType.ERROR, message.toString()));
+            Platform.runLater(() -> ShowAlert.showAlert("Unknown Failure",message.toString(), AlertType.ERROR));
         }
     }
 
-    /**
-     * Displays an alert pop-up to the user.
-     *
-     * @param type The type of alert (e.g., INFORMATION, ERROR)
-     * @param text The message text to display
-     */
-    protected void showAlert(AlertType type, String text) {
-        Alert a = new Alert(type);
-        a.setHeaderText(null);
-        a.setContentText(text);
-        a.showAndWait();
-    }
 
     /**
      * Sets the client and subscriber objects for this controller.
