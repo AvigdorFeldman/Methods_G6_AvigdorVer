@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane fx:controller="clientControllers.RegistrationController"
+            prefHeight="1080" prefWidth="1920"
+            styleClass="main-pane"
+            stylesheets="@styles.css"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+
+    <children>
+        <GridPane alignment="CENTER" hgap="20" vgap="20"
+                  AnchorPane.topAnchor="30.0"
+                  AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" />
+                <ColumnConstraints halignment="CENTER" />
+            </columnConstraints>
+
+            <!-- Title -->
+            <Label text="Registration Screen" style="-fx-font-size: 50px;" styleClass="title-label"
+                   GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" GridPane.halignment="CENTER" />
+
+            <!-- title -->
+            <Label text="Please Enter The Following Details:" style="-fx-font-size: 30px;" styleClass="reg-label"
+                   GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.halignment="CENTER" />
+
+            <!-- ID -->
+            <Label text="ID:" style="-fx-font-size: 25px;" styleClass="reg-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField fx:id="idField" promptText="Enter ID:" style="-fx-font-size: 20px;" styleClass="text-field"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <!-- Name -->
+            <Label text="Name:" style="-fx-font-size: 25px;" styleClass="reg-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextField fx:id="nameField" promptText="Enter Name" style="-fx-font-size: 20px;" styleClass="text-field"
+                       GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+            <!-- Phone -->
+            <Label text="Phone:" style="-fx-font-size: 25px;" styleClass="reg-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <TextField fx:id="phoneField" promptText="Enter Phone" style="-fx-font-size: 20px;" styleClass="text-field"
+                       GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <!-- Email -->
+            <Label text="Email:" style="-fx-font-size: 25px;" styleClass="reg-label"
+                   GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <TextField fx:id="emailField" promptText="Enter Email" style="-fx-font-size: 20px;" styleClass="text-field"
+                       GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+            <!-- Submit Button -->
+            <Button text="Submit Registration" onAction="#registerNewSubscriber"
+                    style="-fx-font-size: 25px;" styleClass="menu-button"
+                    GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.halignment="CENTER" />
+
+        </GridPane>
+        
+        <!-- Back Button -->
+        <Button fx:id="backButton" text="⬅ Back" onAction="#handleBackButton"
+        		style="-fx-font-size: 20px;" styleClass="disconnect-button"
+        		AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+        
+    </children>
+</AnchorPane>

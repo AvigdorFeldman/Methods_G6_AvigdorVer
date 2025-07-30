@@ -1,0 +1,25 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.exit-button {
+    -fx-background-color: #FF4C4C;  /* Red background */
+    -fx-text-fill: white;           /* White text */
+    -fx-font-size: 16px;            /* Font size */
+    -fx-font-weight: bold;          /* Bold text */
+    -fx-padding: 10 20;             /* Padding */
+    -fx-border-radius: 5;          /* Rounded corners */
+    -fx-cursor: hand;              /* Pointer cursor on hover */
+    -fx-effect: innershadow(gaussian, #d13a3a, 10, 0.0, 1, 1); /* Red shadow for 3D effect */
+}
+
+/* Hover effect */
+.exit-button:hover {
+    -fx-background-color: #FF1F1F; /* Darker red when hovered */
+    -fx-scale-x: 1.1;               /* Slightly scale up when hovered */
+    -fx-scale-y: 1.1;
+}
+
+/* Active (clicked) effect */
+.exit-button:pressed {
+    -fx-background-color: #D13A3A; /* Even darker red when clicked */
+    -fx-scale-x: 0.95;              /* Shrink slightly to give a pressed effect */
+    -fx-scale-y: 0.95;
+}

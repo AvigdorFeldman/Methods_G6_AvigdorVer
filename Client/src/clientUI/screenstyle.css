@@ -1,0 +1,16 @@
+.button-back {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.2), 4, 0.0, 0, 2);
+}
+
+.button-back:hover {
+    -fx-background-color: #dc2626; /* גוון כהה יותר באדום */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.35), 6, 0.0, 0, 3);
+}

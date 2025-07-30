@@ -1,0 +1,7 @@
+/* Style for the IP address label */
+.label {
+    -fx-border-color: black;            /* Light gray border */
+    -fx-border-width: 1;                  /* Thin border */
+
+}
+

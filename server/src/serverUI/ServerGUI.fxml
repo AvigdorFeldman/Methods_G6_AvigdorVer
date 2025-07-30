@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="207.0" prefWidth="246.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverControllers.ServerController">
+	<VBox prefHeight="462.0" prefWidth="473.0">
+		<children>
+
+			<TableView fx:id="clientTable" layoutX="14.0" layoutY="109.0" prefHeight="400.0" prefWidth="500.0">
+				<columns>
+					<TableColumn fx:id="clientIpColumn" prefWidth="150" style="-fx-alignment: center;" text="IP" />
+					<TableColumn fx:id="clientHostNameColumn" prefWidth="200" style="-fx-alignment: center;" text="HostName" />
+					<TableColumn fx:id="clientStatusColumn" prefWidth="122.0" style="-fx-alignment: center;" text="Status" />
+				</columns>
+			</TableView>
+
+			<Button fx:id="exitButton" layoutX="160.0" layoutY="164.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#getExitButton" prefHeight="33.0" prefWidth="248.0" styleClass="exit-button" stylesheets="@ExitButton.css" text="Exit" />
+			<Label fx:id="ipLabel" alignment="CENTER" prefHeight="32.0" prefWidth="550.0" styleClass="ip-label" stylesheets="@IPLabel.css">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Label>
+		</children>
+	</VBox>
+</AnchorPane>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+	xmlns:fx="http://javafx.com/fxml"
+	fx:controller="clientControllers.ViewSubscriberController"
+	stylesheets="@ReportScreen.css" styleClass="main-pane">
+
+	<VBox spacing="20.0" alignment="CENTER"
+		AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0"
+		AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
+		style="-fx-padding: 20;" styleClass="menu-container">
+
+		<!-- TOP SECTION: Subscriber Table -->
+		<TableView fx:id="subscriberTable" prefHeight="300.0"
+			styleClass="main-table">
+			<columns>
+				<TableColumn fx:id="colSubscriberId"
+					text="Subscriber ID" prefWidth="120.0" />
+				<TableColumn fx:id="colName" text="Name"
+					prefWidth="120.0" />
+				<TableColumn fx:id="colEmail" text="Email"
+					prefWidth="180.0" />
+				<TableColumn fx:id="colPhone" text="Phone"
+					prefWidth="140.0" />
+				<TableColumn fx:id="colTag" text="Tag" prefWidth="140.0" />
+				<TableColumn fx:id="colRole" text="Role"
+					prefWidth="100.0" />
+			</columns>
+		</TableView>
+
+		<HBox spacing="15.0" alignment="CENTER">
+			<Label text="Role:" />
+			<ComboBox fx:id="roleComboBox" prefWidth="140.0" />
+			<Button fx:id="sortBySubscriberIdButton"
+				text="Sort by Subscriber ID" styleClass="button-blue" />
+			<Button fx:id="backButton" text="Back"
+				styleClass="button-blue" onAction="#handleBackButton" />
+		</HBox>
+
+		<!-- BOTTOM SECTION: History View -->
+		<!-- History Table -->
+		<VBox spacing="10.0" alignment="TOP_LEFT"
+			style="-fx-padding: 10;">
+			<HBox spacing="10.0">
+				<TextField fx:id="subscriberIdField"
+					promptText="Subscriber ID" prefWidth="150.0" />
+				<Button fx:id="viewHistoryButton"
+					text="View Subscriber History" styleClass="button-blue" />
+			</HBox>
+
+			<TableView fx:id="historyTable" prefHeight="250.0">
+				<columns>
+					<TableColumn fx:id="colSessionId" text="Session ID"
+						prefWidth="80.0" />
+					<TableColumn fx:id="colSpotId" text="Spot ID"
+						prefWidth="80.0" />
+					<TableColumn fx:id="colInTime" text="In Time"
+						prefWidth="160.0" />
+					<TableColumn fx:id="colOutTime" text="Out Time"
+						prefWidth="160.0" />
+					<TableColumn fx:id="colLate" text="Late?"
+						prefWidth="60.0" />
+				</columns>
+			</TableView>
+		</VBox>
+
+
+	</VBox>
+</AnchorPane>

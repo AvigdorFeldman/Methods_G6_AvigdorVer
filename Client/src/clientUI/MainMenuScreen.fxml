@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="mainPane"
+            styleClass="main-pane"
+            stylesheets="@styles.css"
+            maxWidth="Infinity" maxHeight="Infinity"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="clientControllers.MainMenuController">
+
+    <VBox fx:id="mainVBox"
+          alignment="CENTER"
+          spacing="30.0"
+          AnchorPane.topAnchor="60.0"
+          AnchorPane.leftAnchor="200.0"
+          AnchorPane.rightAnchor="200.0"
+          AnchorPane.bottomAnchor="100.0"
+          maxWidth="Infinity" maxHeight="Infinity">
+
+        <Label styleClass="title-label" text="🚘 Parking System" />
+
+        <Button onAction="#parkingRequest"
+        		fx:id="dropoff"
+                styleClass="menu-button"
+                text="🚗 Drop off"/>
+
+        <Button onAction="#retrieveRequest"
+        		fx:id="Pickup"
+                styleClass="menu-button"
+                text="🎁 Pickup"/>
+
+        <Button onAction="#reservationRequest"
+        		fx:id="Reservation"
+                styleClass="menu-button"
+                text="📅 Reservation Request"/>
+
+        <Button onAction="#historyRequest"
+                fx:id="historybutton"
+                styleClass="menu-button"
+                text="📖 History Request"/>
+
+
+		<Button onAction="#openTimeExtensionScreen"
+				fx:id="Extension"
+                styleClass="menu-button"
+                text="⏰ Time Extension Request"/>
+                
+        <Button onAction="#openUpdateUserDetails"
+       			fx:id="Update"
+                styleClass="menu-button"
+                text="📝 Update User Details"/>
+    </VBox>
+
+    <Button fx:id="disconnectButton"
+            text="Disconnect"
+            onAction="#handleBackButton"
+            styleClass="disconnect-button"
+            AnchorPane.bottomAnchor="40.0"
+            AnchorPane.rightAnchor="60.0"
+            maxWidth="Infinity" maxHeight="Infinity"
+            prefWidth="200.0" prefHeight="50.0"/>
+</AnchorPane>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+	xmlns:fx="http://javafx.com/fxml" styleClass="main-pane"
+	stylesheets="@ReportScreen.css"
+	fx:controller="clientControllers.ReportActiveSessionsController">
+
+	<VBox spacing="20.0" alignment="CENTER"
+		AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0"
+		AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
+		styleClass="menu-container" style="-fx-padding: 20;">
+
+		<TableView fx:id="sessionTable" prefHeight="400.0"
+			prefWidth="1050.0" styleClass="main-table">
+			<columns>
+				<TableColumn fx:id="colSessionId" text="Session ID"
+					prefWidth="100.0" minWidth="80.0" />
+				<TableColumn fx:id="colSubscriberId"
+					text="Subscriber ID" prefWidth="120.0" minWidth="100.0" />
+				<TableColumn fx:id="colSpotId" text="Spot ID"
+					prefWidth="100.0" minWidth="80.0" />
+				<TableColumn fx:id="colParkingCode" text="Parking Code"
+					prefWidth="120.0" minWidth="100.0" />
+				<TableColumn fx:id="colInTime" text="In Time"
+					prefWidth="180.0" minWidth="150.0" />
+				<TableColumn fx:id="colOutTime" text="Out Time"
+					prefWidth="180.0" minWidth="150.0" />
+				<TableColumn fx:id="colExtended" text="Extended"
+					prefWidth="90.0" minWidth="70.0" />
+				<TableColumn fx:id="colLate" text="Late"
+					prefWidth="80.0" minWidth="70.0" />
+				<TableColumn fx:id="colActive" text="Active"
+					prefWidth="80.0" minWidth="70.0" />
+			</columns>
+		</TableView>
+
+		<!-- Line Chart -->
+		<LineChart fx:id="activeSessionLineChart"
+			title="Active Sessions per Hour" prefHeight="300.0"
+			prefWidth="1050.0">
+			<xAxis>
+				<NumberAxis fx:id="xAxis" label="Hour of Day"
+					tickUnit="1" lowerBound="0" upperBound="23" />
+			</xAxis>
+			<yAxis>
+				<NumberAxis fx:id="yAxis" label="Session Count" />
+			</yAxis>
+		</LineChart>
+
+		<!-- CSV Export -->
+		<HBox spacing="15.0" alignment="CENTER">
+			<Button fx:id="exportCsvButton" text="Export as CSV"
+				styleClass="button-blue" />
+		</HBox>
+		<HBox spacing="15.0" alignment="CENTER">
+		<Button text="Refresh" styleClass="button-blue" />
+		<!-- Back Button -->
+		<Button fx:id="backButton" text="Back" styleClass="button-blue"
+			onAction="#handleBackButton" />
+		</HBox>
+	</VBox>
+</AnchorPane>

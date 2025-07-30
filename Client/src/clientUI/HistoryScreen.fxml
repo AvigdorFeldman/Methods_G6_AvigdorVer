@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="clientControllers.HistoryScreenController"
+            stylesheets="@historystyle.css"
+            style="-fx-background-color: linear-gradient(to bottom right, #dbeafe, #93c5fd);">
+
+    <VBox alignment="CENTER"
+          spacing="20.0"
+          AnchorPane.topAnchor="5.0"
+          AnchorPane.bottomAnchor="5.0"
+          AnchorPane.leftAnchor="5.0"
+          AnchorPane.rightAnchor="5.0"
+          styleClass="main-pane">
+
+        <!-- כותרת -->
+        <Label text="📖 History" styleClass="title-label"/>
+
+        <!-- רשימת היסטוריה -->
+        <TableView fx:id="parkingTable"
+           VBox.vgrow="ALWAYS"
+           maxWidth="Infinity"
+           maxHeight="Infinity">
+
+    <columns>
+        <TableColumn fx:id="colSessionId" text="Session ID" prefWidth="100" minWidth="80"/>
+        <TableColumn fx:id="colSpotId" text="Spot ID" prefWidth="100" minWidth="80"/>
+        <TableColumn fx:id="colInTime" text="In Time" prefWidth="180" minWidth="150"/>
+        <TableColumn fx:id="colOutTime" text="Out Time" prefWidth="180" minWidth="150"/>
+        <TableColumn fx:id="colLate" text="Late?" prefWidth="80" minWidth="60"/>
+    </columns>
+
+</TableView>
+
+
+        <!-- כפתורים -->
+        <HBox alignment="CENTER"
+              spacing="20.0"
+              maxWidth="Infinity"
+              styleClass="button-box">
+            <Button text="🔄 Refresh"
+                    onAction="#displayHistory"
+                    styleClass="button-blue"
+                    maxWidth="Infinity"
+                    maxHeight="Infinity"/>
+            <Button text="⬅ Back"
+                    onAction="#handleBackButton"
+                    styleClass="button-red"
+                    maxWidth="Infinity"
+                    maxHeight="Infinity"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>

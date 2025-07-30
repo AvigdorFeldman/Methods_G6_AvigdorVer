@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="clientControllers.LoginController"
+            prefWidth="400.0" prefHeight="580.0">
+
+    <VBox alignment="CENTER" spacing="12.0"
+          AnchorPane.topAnchor="10.0"
+          AnchorPane.leftAnchor="20.0"
+          AnchorPane.rightAnchor="20.0"
+          AnchorPane.bottomAnchor="10.0">
+
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+
+        <Label text="🔐 Login" />
+
+        <TextField fx:id="ipField" promptText="Server IP Address" />
+
+        <!-- ComboBox + Connect -->
+        <HBox alignment="CENTER" spacing="10">
+            <ComboBox fx:id="loginMethodComboBox" promptText="Select login method" HBox.hgrow="ALWAYS" />
+            <CheckBox fx:id="consoleCheckBox" text="Terminal" />
+        </HBox>
+
+        <!-- Subscriber fields -->
+        <TextField fx:id="nameField" promptText="Enter name" />
+        <TextField fx:id="subscriberIdField" promptText="Enter subscriber Code" />
+        <TextField fx:id="tagField" promptText="Enter tag" visible="false" managed="false" />
+
+        <!-- Admin/Attendant fields -->
+        <TextField fx:id="usernameField" promptText="Enter username" visible="false" managed="false" />
+        <PasswordField fx:id="passwordField" promptText="Enter password" visible="false" managed="false" />
+
+        <!-- Terminal checkbox -->
+        
+		<Button fx:id="connectButton" text="Connect" onAction="#handleLogin"/>
+        <Button text="Guest Access" onAction="#openGuestScreen"/>
+        <Button fx:id="exitButton" text="Exit" onAction="#handleExit" />
+    </VBox>
+</AnchorPane>

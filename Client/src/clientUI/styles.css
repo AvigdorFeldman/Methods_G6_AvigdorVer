@@ -1,0 +1,165 @@
+
+.main-pane {
+    -fx-background-color: linear-gradient(to bottom right, #dbeafe, #90caf9);
+}
+
+.title-label {
+    -fx-font-size: 72px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+    -fx-padding: 0 0 20 0;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 3);
+}
+
+.reg-label {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+    -fx-padding: 10 0 20 0;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 3);
+}
+
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #dbeafe, #93c5fd);
+}
+
+
+
+.menu-button {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 480px;
+    -fx-pref-height: 70px;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to right, #2196f3, #1e88e5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.3, 0, 5);
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-width: 1px;
+}
+.form-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1; /* Deep blue for consistency */
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.15), 4, 0, 0, 2);
+}
+.date-picker {
+    -fx-font-size: 20px;
+    -fx-pref-height: 50px;
+}
+
+
+/* Matching TextField Style */
+.text-field {
+    -fx-font-size: 36px; /* Slightly smaller font for the TextField */
+    -fx-font-weight: bold;
+    -fx-pref-width: 480px;
+    -fx-pref-height: 50px; /* Slightly shorter than the button */
+    -fx-text-fill: black;
+    -fx-alignment: center;
+    -fx-background-radius: 20; /* Rounded corners to match the buttons */
+   	-fx-padding: 10 15 10 15;
+    
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 5); /* Subtle shadow */
+    -fx-border-width: 0px; /* No border */
+    -fx-cursor: text; /* Show text cursor when focused */
+    -fx-margin: 0 0 20 0; /* Bottom margin for spacing between button */
+}
+
+/* Remove focus border */
+.text-field:focused {
+    -fx-border-color: transparent; /* Removes the default focus border */
+  
+}
+.menu-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e88e5, #1565c0);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
+}
+
+.menu-button:pressed {
+    -fx-translate-y: 2px;
+    -fx-background-color: #0d47a1;
+}
+.disconnect-button {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 240px;
+    -fx-pref-height: 55px;
+    -fx-text-fill: white;
+    -fx-background-radius: 30;
+    -fx-background-color: linear-gradient(to right, #e53935, #d32f2f);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 6, 0.3, 0, 3);
+    -fx-cursor: hand;
+}
+
+.disconnect-button:hover {
+    -fx-background-color: linear-gradient(to right, #d32f2f, #b71c1c);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.disconnect-button:pressed {
+    -fx-background-color: #b71c1c;
+    -fx-translate-y: 1;
+}
+
+.small-menu-button {
+    -fx-font-size: 16px; /* Smaller font size */
+    -fx-font-weight: bold;
+    -fx-pref-width: 120px; /* Adjust width */
+    -fx-pref-height: 40px; /* Adjust height */
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to right, #2196f3, #1e88e5);
+    -fx-background-radius: 25px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.3, 0, 5);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.small-menu-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e88e5, #1565c0);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.small-menu-button:pressed {
+    -fx-background-color: #0d47a1;
+    -fx-translate-y: 2px;
+}
+
+.button-red {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.button-red:hover {
+    -fx-background-color: linear-gradient(to right, #d32f2f, #b71c1c);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.list-view {
+    -fx-font-size: 16px;
+}
+.button-blue {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.button-blue:hover {
+    -fx-background-color: linear-gradient(to right, #1e88e5, #1565c0);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
+}

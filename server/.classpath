@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="client/|main/resources/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry exported="true" kind="lib" path="mysql-connector-java-8.0.13.jar"/>
+	<classpathentry kind="lib" path="jakarta.activation-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jakarta.mail-2.0.1.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/bpark"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFx"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainPane" prefHeight="1080" prefWidth="1920" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.PickUpScreenController">
+    <children>
+        <!-- Main GridPane layout with adjusted spacing -->
+        <GridPane alignment="CENTER" hgap="20" vgap="40" AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" />
+                <ColumnConstraints halignment="CENTER" />
+            </columnConstraints>
+
+            <children>
+                <!-- Title Row with more space below it -->
+                <Label styleClass="title-label" text="PickUp Screen" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" GridPane.halignment="CENTER" />
+				
+				<Region GridPane.rowIndex="1" />
+                <!-- Label and TextArea Row -->
+                <Label styleClass="reg-label" text="Enter Parking Code:" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="CENTER" />
+                <TextField fx:id="parkingCode" styleClass="text-field" promptText="Enter code numbers only" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.fillWidth="true" />
+
+                <!-- Buttons Row with more space above it -->
+                <Button onAction="#submitParkingCode" styleClass="menu-button" text="Submit" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.halignment="CENTER" />
+                <Button onAction="#handleLostCodeRequest" styleClass="menu-button" text="Forgot Code" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.halignment="CENTER" />
+            </children>
+        </GridPane>
+
+        <!-- Back Button -->
+        <Button onAction="#handleBackButton" styleClass="disconnect-button" text="⬅ Back" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+    </children>
+</AnchorPane>

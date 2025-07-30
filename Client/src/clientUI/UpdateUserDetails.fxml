@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="clientControllers.UpdateUserDetailsController"
+            styleClass="main-pane"
+            stylesheets="@styles.css">
+
+    <VBox alignment="CENTER" spacing="20.0"
+          AnchorPane.topAnchor="50.0"
+          AnchorPane.leftAnchor="200.0"
+          AnchorPane.rightAnchor="200.0"
+          AnchorPane.bottomAnchor="50.0">
+
+        <Label text="Update Subscriber Details" styleClass="title-label"/>
+
+        <TextField fx:id="nameField" styleClass="text-field"/>
+        <TextField fx:id="phoneField"  styleClass="text-field"/>
+        <TextField fx:id="emailField" styleClass="text-field"/>
+
+        <Button text="Update Subscriber Details" onAction="#handleUpdate" styleClass="menu-button"/>
+    </VBox>
+    <Button fx:id="back"
+            text="back"
+            onAction="#handleBackButton"
+            styleClass="disconnect-button"
+            AnchorPane.bottomAnchor="40.0"
+            AnchorPane.rightAnchor="60.0"
+            maxWidth="Infinity" maxHeight="Infinity"
+            prefWidth="200.0" prefHeight="50.0"/>
+</AnchorPane>
