@@ -413,7 +413,7 @@ public class SendObjectHandler {
 					Reservation reservationToBeSent = new Reservation(spot.getSpotId(), reservation.getSubscriberId(),
 							reservation.getDate(), reservation.getStartTime(), reservation.getEndTime(),reservationCode);
 					int reservationId = con.createReservationInDatabase(reservationToBeSent);
-					reservationToBeSent.setCode(reservationId);
+					reservationToBeSent.setId(reservationId);
 					con.updateReservationInDatabase(reservationId, reservationToBeSent);
 					return new SendObject<T1>("Reservation",
 							(T1) (String) String.format("Created with code:%d", reservationCode));

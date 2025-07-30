@@ -130,7 +130,6 @@ public class DataBaseQuery extends MySQLConnection {
                         String endTime     = rs.getString("end_time");
                         Reservation r = new Reservation(subscriber_id, spotId ,date, startTime, endTime, 0);
                         r.setId(id);
-
                         //Add it to our list.
                         reservationListOfSubscriber.add(r);
                     }
@@ -684,8 +683,8 @@ public class DataBaseQuery extends MySQLConnection {
     public int createReservationInDatabase(Reservation reservation) {
         String sql =
             "INSERT INTO reservations " +
-            "  (subscriber_id, spot_id, date, start_time, end_time) " +
-            "VALUES (?, ?, ?, ?, ?)";
+            "  (subscriber_id, spot_id, date, start_time, end_time, reservation_code) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
 
         int generatedId = -1;
 
@@ -695,14 +694,13 @@ public class DataBaseQuery extends MySQLConnection {
             ps.setDate(3, java.sql.Date.valueOf(reservation.getDate()));
             ps.setTime(4, java.sql.Time.valueOf(reservation.getStartTime() + ":00"));
             ps.setTime(5, java.sql.Time.valueOf(reservation.getEndTime() + ":00"));
-
+            ps.setInt(6, reservation.getCode());
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 try (ResultSet keys = ps.getGeneratedKeys()) {
                     if (keys.next()) {
                         generatedId = keys.getInt(1);
-                        // if your Reservation class has a setter:
-                        // reservation.setReservationId(generatedId);
+                        reservation.setId(generatedId);
                     }
                 }
             }
@@ -983,7 +981,7 @@ public class DataBaseQuery extends MySQLConnection {
         String sql =
             "SELECT 1 " +
             "FROM reservations " +
-            "WHERE code = ? " +
+            "WHERE reservation_code = ? " +
             "LIMIT 1";
 
         try (PreparedStatement ps = getCon().prepareStatement(sql)) {
@@ -1022,8 +1020,9 @@ public class DataBaseQuery extends MySQLConnection {
                 String  startTime    = rs.getString("start_time");
                 String  endTime      = rs.getString("end_time");
                 int        code      = rs.getInt("reservation_code");
-
-                list.add(new Reservation(subscriberId, spotId, date, startTime, endTime, code));
+                Reservation r = new Reservation(subscriberId, spotId, date, startTime, endTime, code);
+                r.setId(reservationId);
+                list.add(r);
             }
         } catch (SQLException e) {
             e.printStackTrace();

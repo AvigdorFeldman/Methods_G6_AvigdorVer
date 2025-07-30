@@ -27,6 +27,7 @@
         <TableView fx:id="reservationTable" prefHeight="400.0" prefWidth="960.0"
                    styleClass="main-table">
             <columns>
+            	<TableColumn fx:id="colId" text="Id" prefWidth="120.0"/>
                 <TableColumn fx:id="colSubscriberId" text="Subscriber ID" prefWidth="200.0"/>
                 <TableColumn fx:id="colSpotId" text="Spot" prefWidth="120.0"/>
                 <TableColumn fx:id="colDate" text="Reservation Date" prefWidth="150.0"/>

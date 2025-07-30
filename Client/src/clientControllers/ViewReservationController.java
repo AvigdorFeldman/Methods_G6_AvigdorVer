@@ -46,6 +46,9 @@ public class ViewReservationController extends Controller {
 
 	@FXML
 	protected TableColumn<Reservation, String> colEndTime;
+	
+	@FXML
+	protected TableColumn<Reservation, Integer> colId;
 
 	@FXML
 	protected Button sortByDateButton;
@@ -76,6 +79,8 @@ public class ViewReservationController extends Controller {
 		years.add(0, 0); // Add "All" as first year
 
 		// Setup table columns
+		colId.setCellValueFactory(
+				cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
 		colSubscriberId.setCellValueFactory(
 				cellData -> new SimpleIntegerProperty(cellData.getValue().getSubscriberId()).asObject());
 		colSpotId.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getSpot()).asObject());
