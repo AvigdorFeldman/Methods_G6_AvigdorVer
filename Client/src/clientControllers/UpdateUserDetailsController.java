@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import logic.*;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import ocsf.client.*;
 
@@ -21,7 +22,106 @@ public class UpdateUserDetailsController extends Controller {
 	private TextField phoneField;
 	@FXML
 	private TextField emailField;
+	@FXML 
+	private Label nameWarningLabel;
+	@FXML 
+	private Label phoneWarningLabel;
+	@FXML 
+	private Label emailWarningLabel;
+	
+	@FXML
+	private void initialize(){
+		// Name validation
+        nameField.textProperty().addListener((obs, oldText, newText) -> {
+            if (!newText.matches("[a-zA-Z\\s]*")) {
+            	nameField.setText(oldText);
+                nameField.setStyle("-fx-border-color: red;");
+                nameWarningLabel.setText("Name must contain only letters and spaces");
+                nameWarningLabel.setVisible(true);
+            } else {
+                nameField.setStyle(null);
+                nameWarningLabel.setVisible(false);
+            }
+        });
+        
+        nameField.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) {
+                String text = nameField.getText();
+                if (text.matches("[a-zA-Z\\s]+")) {
+                    nameWarningLabel.setVisible(false);
+                }
+            }
+        });
+        
+        
 
+        phoneField.textProperty().addListener((obs, oldText, newText) -> {
+            // Remove everything except digits
+            String digits = newText.replaceAll("[^\\d]", "");
+
+            // Limit to 10 digits
+            if (digits.length() > 10) {
+                digits = digits.substring(0, 10);
+            }
+
+            // Build formatted string
+            StringBuilder formatted = new StringBuilder();
+            for (int i = 0; i < digits.length(); i++) {
+                if (i == 3 || i == 6) {
+                    formatted.append('-');
+                }
+                formatted.append(digits.charAt(i));
+            }
+
+            // Avoid unnecessary setText calls
+            if (!phoneField.getText().equals(formatted.toString())) {
+                phoneField.setText(formatted.toString());
+                phoneField.positionCaret(formatted.length()); // Keep caret at end
+            }
+
+            // Show warning if input is not complete
+            if (digits.length() < 10) {
+                phoneField.setStyle("-fx-border-color: red;");
+                phoneWarningLabel.setText("Phone must be 10 digits: XXX-XXX-XXXX");
+                phoneWarningLabel.setVisible(true);
+            } else {
+                phoneField.setStyle(null);
+                phoneWarningLabel.setVisible(false);
+            }
+        });
+
+        phoneField.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) {
+                String digits = phoneField.getText().replaceAll("[^\\d]", "");
+                if (digits.length() == 10) {
+                    phoneWarningLabel.setVisible(false);
+                }
+            }
+        });
+        
+        // Email validation
+        emailField.textProperty().addListener((obs, oldText, newText) -> {
+            if (!newText.matches("^[\\w.-]*@?[\\w.-]*\\.?[a-zA-Z]{0,}$")) {
+            	emailField.setText(oldText);
+                emailField.setStyle("-fx-border-color: red;");
+                emailWarningLabel.setText("Invalid email format (e.g. user@example.com)");
+                emailWarningLabel.setVisible(true);
+            } else {
+                emailField.setStyle(null);
+                emailWarningLabel.setVisible(false);
+            }
+        });
+        
+        emailField.focusedProperty().addListener((obs, oldFocus, newFocus) -> {
+            if (!newFocus) {
+                String text = emailField.getText();
+                if (text.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                    emailWarningLabel.setVisible(false);
+                }
+            }
+        });
+	}
+	
 	/**
      * Handles the update action triggered from the UI.
      * Validates name, phone, and email fields.
@@ -34,7 +134,7 @@ public class UpdateUserDetailsController extends Controller {
 		String phone = phoneField.getText();
 		String email = emailField.getText();
 		if (name.isEmpty() || phone.isEmpty() || email.isEmpty()) {
-			showAlert(AlertType.ERROR, "ERROR", "please fill every field");
+			ShowAlert.showAlert("ERROR", "please fill every field",AlertType.ERROR);
 		} else {
 			if (!name.matches("[a-zA-Z\\s]+")) {
 	            ShowAlert.showAlert("Error", "Name must contain only letters and spaces.", AlertType.ERROR);
@@ -75,22 +175,6 @@ public class UpdateUserDetailsController extends Controller {
 		emailField.setText(sub.getEmail());
 	}
 
-	
-	/**
-     * Displays an alert dialog with the specified type, title, and message.
-     *
-     * @param type    the {@code AlertType} to display (e.g., ERROR, INFORMATION)
-     * @param title   the title of the alert dialog
-     * @param message the message content of the alert dialog
-     */
-	private void showAlert(AlertType type, String title, String message) {
-		Alert alert = new Alert(type);
-		alert.setTitle(title);
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-		alert.showAndWait();
-	}
-
 	/**
      * Sets the client and subscriber instance, and populates the fields with subscriber data.
      *
@@ -116,7 +200,7 @@ public class UpdateUserDetailsController extends Controller {
 			SendObject<?> response = (SendObject<?>) msg;
 			if(response.getObjectMessage().equals("Subscriber")) {
 				if(((String)response.getObj()).equals("updated successfully"))
-					Platform.runLater(()->{ShowAlert.showAlert("Success",(String)response.getObj() , AlertType.INFORMATION);});
+					Platform.runLater(()->{ShowAlert.showSuccessAlert("Success",(String)response.getObj());});
 				else
 					Platform.runLater(()->{ShowAlert.showAlert("Error",(String)response.getObj() , AlertType.ERROR);});
 			}
