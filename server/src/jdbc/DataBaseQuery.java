@@ -111,7 +111,7 @@ public class DataBaseQuery extends MySQLConnection {
     {
     	List<Reservation> reservationListOfSubscriber = new ArrayList<>();
     	String sql = 
-                "SELECT spot_id,date,start_time,end_time " +
+                "SELECT reservation_id,spot_id,date,start_time,end_time " +
                 "FROM reservations " +
                 "WHERE subscriber_id = ? "+
                 "And end_time IS NOT NULL " + 
@@ -123,12 +123,13 @@ public class DataBaseQuery extends MySQLConnection {
                 // Execute the query; it returns a ResultSet with exactly one row and one column (the count).
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
+                    	int id           = rs.getInt("reservation_id");
                     	int spotId       = rs.getInt("spot_id");
                     	java.time.LocalDate date = rs.getDate("date").toLocalDate();
                         String startTime   = rs.getString("start_time");
                         String endTime     = rs.getString("end_time");
-                        int    code        = rs.getInt("reservation_code");
-                        Reservation r = new Reservation(subscriber_id, spotId ,date, startTime, endTime, code);
+                        Reservation r = new Reservation(subscriber_id, spotId ,date, startTime, endTime, 0);
+                        r.setId(id);
 
                         //Add it to our list.
                         reservationListOfSubscriber.add(r);

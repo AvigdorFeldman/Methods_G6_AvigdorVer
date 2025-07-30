@@ -31,6 +31,7 @@ public class ReservationController extends Controller{
     @FXML private TextField endTimeField;
 
     @FXML private TableView<Reservation> futureReservationsTable;
+    @FXML private TableColumn<Reservation,Integer> colId;
     @FXML private TableColumn<Reservation,String> colSpot;
     @FXML private TableColumn<Reservation,LocalDate> colDate;
     @FXML private TableColumn<Reservation,String> colStart;
@@ -44,7 +45,8 @@ public class ReservationController extends Controller{
     @FXML
     public void initialize() {
         // configure table columns
-        colSpot .setCellValueFactory(new PropertyValueFactory<>("spot"));
+    	colId .setCellValueFactory(new PropertyValueFactory<>("Id"));
+    	colSpot .setCellValueFactory(new PropertyValueFactory<>("spot"));
         colDate .setCellValueFactory(new PropertyValueFactory<>("date"));
         colStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         colEnd  .setCellValueFactory(new PropertyValueFactory<>("endTime"));

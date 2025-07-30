@@ -54,6 +54,7 @@
       <Label styleClass="title-label" text="Future Reservations" />
       <TableView fx:id="futureReservationsTable" prefHeight="250.0" prefWidth="600.0" styleClass="menu-container" VBox.vgrow="ALWAYS">
         <columns>
+          <TableColumn fx:id="colId" prefWidth="100" text="Id"/>
           <TableColumn fx:id="colSpot" prefWidth="100" text="Spot" />
           <TableColumn fx:id="colDate" prefWidth="150" text="Date" />
           <TableColumn fx:id="colStart" prefWidth="150" text="Start" />
