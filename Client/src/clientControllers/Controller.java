@@ -22,6 +22,7 @@ public abstract class Controller {
     protected subscriber sub;
     protected BParkClient client;
     protected Boolean isConsole = false;
+    protected String ip;
 
     /**
      * Sets the back navigation handler.
@@ -59,6 +60,15 @@ public abstract class Controller {
      */
     public void setIsConsole(boolean bool) {
         isConsole = bool;
+    }
+    
+    /**
+     * Sets the ip to remember for next login
+     * 
+     * @param ip
+     */
+    public void setIp(String ip) {
+    	this.ip = ip;
     }
 
     /**
@@ -117,6 +127,7 @@ public abstract class Controller {
             Controller c = loader.getController();
             c.setClient(client, sub);
             c.setIsConsole(this.isConsole);
+            c.setIp(this.ip);
             client.setMessageListener(c::handleServerMessage);
 
             c.setBackHandler(() -> {
@@ -127,6 +138,7 @@ public abstract class Controller {
                     currentStage.setTitle(return_name);
 
                     Controller backC = loginLoader.getController();
+                    backC.setIp(this.ip);
                     backC.setClient(client, sub);
                     backC.setIsConsole(this.isConsole);
 
@@ -162,7 +174,8 @@ public abstract class Controller {
             stage.setTitle("Login");
             stage.setScene(new Scene(root));
             stage.show();
-
+            LoginController backC = loader.getController();
+            backC.setIpField(ip);
             Stage currentStage = (Stage) node.getScene().getWindow();
             currentStage.close();
 

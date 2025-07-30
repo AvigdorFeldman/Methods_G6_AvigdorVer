@@ -57,6 +57,15 @@ public class LoginController {
         loginMethodComboBox.setOnAction(event -> updateFieldVisibility());
         consoleCheckBox.setOnAction(event -> updateLoginOptions());
     }
+    
+    /**
+     * Sets ip field when returning to login screen
+     * 
+     * @param ipField
+     */
+    public void setIpField(String ipField) {
+    	this.ipField.setText(ipField);
+    }
 
     /**
      * Updates the login method options in the combo box based on whether the console checkbox is selected.
@@ -201,6 +210,7 @@ public class LoginController {
             tableRoot = loader.load();
             controller = loader.getController();
             controller.setClient(client, sub);
+            controller.setIp(ipField.getText().trim());
             
         } catch (IOException e) {
             System.out.println("cant load screen: " + fxml);
@@ -246,6 +256,7 @@ public class LoginController {
                 Parent loginRoot = loginLoader.load();
                 stage.setScene(new Scene(loginRoot));
                 stage.setTitle("Connect to Server");
+                ipField.setText(controller.ip);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
