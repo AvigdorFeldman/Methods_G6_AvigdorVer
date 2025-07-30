@@ -723,7 +723,7 @@ public class DataBaseQuery extends MySQLConnection {
         String sql = 
             "SELECT * " +
             "FROM reservations " +
-            "WHERE reservation_id = ?";
+            "WHERE reservation_code = ?";
 
         try (PreparedStatement ps = getCon().prepareStatement(sql)) {
             ps.setInt(1, reservationId);
