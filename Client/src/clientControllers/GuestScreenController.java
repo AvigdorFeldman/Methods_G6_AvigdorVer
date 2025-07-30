@@ -3,6 +3,7 @@ package clientControllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 
 /**
  * Controller class for the guest screen in the parking management system.
@@ -31,22 +32,33 @@ public class GuestScreenController extends Controller {
     @FXML
     private Label freeSpaceLabel;
 
+    
+    /**
+     * Circular progress bar to show the precentage visually
+     */
+    @FXML
+    private ProgressIndicator progressInd;
+    
     /**
      * Initializes the guest screen after FXML loading.
      * This method updates the displayed free space using the stored percentage.
      */
     @FXML
     private void initialize() {
+    	progressInd.setPrefWidth(120);
+    	progressInd.setPrefHeight(120);
         updateFreeSpace(percent);
     }
 
     /**
-     * Updates the label to display the current free space percentage.
+     * Updates the label and progress indicator to display the current free space percentage.
      *
      * @param percent The percentage of free parking spaces to display.
      */
     public void updateFreeSpace(double percent) {
         freeSpaceLabel.setText("Free Space: " + percent + "%");
+        double progress = percent / 100.0;
+        progressInd.setProgress(progress);
     }
 
     /**
