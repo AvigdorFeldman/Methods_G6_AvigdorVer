@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableCell;
@@ -36,6 +37,9 @@ public class TimeExtensionScreenController extends Controller {
 
 	@FXML
 	private TextField ParkingsessionIdField;
+	
+	@FXML
+	private Label ParkingsessionIdLabel;
 
 	@FXML
 	private TableView<Parkingsession> currentParkingSessionTable;
@@ -101,8 +105,14 @@ public class TimeExtensionScreenController extends Controller {
 		ParkingsessionIdField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d*")) {
 				ParkingsessionIdField.setText(oldValue); // Revert to old value if invalid
-			}
-		});
+				ParkingsessionIdField.setStyle("-fx-border-color: red;");
+				ParkingsessionIdLabel.setText("ID must be numeric");
+				ParkingsessionIdLabel.setVisible(true);
+	            } else {
+	            	ParkingsessionIdField.setStyle(null);
+	            	ParkingsessionIdLabel.setVisible(false);
+	            }
+	        });
 		// Initialize TableView columns
 		colSessionId.setCellValueFactory(new PropertyValueFactory<>("sessionId"));
 		colSpotId.setCellValueFactory(new PropertyValueFactory<>("spotId"));
@@ -163,7 +173,7 @@ public class TimeExtensionScreenController extends Controller {
 					setStyle("");
 				} else {
 					if (session != null && item.getSessionId() == session.getSessionId()) {
-						setStyle("-fx-background-color: #a3d2ca;"); // Light green or any color
+						setStyle("-fx-background-color: #a3d2ca;"); // Light green
 					} else {
 						setStyle("");
 					}
@@ -220,6 +230,7 @@ public class TimeExtensionScreenController extends Controller {
 	 */
 	@FXML
 	private void handleExtendTime() {
+		extendedSessionId = false;
 		long hour = hourSpinner.getValue();
 		long minute = minuteSpinner.getValue();
 		// Input validation
@@ -232,27 +243,38 @@ public class TimeExtensionScreenController extends Controller {
 				ShowFail("Session was not found");
 			}
 		} else {
-
+			Date timeBefore = session.getOutTime();
 			session.setOutTime(new Date(session.getOutTime().getTime() + hour * 60 * 60 * 1000 + minute * 60 * 1000));
 			try {
 				if (!ShowAlert.showConfirmation("Confirm Time Extension",
 						"Are you sure you want to extend time by " + hour + " hour(s) and " + minute + " minute(s)?")) {
 					extendedSessionId = false;
 					session = null;
-					clearForm();
 					currentParkingSessionTable.refresh();
 
 					return; // user clicked Cancel
 				}
+				
 				// Updates the session
-				parkingController.ExtendTime(session);
-				ShowAlert.showAlert("Extended Time", "Time was successfully extended", AlertType.INFORMATION);
+				parkingController.ExtendTime(session);	
 				Platform.runLater(() -> {
 					displayActiveSessions();
-				});
-				clearForm();
-				currentParkingSessionTable.refresh();
-				extendedSessionId = true;
+					try {
+						handleLoadSession();
+					} catch (Exception e) {
+						ShowFail("Time hasn't extended");
+					}
+					currentParkingSessionTable.refresh();
+					if(!session.getOutTime().equals(timeBefore)) {			
+						ShowAlert.showSuccessAlert("Extended Time Success", "Time was successfully extended");
+						extendedSessionId = true;
+						clearForm();
+						session = null;
+					}
+					else {
+						ShowFail("Time could not be extended, the spot is reserved at that time");
+					}	
+				});		
 			} catch (Exception e) {
 				ShowFail("Time hasn't extended");
 				e.printStackTrace();

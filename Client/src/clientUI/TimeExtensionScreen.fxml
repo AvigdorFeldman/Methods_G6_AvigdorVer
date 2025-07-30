@@ -23,6 +23,7 @@
 		<Label contentDisplay="CENTER" prefHeight="83.0" prefWidth="334.0" styleClass="reg-label" text="Parking Session ID:" />
 		<TextField fx:id="ParkingsessionIdField" prefHeight="73.0" prefWidth="356.0" promptText="Numbers Only" />
 		<Button onAction="#handleLoadSession" styleClass="button-blue" text="Load" />
+		<Label fx:id="ParkingsessionIdLabel" style="-fx-text-fill: red;" text="The id is numbers only!" visible="false"/>
 	</HBox>
 
 	<!-- Time Extension Spinners -->

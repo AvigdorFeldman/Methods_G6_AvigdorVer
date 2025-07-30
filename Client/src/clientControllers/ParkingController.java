@@ -340,13 +340,14 @@ public class ParkingController {
 		Util.waitForServerResponse(20000,()->this.responseReceived);
 		Parkingsession session = null;
 		if (timeExtendSession != null) {
-			if (timeExtendSession.getSubscriberId() == sub.getId()) {
+			if ((timeExtendSession.getSubscriberId() == sub.getId())&&timeExtendSession.getActive()) {
 				session = new Parkingsession(timeExtendSession.getSessionId(), timeExtendSession.getSubscriberId(),
 						timeExtendSession.getSpotId(), timeExtendSession.getParkingCode(),
 						timeExtendSession.getInTime(), timeExtendSession.getOutTime(), true, false, true);
 				timeExtendSession = null;
 			} else {
 				timeExtendSession = null;
+				session = null;
 				TimeExtensionScreen.ShowFail("Session was not found");
 			}
 		} else
