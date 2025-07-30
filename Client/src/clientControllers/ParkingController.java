@@ -143,7 +143,7 @@ public class ParkingController {
 				client.sendToServerSafely(new SendObject<Parkingsession>("Create new", session));
 				int spotId = spot.getSpotId();
 				Platform.runLater(() -> {
-					dropOffScreen.showParkingSuccess(); // show success message
+					dropOffScreen.showParkingSuccess(spotId,parkingCode); // show success message
 					dropOffScreen.displayAssignedSpot(spotId);
 					dropOffScreen.displayParkingCode(parkingCode);
 				});
@@ -183,15 +183,16 @@ public class ParkingController {
      * @param code the parking code entered by the user
      * @throws Exception if code is invalid or session not found
 	 */
-	public void requestCarPickUp(int code) throws Exception {
+	public Boolean requestCarPickUp(int code) throws Exception {
 		try {
+			boolean late = false;
 			responseReceived = false;
 			sendParkingCode(code);
 			// Poll until response is received
 			Util.waitForServerResponse(20000,()->this.responseReceived);
 			if (mySession != null) { // this should be retrieved from the database using the parking code
 				if (mySession.getOutTime().before(new Date())) {
-					markLateArrival(mySession); // if the session is late, mark it
+					late = markLateArrival(mySession); // if the session is late, mark it
 				}
 				mySession.setOutTime(new Date());
 				mySession.setActive(false);
@@ -203,13 +204,14 @@ public class ParkingController {
 				spot = null;
 				isAvailable = false;
 				isUsedCode = true;
+				return late;
 			} else
 				throw new Exception();
 		} catch (Exception e) {
 			// Log or handle exception
 			e.printStackTrace();
 			throw new Exception("Error processing parking code, the code could be wrong.");
-		}
+		} 
 	}
 
 	/**
@@ -218,7 +220,7 @@ public class ParkingController {
      * @param session the parking session to mark as late
      * @throws Exception if communication with the server fails
 	 */
-	public void markLateArrival(Parkingsession session) throws Exception {
+	public boolean markLateArrival(Parkingsession session) throws Exception {
 		session.setLate(true);
 		// send message to client about being late
 		try {
@@ -228,9 +230,7 @@ public class ParkingController {
 			e.printStackTrace();
 			throw new Exception();
 		}
-		Platform.runLater(() -> {
-			pickUpScreen.showLateArrivalMessage(); // show late arrival message
-		});
+		return true;
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class ParkingController {
 				client.sendToServerSafely(new SendObject<Object[]>("Update",reservationAndCode)); 
 				int spotId = spot.getSpotId();
 				Platform.runLater(() -> {
-					dropOffScreen.showParkingSuccess(); // show success message
+					dropOffScreen.showParkingSuccess(spotId,parkingCode); // show success message
 					dropOffScreen.displayAssignedSpot(spotId);
 					dropOffScreen.displayParkingCode(parkingCode);
 				});

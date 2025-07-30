@@ -58,7 +58,6 @@ public class PickUpScreenController extends Controller{
 	 */
 	@FXML
 	public void handleLostCodeRequest() {
-		parkingCode.setText("");
 		try {
 			if (!ShowAlert.showConfirmation("Send Parking code",
 					"Are you sure you want to send the code to\nEmail: " +sub.getEmail()+"\nPhone: "+sub.getPhone())) {
@@ -90,15 +89,14 @@ public class PickUpScreenController extends Controller{
 		} else {
 			if (!ShowAlert.showConfirmation("Confirm Parking Code submit",
 					"Are you sure you want to submit the code " +code+"?")) {
-				parkingCode.setText("");
 				return; // user clicked Cancel
 			}
 			parkingCode.setText("");
 			try {
 				int parkingCodeInt = Integer.parseInt(code);
-				parkingController.requestCarPickUp(parkingCodeInt);
+				boolean late = parkingController.requestCarPickUp(parkingCodeInt);
 				if (serverConnection) {
-					showPickUpSuccess();
+					showPickUpSuccess(late);
 				}
 			} catch (Exception e) {
 				ShowAlert.showAlert("Error", e.getMessage(), AlertType.ERROR);
@@ -110,17 +108,12 @@ public class PickUpScreenController extends Controller{
 	/**
 	 * Displays a success popup indicating that the vehicle is being prepared for pickup.
 	 */
-	public void showPickUpSuccess() {
-		ShowAlert.showAlert("Success",
-				"Pickup Success!\nPlease wait while your vehicle moves to the vehicle collection point",
-				Alert.AlertType.INFORMATION);
-	}
-
-	/**
-	 * Displays a warning popup indicating that the user was late to pick up their vehicle.
-	 */
-	public void showLateArrivalMessage() {
-		ShowAlert.showAlert("Late!", "You were late to pick up your vehicle", Alert.AlertType.WARNING);
+	public void showPickUpSuccess(boolean late) {
+		if(late)
+			ShowAlert.showAlert("Late & Success!", "You were late to pick up your vehicle\nPickup Success!\nPlease wait while your vehicle moves to the vehicle collection point\"", Alert.AlertType.WARNING);
+		else
+			ShowAlert.showSuccessAlert("Success",
+				"Pickup Success!\nPlease wait while your vehicle moves to the vehicle collection point");
 	}
 
 	/**

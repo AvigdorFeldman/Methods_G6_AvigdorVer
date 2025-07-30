@@ -49,6 +49,20 @@ public class DropOffScreenController extends Controller {
 		parkingController.setClient(client, sub);
 		parkingController.setDropOffScreen(this);
 	}
+	
+	/**
+	 * Initializes the text field to allow only numeric input of up to 6 digits.
+     * 
+     * Called automatically by the JavaFX framework after the FXML is loaded.
+	 */
+	@FXML
+	public void initialize() {
+		reservationCode.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d{0,6}")) {
+				reservationCode.setText(oldValue); // Revert to old value if invalid
+			}
+		});
+	}
 
 	//////////////////////////////////////////////
 	/*-------------------ACTIONS----------------*/
@@ -105,7 +119,6 @@ public class DropOffScreenController extends Controller {
 	 */
 	public void displayAssignedSpot(int spotId) {
 		assignedSpotLabel.setText("Your parking spot is " + spotId);
-		ShowAlert.showAlert("Assigned Spot", "Your parking spot is: " + spotId, Alert.AlertType.INFORMATION);
 	}
 
 	/**
@@ -114,17 +127,15 @@ public class DropOffScreenController extends Controller {
      * @param parkingCode the generated parking code
 	 */
 	public void displayParkingCode(int parkingCode) {
-		// זה אמור להיות Alert או setText?
 		parkingCodeLabel.setText("Your parking code is " + String.valueOf(parkingCode)); // display the parking code in
 																							// the text field
-		ShowAlert.showAlert("Parking Code", "Your parking code is: " + parkingCode, Alert.AlertType.INFORMATION);
 	}
 
 	/**
 	 * Displays a success message indicating that the vehicle was successfully parked.
 	 */
-	public void showParkingSuccess() {
-		ShowAlert.showAlert("Success", "Parking Success! spot assigned successfully!", Alert.AlertType.INFORMATION);
+	public void showParkingSuccess(int spotId, int parkingCode) {
+		ShowAlert.showSuccessAlert("Success", "Parking Success! spot assigned successfully!\nYour parking spot is: " + spotId+"\nYour parking code is: " + parkingCode);
 	}
 
 	/**

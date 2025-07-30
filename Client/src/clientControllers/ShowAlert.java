@@ -3,7 +3,9 @@ package clientControllers;
 import java.util.Optional;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 
 /**
  * Utility class for showing different types of alert dialogs in the JavaFX UI.
@@ -42,5 +44,21 @@ public class ShowAlert {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
+    }
+    
+    /**
+     * Shows an alert success dialog with the given title and message
+     * 
+     * @param title   The title of the confirmation dialog.
+     * @param message The content text to display.
+     */
+    public static void showSuccessAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText("✔ Operation Successful!");
+        alert.setContentText(message);
+        alert.setGraphic(new Label("✅")); 
+
+        alert.showAndWait();
     }
 }
