@@ -29,6 +29,9 @@ public class UpdateUserDetailsController extends Controller {
 	@FXML 
 	private Label emailWarningLabel;
 	
+	/**
+	 * Form validation and labels
+	 */
 	@FXML
 	private void initialize(){
 		// Name validation
