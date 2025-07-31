@@ -188,6 +188,14 @@ public class SendObjectHandler {
 				int reservationCode = intObject;
 				reservation = con.getReservationByCode(reservationCode);
 				return new SendObject<T1>("Received reservation", (T1) reservation);
+			} else if (action.contains("reservation with id")) {
+				Reservation reservation;
+				int reservationId = intObject;
+				reservation = con.getReservationById(reservationId);
+				if(reservation==null)
+					return new SendObject<T1>("No such", (T1) "Reservation");
+				else
+					return new SendObject<T1>("Received reservation", (T1) reservation);
 			}
 		}
 		return null;
@@ -349,6 +357,7 @@ public class SendObjectHandler {
 					Reservation reservation = (Reservation) objectArr[1];
 					// Update Reservation In the database using received object
 					con.updateReservationInDatabase(reservationNum,reservation);
+					return new SendObject<T1>("Reservation",(T1)"Updated");
 				}
 			}
 		} catch (Exception e) { // SQLException e

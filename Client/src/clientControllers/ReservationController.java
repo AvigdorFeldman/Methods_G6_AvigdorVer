@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.Iterator;
 import java.util.List;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -29,6 +32,8 @@ public class ReservationController extends Controller{
     @FXML private DatePicker datePicker;
     @FXML private TextField startTimeField;
     @FXML private TextField endTimeField;
+    @FXML private TextField reservationIdField;
+    @FXML private Label reservationIdWarningLabel;
 
     @FXML private TableView<Reservation> futureReservationsTable;
     @FXML private TableColumn<Reservation,Integer> colId;
@@ -36,7 +41,16 @@ public class ReservationController extends Controller{
     @FXML private TableColumn<Reservation,LocalDate> colDate;
     @FXML private TableColumn<Reservation,String> colStart;
     @FXML private TableColumn<Reservation,String> colEnd;
+    
+    private Reservation reservation = null;
+	@FXML private Label startTimeWarningLabel;
+	@FXML private Label endTimeWarningLabel;
 
+    private void setReservation(Reservation r){
+    	this.reservation = r;
+    	futureReservationsTable.refresh();
+    }
+    
     /**
      * Initializes the controller.
      * Configures the table columns for displaying future reservations.
@@ -52,8 +66,37 @@ public class ReservationController extends Controller{
         colEnd  .setCellValueFactory(new PropertyValueFactory<>("endTime"));
         
         // Add HH:MM formatting listeners
-        addTimeFieldFormatter(startTimeField);
-        addTimeFieldFormatter(endTimeField);
+        addTimeFieldFormatter(startTimeField, startTimeWarningLabel);
+        addTimeFieldFormatter(endTimeField,endTimeWarningLabel);
+        
+        // Handle numeric input for reservation ID field
+        reservationIdField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                reservationIdField.setText(oldValue); // Revert to old value if invalid
+                reservationIdField.setStyle("-fx-border-color: red;");
+                reservationIdWarningLabel.setText("ID must be numeric");
+                reservationIdWarningLabel.setVisible(true);
+            } else {
+                reservationIdWarningLabel.setVisible(false);
+            }
+        });
+        
+        // Row highlighting logic
+        futureReservationsTable.setRowFactory(tv -> new TableRow<Reservation>() {
+            @Override
+            protected void updateItem(Reservation item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null && !empty) {
+                    if (reservation!=null && item.getId() == reservation.getId()) {
+                        setStyle("-fx-background-color: lightgreen;"); // Apply a green background when matching
+                    } else {
+                        setStyle(""); // Reset style if it doesn't match
+                    }
+                } else {
+                    setStyle(""); // Default style for empty items
+                }
+            }
+        });
     }
 
     /**
@@ -61,7 +104,7 @@ public class ReservationController extends Controller{
      * 
      * @param timeField
      */
-    private void addTimeFieldFormatter(TextField timeField) {
+    private void addTimeFieldFormatter(TextField timeField, Label timeErrorLabel) {
         timeField.textProperty().addListener((obs, oldText, newText) -> {
             // Keep only digits
             String digits = newText.replaceAll("[^\\d]", "");
@@ -89,8 +132,12 @@ public class ReservationController extends Controller{
                 String value = timeField.getText();
                 if (!value.matches("([01]\\d|2[0-3]):[0-5]\\d")) {
                     timeField.setStyle("-fx-border-color: red;");
+                    timeField.setStyle("-fx-border-color: red;");  // Add red border
+                    timeErrorLabel.setText("Invalid time format!");  // Show error message
+                    timeErrorLabel.setVisible(true);  // Make error label visible
                 } else {
-                    timeField.setStyle(null);
+                    timeField.setStyle(null);  // Reset the border style
+                    timeErrorLabel.setVisible(false);  // Hide error label
                 }
             }
         });
@@ -217,6 +264,51 @@ public class ReservationController extends Controller{
         client.sendToServerSafely(req);
     }
 
+    @FXML
+    public void handleLoadButton() {
+        String reservationId = reservationIdField.getText().trim();
+
+        // Validation: Check if the input is a valid number
+        if (reservationId.isEmpty() || !reservationId.matches("\\d+")) {
+            reservationIdWarningLabel.setText("Please enter a valid reservation ID.");
+            reservationIdWarningLabel.setVisible(true);
+            return;
+        }
+
+        // Send load reservation request to the server
+        int reservationIdInt = Integer.parseInt(reservationId);
+        SendObject<Integer> req = new SendObject<>("Get reservation with id", reservationIdInt);
+        client.sendToServerSafely(req);
+
+        // Clear warning message
+        reservationIdWarningLabel.setVisible(false);
+    }
+    
+    @FXML
+    public void handleDeleteReservationButton() {
+
+        // Validation: Check if the input is a valid number
+        if (reservation==null) {
+        	ShowAlert.showAlert("Error", "You must choose a valid reservation id", AlertType.ERROR);
+            return;
+        }
+
+        // Ask for user confirmation before deleting
+        if (!ShowAlert.showConfirmation("Confirm Deletion", 
+                "Are you sure you want to delete reservation: " + reservation.getId() + "?")) {
+            return; // User clicked Cancel
+        }
+
+        // Send delete reservation request to the server
+        reservation.setStartTime(null);
+        Object reservationToSend[] = {reservation.getId(), reservation};
+        SendObject<Object[]> req = new SendObject<>("Update", reservationToSend);
+        client.sendToServerSafely(req);
+
+        getFutureReservationsFor();
+        reservation = null;
+    }
+    
     /**
      * Entry point for handling all messages received from the server.
      *
@@ -231,18 +323,36 @@ public class ReservationController extends Controller{
             Platform.runLater(() -> futureReservationsTable.getItems().setAll(list));
         } else if (message instanceof SendObject<?>) {
             SendObject<?> sendObject = (SendObject<?>)message;
-            if(sendObject.getObj() instanceof String)
+            if(sendObject.getObj() instanceof String) {
             	if(((String)sendObject.getObj()).contains("Not")||((String)sendObject.getObjectMessage()).contains("Error"))
             		Platform.runLater(() -> ShowAlert.showAlert("Failed", sendObject.getObjectMessage()+" "+sendObject.getObj(), AlertType.ERROR));
             	else {
             		Platform.runLater(() -> ShowAlert.showSuccessAlert("Success", sendObject.getObjectMessage()+" "+sendObject.getObj()));
             		clearForm();
+            		if(!reservationIdField.getText().trim().isEmpty()) {
+            			reservationIdField.clear();
+            			reservationIdWarningLabel.setText("");
+            		}
             	}
-            	else if(sendObject.getObj() instanceof List<?>) {
-                @SuppressWarnings("unchecked")
-                List<Reservation> list = (List<Reservation>) sendObject.getObj();
-                Platform.runLater(() -> futureReservationsTable.getItems().setAll(list));
             }
+            else if(sendObject.getObj() instanceof List<?>) {
+            		@SuppressWarnings("unchecked")
+            		List<Reservation> list = (List<Reservation>) sendObject.getObj();        		
+            		Platform.runLater(() -> futureReservationsTable.getItems().setAll(list));
+            }
+            else if(sendObject.getObj() instanceof Reservation) {
+            		setReservation((Reservation)sendObject.getObj());
+            		if(reservation==null||reservation.getSubscriberId()!=sub.getId()||reservation.getStartTime()==null) {
+            			Platform.runLater(() -> {reservationIdWarningLabel.setText("");
+            			reservationIdWarningLabel.setVisible(false);
+            			futureReservationsTable.refresh();
+            			ShowAlert.showAlert("Failed", "No such reservation", AlertType.ERROR);
+            			reservation=null;});
+            		}else {            			
+            			Platform.runLater(() ->{reservationIdWarningLabel.setText("loaded");reservationIdWarningLabel.setVisible(true);
+            			futureReservationsTable.refresh();});    	
+            		}
+            	}
         } else {
             Platform.runLater(() -> ShowAlert.showAlert("Unknown Failure",message.toString(), AlertType.ERROR));
         }

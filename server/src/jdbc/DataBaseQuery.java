@@ -729,6 +729,7 @@ public class DataBaseQuery extends MySQLConnection {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                	int id      = rs.getInt("reservation_id");
                     int subId   = rs.getInt("subscriber_id");
                     int spotId  = rs.getInt("spot_id");
                     LocalDate date      = rs.getDate("date").toLocalDate();
@@ -744,6 +745,7 @@ public class DataBaseQuery extends MySQLConnection {
                         endTime,
                         code
                     );
+                    reservation.setId(id);
                 }
             }
         } catch (SQLException e) {
@@ -771,6 +773,7 @@ public class DataBaseQuery extends MySQLConnection {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                	int id      = rs.getInt("reservation_id");
                     int subId   = rs.getInt("subscriber_id");
                     int spotId  = rs.getInt("spot_id");
                     LocalDate date      = rs.getDate("date").toLocalDate();
@@ -786,6 +789,7 @@ public class DataBaseQuery extends MySQLConnection {
                         endTime,
                         code
                     );
+                    reservation.setId(id);
                 }
             }
         } catch (SQLException e) {

@@ -144,7 +144,8 @@ public class LoginController {
             }
         } catch (Exception e) {
             ShowAlert.showAlert("Error", "The type of the fields is wrong", Alert.AlertType.ERROR);
-            return null;
+            return new subscriber(0,null ,null, null, null,
+                        null, null,0);
         }
     }
 
@@ -183,7 +184,6 @@ public class LoginController {
                         case MANAGER -> connectclient(sub, "AdminScreen.fxml", "Admin Menu", -1);
                     }
                 } else if (send.getObj() instanceof Double percent) {
-                    System.out.println(percent);
                     connectclient(null, "GuestScreenUI.fxml", "Guest Screen", percent);
                 } else {
                     client.stop();
