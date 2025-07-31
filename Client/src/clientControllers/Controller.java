@@ -2,12 +2,14 @@ package clientControllers;
 
 import java.io.IOException;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import logic.*;
 import ocsf.client.BParkClient;
 
@@ -120,7 +122,14 @@ public abstract class Controller {
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
             stage.show();
-
+            stage.setOnCloseRequest(new EventHandler<>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    client.stop(sub);
+                    System.gc();
+                    System.exit(0);
+                }
+            });
             Stage currentStage = (Stage) sourceButton.getScene().getWindow();
             currentStage.close();
 
@@ -179,7 +188,7 @@ public abstract class Controller {
             Stage currentStage = (Stage) node.getScene().getWindow();
             currentStage.close();
 
-            client.stop();
+            client.stop(sub);
         } catch (IOException e) {
             e.printStackTrace();
         }

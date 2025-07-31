@@ -49,7 +49,10 @@ public class SendObjectHandler {
 			// Connects the subscriber to the client application
 			Object genericObject = handleGetAction(object, con);
 			return replyDefiner(genericObject);
-		} else if (action.contains("Update")) {
+		}else if(action.contains("loggedoff")||action.contains("login")) {
+			if(object!=null)
+				con.updateUserInDatabase((subscriber)object);
+		}else if (action.contains("Update")) {
 			if (action.contains("time in session")) {
 				// Manages time extension update of parking sessions
 				Parkingsession session = (Parkingsession) obj.getObj();

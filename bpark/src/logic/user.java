@@ -11,6 +11,7 @@ public class user implements Serializable{
     private String phone;
     private String email;
     private Role role;
+    private boolean loggedIn = false;
  
     /**
      * Constructs a new user with the specified information.
@@ -27,6 +28,7 @@ public class user implements Serializable{
         this.phone = phone;
         this.email = email;
         this.role = role;
+        this.loggedIn = loggedIn;
     }
 
     // Getters
@@ -66,6 +68,11 @@ public class user implements Serializable{
      */
     public Role getRole() { return role; }
 
+    /**
+     * @return true if the subscriber is logged in, false otherwise
+     */
+    public boolean getLoggedIn() { return loggedIn; }
+    
     // Setters
     
     /**
@@ -102,4 +109,11 @@ public class user implements Serializable{
      * @param role the new role
      */
     public void setRole(Role role) { this.role = role; }
+    
+    /**
+     * Sets the user's login.
+     *
+     * @param change the value of loggedIn
+     */
+    public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
 }

@@ -319,9 +319,11 @@ public class DataBaseQuery extends MySQLConnection {
                     Role   role         = Role.valueOf(rs.getString("role"));
                     String tag          = rs.getString("tag");
                     int    codeDb       = rs.getInt("code");
+                    boolean isLoggedIn  = rs.getBoolean("logged_in");
                     List<Parkingsession> history = new ArrayList<>();
                     // Construct the subscriber
                     subscribe = new subscriber(subscriberId,nameDb,phone, email,role,history,tag,codeDb);
+                    subscribe.setLoggedIn(isLoggedIn);
                 }
             }
         }
@@ -359,9 +361,11 @@ public class DataBaseQuery extends MySQLConnection {
                     String email        = rs.getString("email");
                     Role   role         = Role.valueOf(rs.getString("role"));                   
                     int    codeDb       = rs.getInt("code");
+                    boolean isLoggedIn  = rs.getBoolean("logged_in");
                     List<Parkingsession> history = new ArrayList<>();
                     // Construct the subscriber
                     subscribe = new subscriber(subscriberId,nameDb,phone, email,role,history,tag,codeDb);
+                    subscribe.setLoggedIn(isLoggedIn);
                 }
             }
         }
@@ -430,7 +434,8 @@ public class DataBaseQuery extends MySQLConnection {
             "    email  = ?, " +
             "    role   = ?, " +
             "    tag    = ?, " +
-            "    code   = ? " +
+            "    code   = ?, " +
+            "    logged_in = ? "+
             "WHERE subscriber_id = ?";
 
         // 2) Use try-with-resources to ensure the PreparedStatement is closed
@@ -443,7 +448,8 @@ public class DataBaseQuery extends MySQLConnection {
             ps.setString(5, user.getTag());
             ps.setInt   (6, user.getCode());
             // 4) Bind the WHERE clause parameter
-            ps.setInt   (7, user.getId());
+            ps.setBoolean(7, user.getLoggedIn());
+            ps.setInt   (8, user.getId());
 
             // 5) Execute the update
             int rowsAffected = ps.executeUpdate();
@@ -543,8 +549,8 @@ public class DataBaseQuery extends MySQLConnection {
         // 1) Prepare INSERT SQL (subscriber_id is AUTO_INCREMENT, so we skip it)
         String sql =
             "INSERT INTO subscribers " +
-            "  (name, phone, email, role, tag, code) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
+            "  (name, phone, email, role, tag, code, logged_in) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         // 2) Use RETURN_GENERATED_KEYS so we can retrieve the new subscriber_id
         try (PreparedStatement ps = getCon().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -555,7 +561,7 @@ public class DataBaseQuery extends MySQLConnection {
             ps.setString(4, user.getRole().name());  // Role enum to VARCHAR
             ps.setString(5, user.getTag());
             ps.setInt   (6, user.getCode());
-
+            ps.setBoolean(7, user.getLoggedIn());
             // 4) Execute the insert
             int rows = ps.executeUpdate();
 
@@ -986,8 +992,6 @@ public class DataBaseQuery extends MySQLConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(tag);
-        System.out.println(unique);
         return unique;
     }
 
@@ -1098,11 +1102,12 @@ public class DataBaseQuery extends MySQLConnection {
                 Role   role  = Role.valueOf(rs.getString("role"));
                 String tag   = rs.getString("tag");
                 int    code  = rs.getInt("code");
-
+                boolean isLoggedIn = rs.getBoolean("logged_in");
                 // empty history list for now
                 List<Parkingsession> history = new ArrayList<>();
-
-                list.add(new subscriber(id, name, phone, email, role, history, tag, code));
+                subscriber s = new subscriber(id, name, phone, email, role, history, tag, code);
+                s.setLoggedIn(isLoggedIn);
+                list.add(s);
             }
         } catch (SQLException e) {
             e.printStackTrace();

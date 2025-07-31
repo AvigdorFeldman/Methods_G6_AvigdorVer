@@ -178,15 +178,23 @@ public class LoginController {
             if (msg instanceof SendObject send) {
                 if (send.getObj() instanceof subscriber sub) {
                     System.out.println("[Server] " + msg);
+                    if (sub.getLoggedIn()) {
+                        // If the user is already logged in, show an error (if they are a manager)
+                        if (sub.getRole() == Role.MANAGER) {
+                            ShowAlert.showAlert("Error", "Can't login to server, Manager already logged in", Alert.AlertType.ERROR);
+                            return; // Stop further login processing
+                        }
+                    }
                     switch (sub.getRole()) {
                         case SUBSCRIBER -> connectclient(sub, "MainMenuScreen.fxml", "Main Menu", -1);
                         case ATTENDANT -> connectclient(sub, "AttendantScreen.fxml", "Attendant Menu", -1);
                         case MANAGER -> connectclient(sub, "AdminScreen.fxml", "Admin Menu", -1);
                     }
+                    
                 } else if (send.getObj() instanceof Double percent) {
                     connectclient(null, "GuestScreenUI.fxml", "Guest Screen", percent);
                 } else {
-                    client.stop();
+                    client.stop(null);
                     ShowAlert.showAlert("Error", "Cant login to server wrong account", Alert.AlertType.ERROR);
                 }
             }
@@ -202,7 +210,15 @@ public class LoginController {
      * @param percent the guest discount (only used for GuestScreenController)
      */
     private void connectclient(subscriber sub, String fxml, String title, double percent) {
-        controller = null;
+    	try {
+        	if(!sub.getLoggedIn()) {
+        		sub.setLoggedIn(true);
+        		client.sendToServer(new SendObject<subscriber>("login",sub));
+        	}
+		} catch (IOException e) {
+			System.out.println("Failed to login");
+		}
+    	controller = null;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientUI/"+fxml));
         Parent tableRoot = null;
 
@@ -239,7 +255,7 @@ public class LoginController {
             @Override
             public void handle(WindowEvent event) {
                 System.out.println("Closing application...");
-                client.stop();
+                client.stop(sub);
                 System.gc();
                 System.exit(0);
             }
@@ -247,7 +263,7 @@ public class LoginController {
 
         controller.setBackHandler(() -> {
             try {
-                client.stop();
+                client.stop(sub);
             } catch (Exception e) {
                 e.printStackTrace();
             }

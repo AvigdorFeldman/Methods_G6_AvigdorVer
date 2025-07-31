@@ -69,8 +69,12 @@ public class BParkClient extends ObservableClient {
 	/**
 	 * Stops the client connection
 	 */
-	public void stop() {
+	public void stop(subscriber sub) {
 		try {
+			if(sub!=null) {
+				sub.setLoggedIn(false);
+				this.sendToServerSafely(new SendObject<subscriber>("loggedoff",sub));
+			}
 			this.sendToServerSafely("Client disconnected");
 			closeConnection();
 		} catch (IOException e) {
