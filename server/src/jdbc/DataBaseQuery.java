@@ -772,7 +772,7 @@ public class DataBaseQuery extends MySQLConnection {
         String sql = 
             "SELECT * " +
             "FROM reservations " +
-            "WHERE reservation_code = ?";
+            "WHERE reservation_code = ? AND start_time IS NOT NULL";
 
         try (PreparedStatement ps = getCon().prepareStatement(sql)) {
             ps.setInt(1, reservationId);
@@ -1026,12 +1026,20 @@ public class DataBaseQuery extends MySQLConnection {
         return unique;
     }
     
+    /**
+     * Checks whether a given numeric code is unique among all active Reservations.
+     * 
+     * Executes a SQL SELECT query to ensure no other active reservation has the same code.
+     *
+     * @param code The numeric code to check.
+     * @return true if the code is unique; false if it already exists.
+     */
     public boolean checkCodeDifferentFromAllReservations(int code) {
     	boolean unique = true;
         String sql =
             "SELECT 1 " +
             "FROM reservations " +
-            "WHERE reservation_code = ? " +
+            "WHERE reservation_code = ? AND start_time IS NOT NULL " +
             "LIMIT 1";
 
         try (PreparedStatement ps = getCon().prepareStatement(sql)) {
