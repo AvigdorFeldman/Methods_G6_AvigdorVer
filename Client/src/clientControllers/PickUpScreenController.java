@@ -3,7 +3,9 @@ package clientControllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import logic.*;
 import ocsf.client.*;
 
@@ -20,6 +22,8 @@ public class PickUpScreenController extends Controller{
 	private ParkingController parkingController = new ParkingController();
 	@FXML
 	TextField parkingCode;
+	@FXML
+	private Label codeWarningLabel;
 
 	/**
 	 * Initializes the text field to allow only numeric input of up to 6 digits.
@@ -31,7 +35,11 @@ public class PickUpScreenController extends Controller{
 		parkingCode.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d{0,6}")) {
 				parkingCode.setText(oldValue); // Revert to old value if invalid
+				codeWarningLabel.setText("Numeric value must be 6 digits");
+				codeWarningLabel.setVisible(true);
 			}
+			else
+				codeWarningLabel.setVisible(false);
 		});
 	}
 	

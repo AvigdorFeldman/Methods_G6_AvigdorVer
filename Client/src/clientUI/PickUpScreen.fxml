@@ -28,7 +28,7 @@
                 <!-- Label and TextArea Row -->
                 <Label styleClass="reg-label" text="Enter Parking Code:" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="CENTER" />
                 <TextField fx:id="parkingCode" styleClass="text-field" promptText="Enter code numbers only" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.fillWidth="true" />
-
+				<Label fx:id="codeWarningLabel" text="Label" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <!-- Buttons Row with more space above it -->
                 <Button onAction="#submitParkingCode" styleClass="menu-button" text="Submit" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.halignment="CENTER" />
                 <Button onAction="#handleLostCodeRequest" styleClass="menu-button" text="Forgot Code" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.halignment="CENTER" />
