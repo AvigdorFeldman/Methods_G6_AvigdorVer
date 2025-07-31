@@ -20,6 +20,7 @@ import ocsf.client.*;
 public class ParkingController {
 	private BParkClient client;
 	private subscriber sub;
+	@SuppressWarnings("unused")
 	private PickUpScreenController pickUpScreen;
 	private ParkingSpot spot;
 	private boolean isAvailable = false;

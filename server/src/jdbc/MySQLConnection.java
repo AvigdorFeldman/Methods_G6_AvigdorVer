@@ -34,6 +34,7 @@ public class MySQLConnection {
 	 * Start a connection to DB bpark returns con
 	 * @return con
 	 */
+	@SuppressWarnings("deprecation")
 	private Connection connectToDB() {	
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
@@ -60,6 +61,7 @@ public class MySQLConnection {
 	 * Happens at Server Startup
 	 * @return Connection object
 	 */
+	@SuppressWarnings("deprecation")
 	private Connection connectToMySQL() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
