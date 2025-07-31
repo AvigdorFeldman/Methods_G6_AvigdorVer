@@ -49,6 +49,7 @@ public class ParkingController {
      *
      * @param message the response object received from the server
 	 */
+	@SuppressWarnings("unchecked")
 	public void handleServerResponse(Object message) {
 		if (message instanceof SendObject<?>) {
 			SendObject<?> msg = (SendObject<?>) message;

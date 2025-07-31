@@ -1,8 +1,6 @@
 package serverControllers;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
-import jakarta.activation.*;
-
 import java.util.*;
 
 public class SendEmail {
