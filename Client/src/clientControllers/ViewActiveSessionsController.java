@@ -98,6 +98,7 @@ public class ViewActiveSessionsController extends Controller {
      *
      * @param msg The server message containing session data.
      */
+	@SuppressWarnings("unchecked")
 	public void handleServerMessage(Object msg) {
 		if (msg instanceof SendObject<?>) {
 			if (((SendObject<?>) msg).getObj() instanceof List<?>) {

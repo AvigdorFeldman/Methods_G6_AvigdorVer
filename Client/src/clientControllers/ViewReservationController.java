@@ -160,6 +160,7 @@ public class ViewReservationController extends Controller {
     /**
      * Sorts the reservations by date in ascending order.
      */
+	@SuppressWarnings("unchecked")
 	private void sortByDate() {
 		colDate.setSortType(TableColumn.SortType.ASCENDING);
 		reservationTable.getSortOrder().setAll(colDate);
@@ -169,6 +170,7 @@ public class ViewReservationController extends Controller {
 	/**
 	 * Sorts the reservations by subscriber ID in ascending order.
 	 */
+	@SuppressWarnings("unchecked")
 	private void sortBySubscriberId() {
 		colSubscriberId.setSortType(TableColumn.SortType.ASCENDING);
 		reservationTable.getSortOrder().setAll(colSubscriberId);
@@ -182,6 +184,7 @@ public class ViewReservationController extends Controller {
      *
      * @param msg The server message containing updated reservation data.
      */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handleServerMessage(Object msg) {
 		if (msg instanceof SendObject<?>) {

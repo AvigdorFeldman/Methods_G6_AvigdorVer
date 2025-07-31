@@ -84,6 +84,7 @@ public class ViewSubscriberController extends Controller {
 	@FXML
 	private TableColumn<Parkingsession, String> colLate;
 
+	@SuppressWarnings("unused")
 	private List<Parkingsession> historySessions;
 
 	/**
@@ -175,6 +176,7 @@ public class ViewSubscriberController extends Controller {
     /**
      * Sorts the subscriber table by subscriber ID in ascending order.
      */
+	@SuppressWarnings("unchecked")
 	protected void sortBySubscriberId() {
 		colSubscriberId.setSortType(TableColumn.SortType.ASCENDING);
 		subscriberTable.getSortOrder().setAll(colSubscriberId);
@@ -210,6 +212,7 @@ public class ViewSubscriberController extends Controller {
      * 
      * @param msg The message received from the server.
      */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handleServerMessage(Object msg) {
 		if (msg instanceof SendObject<?>) {
