@@ -186,7 +186,7 @@ public class SendObjectHandler {
 			} else if (action.contains("reservation with code")) {
 				Reservation reservation;
 				int reservationCode = intObject;
-				reservation = con.getReservationById(reservationCode);
+				reservation = con.getReservationByCode(reservationCode);
 				return new SendObject<T1>("Received reservation", (T1) reservation);
 			}
 		}

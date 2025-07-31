@@ -232,7 +232,7 @@ public class ReservationController extends Controller{
         } else if (message instanceof SendObject<?>) {
             SendObject<?> sendObject = (SendObject<?>)message;
             if(sendObject.getObj() instanceof String)
-            	if(((String)sendObject.getObj()).contains("Not"))
+            	if(((String)sendObject.getObj()).contains("Not")||((String)sendObject.getObjectMessage()).contains("Error"))
             		Platform.runLater(() -> ShowAlert.showAlert("Failed", sendObject.getObjectMessage()+" "+sendObject.getObj(), AlertType.ERROR));
             	else {
             		Platform.runLater(() -> ShowAlert.showSuccessAlert("Success", sendObject.getObjectMessage()+" "+sendObject.getObj()));

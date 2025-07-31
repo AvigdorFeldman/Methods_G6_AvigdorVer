@@ -722,6 +722,48 @@ public class DataBaseQuery extends MySQLConnection {
         String sql = 
             "SELECT * " +
             "FROM reservations " +
+            "WHERE reservation_id = ?";
+
+        try (PreparedStatement ps = getCon().prepareStatement(sql)) {
+            ps.setInt(1, reservationId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int subId   = rs.getInt("subscriber_id");
+                    int spotId  = rs.getInt("spot_id");
+                    LocalDate date      = rs.getDate("date").toLocalDate();
+                    String startTime = rs.getString("start_time");
+                    String endTime   = rs.getString("end_time");
+                    int       code   = rs.getInt("reservation_code");
+
+                    reservation = new Reservation(
+                    	spotId,
+                        subId,
+                        date,
+                        startTime,
+                        endTime,
+                        code
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reservation;
+    }
+    
+    /**
+     * Retrieves a reservation by its reservation_id.
+     *
+     * @param reservationId the ID of the reservation to fetch
+     * @return the Reservation object, or null if not found / on error
+     */
+    public Reservation getReservationByCode(int reservationId) {
+        Reservation reservation = null;
+        String sql = 
+            "SELECT * " +
+            "FROM reservations " +
             "WHERE reservation_code = ?";
 
         try (PreparedStatement ps = getCon().prepareStatement(sql)) {
