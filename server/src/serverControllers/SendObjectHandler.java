@@ -24,6 +24,7 @@ public class SendObjectHandler {
      * @return A response SendObject with results or messages
      * @throws Exception if action is null or unprocessable
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T extends Serializable, T1 extends Serializable> SendObject<T1> sendObjectHandle(SendObject<T> obj,
 			DataBaseQuery con) throws Exception {
 		String action = obj.getObjectMessage();
@@ -57,7 +58,7 @@ public class SendObjectHandler {
 				// Manages time extension update of parking sessions
 				Parkingsession session = (Parkingsession) obj.getObj();
 				if (con.checkExtendTimeParkingsessionWithAllReservations(session)) {
-					Object genericObject = handleUpdateAction(object, con);
+					handleUpdateAction(object, con);
 					return new SendObject<T1>("Time Extension", (T1) "Accapted");
 				} else {
 					return new SendObject<T1>("Time Extension", (T1) "Not Accapted");
@@ -94,6 +95,7 @@ public class SendObjectHandler {
      * @param genericObject Object to evaluate
      * @return A new SendObject instance containing a descriptive message and object
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T1 extends Serializable> SendObject<T1> replyDefiner(Object genericObject) {
 		String reply = "received object";
 		if (genericObject != null) {
@@ -126,6 +128,7 @@ public class SendObjectHandler {
      * @param con A DataBaseQuery instance
      * @return A SendObject containing result based on integer processing
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleIntegerType(String action,
 			Integer intObject, DataBaseQuery con) {
 		if (action.contains("Check")) {
@@ -248,6 +251,7 @@ public class SendObjectHandler {
      * @return A SendObject containing result based on string processing
      * @throws Exception if database query fails
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleStringType(String action,
 			String object, DataBaseQuery con) throws Exception {
 		if (action.contains("Check") && object.contains("Availability")) {
@@ -303,6 +307,7 @@ public class SendObjectHandler {
      * @return Retrieved object or error message
      * @throws Exception if retrieval fails
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> T1 handleGetAction(T object, DataBaseQuery con)
 			throws Exception {
 		try {
@@ -336,6 +341,7 @@ public class SendObjectHandler {
      * @return A SendObject response if applicable, else null
      * @throws Exception if database update fails
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleUpdateAction(T object, DataBaseQuery con) throws Exception {
 		try {
 			if (object instanceof subscriber) {
@@ -378,6 +384,7 @@ public class SendObjectHandler {
      * @return A SendObject response describing the creation result
      * @throws Exception if creation fails
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleCreateAction(T object,
 			DataBaseQuery con) throws Exception {
 		try {
