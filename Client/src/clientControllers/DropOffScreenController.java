@@ -30,6 +30,9 @@ public class DropOffScreenController extends Controller {
 	
 	@FXML
 	private TextField reservationCode;
+	
+	@FXML
+	private Label codeWarningLabel;
 
 	/////////////////////////////////////////////////
 	/*----------SET AND INITIALIZE THINGS----------*/
@@ -60,7 +63,11 @@ public class DropOffScreenController extends Controller {
 		reservationCode.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d{0,6}")) {
 				reservationCode.setText(oldValue); // Revert to old value if invalid
+				codeWarningLabel.setText("Numeric value up to 6 digits");
+				codeWarningLabel.setVisible(true);
 			}
+			else
+				codeWarningLabel.setVisible(false);
 		});
 	}
 

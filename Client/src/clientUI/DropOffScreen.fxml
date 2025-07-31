@@ -8,57 +8,50 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="mainPane" prefHeight="1080"
-	prefWidth="1920" styleClass="main-pane" stylesheets="@styles.css"
-	xmlns="http://javafx.com/javafx/23.0.1"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="clientControllers.DropOffScreenController">
+<AnchorPane fx:id="mainPane" prefHeight="1080" prefWidth="1920" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.DropOffScreenController">
 	<children>
-		<!-- Main GridPane layout with adjusted spacing -->
-		<GridPane alignment="CENTER" hgap="20" vgap="40"
-			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-			AnchorPane.topAnchor="50.0">
-			<columnConstraints>
-				<ColumnConstraints halignment="CENTER" />
-				<ColumnConstraints halignment="CENTER" />
-			</columnConstraints>
+      <VBox alignment="CENTER" prefHeight="891.0" prefWidth="1339.0"  AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0">
+         <children>
+      				<!-- Title Row with more space below it -->
+      				<Label styleClass="title-label" text="Drop Off Screen" VBox.vgrow="ALWAYS" />
+				<Label fx:id="assignedSpotLabel" styleClass="reg-label" text="" />
 
-			<children>
-				<!-- Title Row with more space below it -->
-				<Label styleClass="title-label" text="Drop Off Screen"
-					GridPane.columnIndex="0" GridPane.columnSpan="2"
-					GridPane.halignment="CENTER" GridPane.rowIndex="0" />
+      				<Label fx:id="parkingCodeLabel" styleClass="reg-label" text="" />
 
-				<Region GridPane.rowIndex="1" />
+      				<Region />
 
-				<!-- Button Row with more space above it -->
-				<Button onAction="#submitParkingRequest"
-					styleClass="menu-button" text="Submit Parking Request"
-					GridPane.columnIndex="1" GridPane.halignment="CENTER"
-					GridPane.rowIndex="3" />
-				<TextField fx:id="reservationCode" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-					styleClass="text-field" promptText="Enter code numbers only"
-					GridPane.rowIndex="4" />
-				<Button onAction="#submitParkingRequestUsingReservation"
-					styleClass="menu-button" text="Submit Dropoff using Reservation"
-					GridPane.columnIndex="1" GridPane.halignment="CENTER"
-					GridPane.rowIndex="5" />
-				<Label fx:id="assignedSpotLabel" text=""
-					GridPane.columnIndex="0" GridPane.columnSpan="2"
-					GridPane.rowIndex="1" GridPane.halignment="CENTER"
-					styleClass="reg-label" />
-
-				<Label fx:id="parkingCodeLabel" text=""
-					GridPane.columnIndex="0" GridPane.columnSpan="2"
-					GridPane.rowIndex="2" GridPane.halignment="CENTER"
-					styleClass="reg-label" />
-			</children>
-		</GridPane>
+      				<!-- Button Row with more space above it -->
+				<Button onAction="#submitParkingRequest" styleClass="menu-button" text="Submit Parking Request" />
+      		<!-- Main GridPane layout with adjusted spacing -->
+      		<GridPane alignment="CENTER" hgap="20" maxHeight="300.0" maxWidth="1.7976931348623157E308" prefHeight="288.0" prefWidth="1339.0" vgap="40" VBox.vgrow="ALWAYS">
+      			<columnConstraints>
+                  <ColumnConstraints halignment="CENTER" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
+      				<ColumnConstraints halignment="CENTER" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+      				<ColumnConstraints halignment="CENTER" />
+                  <ColumnConstraints halignment="CENTER" />
+      			</columnConstraints>
+      
+      			<children>
+      				<TextField fx:id="reservationCode" promptText="Enter code numbers only" styleClass="text-field" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label prefHeight="40.0" prefWidth="316.0" styleClass="form-label" text="Enter reservation code:" GridPane.rowIndex="3" />
+                  <Label fx:id="codeWarningLabel" text="Label" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      			</children>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+      		</GridPane>
+      				<Button onAction="#submitParkingRequestUsingReservation" styleClass="menu-button" text="Submit Dropoff using Reservation" />
+         </children>
+      </VBox>
 
 		<!-- Back Button -->
-		<Button onAction="#handleBackButton"
-			styleClass="disconnect-button" text="⬅ Back"
-			AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+		<Button onAction="#handleBackButton" styleClass="disconnect-button" text="⬅ Back" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
 	</children>
 </AnchorPane>
