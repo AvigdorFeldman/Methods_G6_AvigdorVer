@@ -33,6 +33,9 @@ public class ViewReservationController extends Controller {
 	protected TableView<Reservation> reservationTable;
 
 	@FXML
+	protected TableColumn<Reservation, Integer> colId;
+	
+	@FXML
 	protected TableColumn<Reservation, Integer> colSubscriberId;
 
 	@FXML
@@ -46,9 +49,6 @@ public class ViewReservationController extends Controller {
 
 	@FXML
 	protected TableColumn<Reservation, String> colEndTime;
-	
-	@FXML
-	protected TableColumn<Reservation, Integer> colId;
 
 	@FXML
 	protected Button sortByDateButton;

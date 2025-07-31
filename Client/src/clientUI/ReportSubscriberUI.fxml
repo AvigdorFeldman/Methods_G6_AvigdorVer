@@ -1,88 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
-	xmlns:fx="http://javafx.com/fxml"
-	fx:controller="clientControllers.ReportSubscriberController"
-	stylesheets="@ReportScreen.css" styleClass="main-pane">
+<AnchorPane styleClass="main-pane" stylesheets="@ReportScreen.css, @styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.ReportSubscriberController">
 
-	<VBox spacing="20.0" alignment="CENTER"
-		AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0"
-		AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0"
-		style="-fx-padding: 20;" styleClass="menu-container">
+	<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;" styleClass="menu-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <Label styleClass="title-label" text="Subscribers Report" />
 
 		<!-- TOP SECTION: Subscriber Table -->
-		<TableView fx:id="subscriberTable" prefHeight="300.0"
-			styleClass="main-table">
+		<TableView fx:id="subscriberTable" prefHeight="300.0" styleClass="main-table">
 			<columns>
-				<TableColumn fx:id="colSubscriberId"
-					text="Subscriber ID" prefWidth="120.0" />
-				<TableColumn fx:id="colName" text="Name"
-					prefWidth="120.0" />
-				<TableColumn fx:id="colEmail" text="Email"
-					prefWidth="180.0" />
-				<TableColumn fx:id="colPhone" text="Phone"
-					prefWidth="140.0" />
-				<TableColumn fx:id="colTag" text="Tag" prefWidth="140.0" />
-				<TableColumn fx:id="colRole" text="Role"
-					prefWidth="100.0" />
+				<TableColumn fx:id="colSubscriberId" prefWidth="120.0" text="Subscriber ID" />
+				<TableColumn fx:id="colName" prefWidth="120.0" text="Name" />
+				<TableColumn fx:id="colEmail" prefWidth="180.0" text="Email" />
+				<TableColumn fx:id="colPhone" prefWidth="140.0" text="Phone" />
+				<TableColumn fx:id="colTag" prefWidth="140.0" text="Tag" />
+				<TableColumn fx:id="colRole" prefWidth="100.0" text="Role" />
+				<TableColumn fx:id="colLoggedIn" prefWidth="100.0" text="Logged in?" />
 			</columns>
 		</TableView>
 
-		<HBox spacing="15.0" alignment="CENTER">
-			<Label text="Role:" />
+		<HBox alignment="CENTER" spacing="15.0">
+			<Label styleClass="form-label" text="Role:" />
 			<ComboBox fx:id="roleComboBox" prefWidth="140.0" />
-			<Button fx:id="sortBySubscriberIdButton"
-				text="Sort by Subscriber ID" styleClass="button-blue" />
-			<Button fx:id="exportCsvButton" text="Export as CSV"
-				styleClass="button-blue" />
-			<Button fx:id="backButton" text="Back"
-				styleClass="button-blue" onAction="#handleBackButton" />
+			<Button fx:id="sortBySubscriberIdButton" styleClass="button-blue" text="Sort by Subscriber ID" />
+			<Button fx:id="exportCsvButton" styleClass="button-blue" text="Export as CSV" />
 		</HBox>
 
 		<!-- BOTTOM SECTION: History View -->
-		<SplitPane orientation="HORIZONTAL" dividerPositions="0.55"
-			prefHeight="330.0">
+		<SplitPane dividerPositions="0.55" orientation="HORIZONTAL" prefHeight="330.0">
 			<!-- LEFT SIDE: History Table -->
-			<VBox spacing="10.0" alignment="TOP_LEFT"
-				style="-fx-padding: 10;">
-				<HBox spacing="10.0">
-					<TextField fx:id="subscriberIdField"
-						promptText="Subscriber ID" prefWidth="150.0" />
-					<Button fx:id="viewHistoryButton"
-						text="View Subscriber History" styleClass="button-blue" />
-				</HBox>
+			<VBox alignment="TOP_LEFT" spacing="10.0" style="-fx-padding: 10;">
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="348.0" minWidth="10.0" prefWidth="308.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="201.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+      					<TextField fx:id="subscriberIdField" maxWidth="298.0" prefHeight="73.0" prefWidth="298.0" promptText="Subscriber ID" />
+      					<Button fx:id="viewHistoryButton" styleClass="button-blue" text="View Subscriber History" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
 
 				<TableView fx:id="historyTable" prefHeight="250.0">
 					<columns>
-						<TableColumn fx:id="colSessionId" text="Session ID"
-							prefWidth="80.0" />
-						<TableColumn fx:id="colSpotId" text="Spot ID"
-							prefWidth="80.0" />
-						<TableColumn fx:id="colInTime" text="In Time"
-							prefWidth="160.0" />
-						<TableColumn fx:id="colOutTime" text="Out Time"
-							prefWidth="160.0" />
-						<TableColumn fx:id="colLate" text="Late?"
-							prefWidth="60.0" />
+						<TableColumn fx:id="colSessionId" prefWidth="80.0" text="Session ID" />
+						<TableColumn fx:id="colSpotId" prefWidth="80.0" text="Spot ID" />
+						<TableColumn fx:id="colInTime" prefWidth="160.0" text="In Time" />
+						<TableColumn fx:id="colOutTime" prefWidth="160.0" text="Out Time" />
+						<TableColumn fx:id="colLate" prefWidth="60.0" text="Late?" />
 					</columns>
 				</TableView>
 			</VBox>
 
 			<!-- RIGHT SIDE: Bar Chart -->
-			<BarChart fx:id="barChart" title="Sessions Per Month"
-				prefHeight="300.0" prefWidth="400.0">
+			<BarChart fx:id="barChart" prefHeight="300.0" prefWidth="400.0" title="Sessions Per Month">
 				<xAxis>
-					<CategoryAxis fx:id="xAxis" label="Month" />
+					<CategoryAxis label="Month" fx:id="xAxis" />
 				</xAxis>
 				<yAxis>
 					<NumberAxis fx:id="yAxis" label="Sessions" />
 				</yAxis>
 			</BarChart>
 		</SplitPane>
+   			<Button fx:id="backButton" onAction="#handleBackButton" styleClass="button-red" text="Back" />
 
 	</VBox>
 </AnchorPane>

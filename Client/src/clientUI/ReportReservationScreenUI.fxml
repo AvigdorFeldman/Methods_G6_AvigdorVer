@@ -1,68 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" 
-            xmlns:fx="http://javafx.com/fxml"
-            styleClass="main-pane"
-            stylesheets="@ReportScreen.css"
-            fx:controller="clientControllers.ReportReservationController">
+<AnchorPane styleClass="main-pane" stylesheets="@ReportScreen.css, @styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.ReportReservationController">
 
-    <VBox spacing="20.0" alignment="CENTER"
-          AnchorPane.topAnchor="20.0"
-          AnchorPane.leftAnchor="20.0"
-          AnchorPane.rightAnchor="20.0"
-          AnchorPane.bottomAnchor="20.0"
-          styleClass="menu-container"
-          style="-fx-padding: 20;">
+    <VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;" styleClass="menu-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <Label styleClass="title-label" text="Reservation Report" />
         
-        <TableView fx:id="reservationTable" prefHeight="400.0" prefWidth="960.0"
-                   styleClass="main-table">
+        <TableView fx:id="reservationTable" prefHeight="400.0" prefWidth="960.0" styleClass="main-table">
             <columns>
-            	<TableColumn fx:id="colId" text="Id" prefWidth="120.0"/>
-                <TableColumn fx:id="colSubscriberId" text="Subscriber ID" prefWidth="200.0"/>
-                <TableColumn fx:id="colSpotId" text="Spot" prefWidth="120.0"/>
-                <TableColumn fx:id="colDate" text="Reservation Date" prefWidth="150.0"/>
-                <TableColumn fx:id="colStartTime" text="Start Time" prefWidth="120.0"/>
-                <TableColumn fx:id="colEndTime" text="End Time" prefWidth="120.0"/>
+            	<TableColumn fx:id="colId" prefWidth="120.0" text="Id" />
+                <TableColumn fx:id="colSubscriberId" prefWidth="200.0" text="Subscriber ID" />
+                <TableColumn fx:id="colSpotId" prefWidth="120.0" text="Spot" />
+                <TableColumn fx:id="colDate" prefWidth="150.0" text="Reservation Date" />
+                <TableColumn fx:id="colStartTime" prefWidth="120.0" text="Start Time" />
+                <TableColumn fx:id="colEndTime" prefWidth="120.0" text="End Time" />
             </columns>
         </TableView>
         
         <LineChart fx:id="reservationsLineChart" prefHeight="240.0" prefWidth="800.0">
     		<xAxis>
-        		<NumberAxis label="Day of Month"/>
+        		<NumberAxis label="Day of Month" />
     		</xAxis>
     		<yAxis>
-        		<NumberAxis label="Reservations"/>
+        		<NumberAxis label="Reservations" />
     		</yAxis>
 		</LineChart>
         
 
-        <HBox spacing="15.0" alignment="CENTER">
-        	<Label text="Month:" />
-    		<ComboBox fx:id="monthComboBox" prefWidth="120"/>
-    		<Label text="Year:" />
-    		<ComboBox fx:id="yearComboBox" prefWidth="90"/>
-            <Button fx:id="sortBySubscriberIdButton" text="Sort by Subscriber ID" styleClass="button-blue"/>
-            <Button fx:id="sortByDateButton" text="Sort by Date" styleClass="button-blue"/>
-            <Button fx:id="exportCsvButton" text="Export as CSV" styleClass="button-blue"/>
+        <HBox alignment="CENTER" spacing="15.0">
+        	<Label styleClass="form-label" text="Month:" />
+    		<ComboBox fx:id="monthComboBox" prefWidth="120" />
+    		<Label styleClass="form-label" text="Year:" />
+    		<ComboBox fx:id="yearComboBox" prefWidth="90" />
+            <Button fx:id="sortBySubscriberIdButton" styleClass="button-blue" text="Sort by Subscriber ID" />
+            <Button fx:id="sortByDateButton" styleClass="button-blue" text="Sort by Date" />
+            <Button fx:id="exportCsvButton" styleClass="button-blue" text="Export as CSV" />
         </HBox>
         
 
-        <HBox spacing="15.0" alignment="CENTER">
-		<Button text="Refresh" styleClass="button-blue" />
+        <HBox alignment="CENTER" spacing="15.0">
+		<Button styleClass="button-blue" text="🔄Refresh" />
 		<!-- Back Button -->
-		<Button fx:id="backButton" text="Back" styleClass="button-blue"
-			onAction="#handleBackButton" />
+		<Button fx:id="backButton" onAction="#handleBackButton" styleClass="button-red" text="Back" />
 		</HBox>
     </VBox>
 </AnchorPane>

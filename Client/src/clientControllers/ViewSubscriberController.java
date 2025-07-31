@@ -51,7 +51,9 @@ public class ViewSubscriberController extends Controller {
 	protected TableColumn<subscriber, String> colTag;
 	@FXML
 	protected TableColumn<subscriber, Role> colRole;
-
+	@FXML
+	protected TableColumn<subscriber, Boolean> colLoggedIn;
+	
 	@FXML
 	protected ComboBox<String> roleComboBox;
 
@@ -102,7 +104,7 @@ public class ViewSubscriberController extends Controller {
 		colPhone.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPhone()));
 		colTag.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getTag()));
 		colRole.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getRole()));
-
+		colLoggedIn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getLoggedIn()));
 		// Combo box
 		roleComboBox.getItems().setAll(roles);
 		roleComboBox.getSelectionModel().selectFirst();

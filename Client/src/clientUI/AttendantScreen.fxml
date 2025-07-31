@@ -1,44 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="clientControllers.AttendentScreenController"
-            prefWidth="900.0" prefHeight="600.0"
-            stylesheets="@screenstyle.css"
-            style="-fx-background-color: linear-gradient(to bottom right, #dbeafe, #93c5fd);">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: linear-gradient(to bottom right, #dbeafe, #93c5fd);" stylesheets="@screenstyle.css, @styles.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="clientControllers.AttendentScreenController">
 
-    <VBox alignment="CENTER" spacing="30.0"
-      AnchorPane.topAnchor="50.0"
-      AnchorPane.bottomAnchor="50.0"
-      AnchorPane.leftAnchor="50.0"
-      AnchorPane.rightAnchor="50.0">
+    <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
 
-	    <Label text="🛠️ Attendant Panel"
-	           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;" />
+	    <Label style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;" styleClass="title-label" text="🛠️ Attendant Panel" />
 	
-	    <Button fx:id="openActiveSessionsReportButton" text="📊 View Active Parkings"
-	    		onAction="#openActiveSessionsReport"
-	            prefWidth="300" prefHeight="50" style="-fx-font-size: 14px;" />
+	    <Button fx:id="openActiveSessionsReportButton" onAction="#openActiveSessionsReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📊 View Active Parkings" />
 	
-	    <Button fx:id="openSubscribersReportButton" text="👥 View Subscribers"
-	   	 		onAction="#openSubscribersReport"
-	            prefWidth="300" prefHeight="50" style="-fx-font-size: 14px;" />
+	    <Button fx:id="openSubscribersReportButton" onAction="#openSubscribersReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="👥 View Subscribers" />
 	            
-	    <Button fx:id="openReservationReportButton" text="📋 View Reservations"
-	            onAction="#openReservationReport"
-	            prefWidth="300" prefHeight="50" style="-fx-font-size: 14px;" />
+	    <Button fx:id="openReservationReportButton" onAction="#openReservationReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📋 View Reservations" />
 	
-	    <Button fx:id="registerNewSubscriberButton" text="📝 Register New Subscriber"
-	            onAction="#registerNewSubscriber"
-	            prefWidth="300" prefHeight="50" style="-fx-font-size: 14px;" />
+	    <Button fx:id="registerNewSubscriberButton" onAction="#registerNewSubscriber" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📝 Register New Subscriber" />
 	
-	    <Button fx:id="backButton" text="⬅ Back"
-	            onAction="#handleBackButton"
-	            prefWidth="180" prefHeight="45"
-	            styleClass="button-back"
-	            style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;" />
+	    <Button fx:id="backButton" onAction="#handleBackButton" prefHeight="45" prefWidth="180" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;" styleClass="disconnect-button" text="Disconnect" />
 	</VBox>
 
 </AnchorPane>
