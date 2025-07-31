@@ -16,109 +16,108 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainPane" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.ReservationScreenController">
-    <children>
-        <!-- Main container holding form + table -->
-        <VBox fx:id="contentVBox" alignment="TOP_CENTER" spacing="20.0" styleClass="menu-container" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
-        
-            <!-- Page title -->
-            <Label styleClass="title-label" text="🚗 Make a Parking Reservation" />
+	<children>
+		<!-- Main container holding form + table -->
+		<VBox fx:id="contentVBox" alignment="TOP_CENTER" spacing="20.0" styleClass="menu-container" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
 
-            <!-- Reservation form -->
-            <GridPane hgap="10" styleClass="menu-container" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                <columnConstraints>
-                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" />
-                    <ColumnConstraints hgrow="ALWAYS" maxWidth="521.0" />
-                    <ColumnConstraints hgrow="ALWAYS" />
-                </columnConstraints>
+			<!-- Page title -->
+			<Label styleClass="title-label" text="🚗 Make a Parking Reservation" />
 
-                <rowConstraints>
-                    <RowConstraints vgrow="ALWAYS" />
-                    <RowConstraints vgrow="ALWAYS" />
-                    <RowConstraints vgrow="ALWAYS" />
-                </rowConstraints>
+			<!-- Reservation form -->
+			<GridPane hgap="10" styleClass="menu-container" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+				<columnConstraints>
+					<ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" />
+					<ColumnConstraints hgrow="ALWAYS" maxWidth="521.0" />
+					<ColumnConstraints hgrow="ALWAYS" />
+				</columnConstraints>
 
-                <!-- Date label and DatePicker -->
-                <Label styleClass="form-label" text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <DatePicker fx:id="datePicker" promptText="dd.MM.yyyy" styleClass="date-picker" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+				<rowConstraints>
+					<RowConstraints vgrow="ALWAYS" />
+					<RowConstraints vgrow="ALWAYS" />
+					<RowConstraints vgrow="ALWAYS" />
+				</rowConstraints>
 
-                <!-- Start Time label and TextField -->
-                <Label styleClass="form-label" text="Start Time:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="startTimeField" maxWidth="521.0" minWidth="521.0" prefWidth="521.0" promptText="HH:MM" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Label fx:id="startTimeWarningLabel" style="-fx-text-fill: red;" text="Invalid time format!" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+				<!-- Date label and DatePicker -->
+				<Label styleClass="form-label" text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+				<DatePicker fx:id="datePicker" promptText="dd.MM.yyyy" styleClass="date-picker" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <!-- End Time label and TextField -->
-                <Label styleClass="form-label" text="End Time:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <TextField fx:id="endTimeField" maxWidth="521.0" promptText="HH:MM" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label fx:id="endTimeWarningLabel" style="-fx-text-fill: red;" text="Invalid time format!" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            </GridPane>
+				<!-- Start Time label and TextField -->
+				<Label styleClass="form-label" text="Start Time:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+				<TextField fx:id="startTimeField" maxWidth="521.0" minWidth="521.0" prefWidth="521.0" promptText="HH:MM" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Label fx:id="startTimeWarningLabel" style="-fx-text-fill: red;" text="Invalid time format!" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
-            <!-- Action buttons (Reserve and Clear) -->
-            <HBox alignment="CENTER" spacing="20.0" HBox.hgrow="ALWAYS">
-                <Button fx:id="reserveButton" onAction="#submitReservationRequest" styleClass="menu-button" text="Reserve" />
-                <Button fx:id="cancelButton" onAction="#submitCancellation" styleClass="menu-button" text="Clear" />
-            </HBox>
+				<!-- End Time label and TextField -->
+				<Label styleClass="form-label" text="End Time:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+				<TextField fx:id="endTimeField" maxWidth="521.0" promptText="HH:MM" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label fx:id="endTimeWarningLabel" style="-fx-text-fill: red;" text="Invalid time format!" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+			</GridPane>
 
-            <!-- Future Reservations table -->
-            <Label styleClass="reg-label" text="Future Reservations" />
-            <TableView fx:id="futureReservationsTable" prefHeight="250.0" prefWidth="600.0" styleClass="menu-container" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="colId" prefWidth="100" text="Id" />
-                    <TableColumn fx:id="colSpot" prefWidth="100" text="Spot" />
-                    <TableColumn fx:id="colDate" prefWidth="150" text="Date" />
-                    <TableColumn fx:id="colStart" prefWidth="150" text="Start" />
-                    <TableColumn fx:id="colEnd" prefWidth="150" text="End" />
-                </columns>
-            </TableView>
+			<!-- Action buttons (Reserve and Clear) -->
+			<HBox alignment="CENTER" spacing="20.0" HBox.hgrow="ALWAYS">
+				<Button fx:id="reserveButton" onAction="#submitReservationRequest" styleClass="menu-button" text="Reserve" />
+				<Button fx:id="cancelButton" onAction="#submitCancellation" styleClass="menu-button" text="Clear" />
+			</HBox>
 
-            <!-- Delete Reservation Section -->
-<VBox alignment="CENTER" spacing="20.0">
-    <Label styleClass="reg-label" text="Delete Reservation" />
-    <GridPane alignment="CENTER_LEFT" hgap="10" vgap="10">
-        <columnConstraints>
-            <!-- First column for label (right-aligned) -->
-            <ColumnConstraints halignment="RIGHT" minWidth="150.0" />
-            <!-- Second column for text field (same width as the ones above) -->
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="521.0" minWidth="200.0" prefWidth="521.0" />
-            <!-- Third column for warning label (flexible size) -->
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="50.0" />
-        </columnConstraints>
+			<!-- Future Reservations table -->
+			<Label styleClass="reg-label" text="Future Reservations" />
+			<TableView fx:id="futureReservationsTable" prefHeight="250.0" prefWidth="600.0" styleClass="menu-container" VBox.vgrow="ALWAYS">
+				<columns>
+					<TableColumn fx:id="colId" prefWidth="100" text="Id" />
+					<TableColumn fx:id="colSpot" prefWidth="100" text="Spot" />
+					<TableColumn fx:id="colDate" prefWidth="150" text="Date" />
+					<TableColumn fx:id="colStart" prefWidth="150" text="Start" />
+					<TableColumn fx:id="colEnd" prefWidth="150" text="End" />
+				</columns>
+			</TableView>
 
-        <rowConstraints>
-            <RowConstraints vgrow="ALWAYS" />
-        </rowConstraints>
+			<!-- Delete Reservation Section -->
+			<VBox alignment="CENTER" spacing="20.0">
+				<Label styleClass="reg-label" text="Delete Reservation" />
+				<GridPane alignment="CENTER_LEFT" hgap="10" vgap="10">
+					<columnConstraints>
+						<!-- First column for label (right-aligned) -->
+						<ColumnConstraints halignment="RIGHT" minWidth="150.0" />
+						<!-- Second column for text field (same width as the ones above) -->
+						<ColumnConstraints hgrow="ALWAYS" maxWidth="521.0" minWidth="200.0" prefWidth="521.0" />
+						<!-- Third column for warning label (flexible size) -->
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="50.0" />
+					</columnConstraints>
 
-        <children>
-            <!-- Reservation ID Label -->
-            <Label prefHeight="38.0" prefWidth="282.0" styleClass="form-label" text="Enter reservation ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            
-            <!-- Reservation ID TextField (same width as the ones above) -->
-            <TextField fx:id="reservationIdField" prefHeight="73.0" prefWidth="521.0" promptText="Numbers only" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            
-            <!-- Load Button -->
-            <Button fx:id="loadButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleLoadButton" styleClass="button-blue" text="Load" GridPane.columnIndex="2" GridPane.rowIndex="0">
-            </Button>
+					<rowConstraints>
+						<RowConstraints vgrow="ALWAYS" />
+					</rowConstraints>
 
-            <!-- Warning Label -->
-            <Label fx:id="reservationIdWarningLabel" ellipsisString="1111111111111111111111111" prefWidth="12.0" text="Label" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                <GridPane.margin>
-                    <Insets left="100.0" />
-                </GridPane.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-            </Label>
-        </children>
-    </GridPane>
+					<children>
+						<!-- Reservation ID Label -->
+						<Label prefHeight="38.0" prefWidth="282.0" styleClass="form-label" text="Enter reservation ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
 
-    <!-- Delete Reservation button -->
-    <HBox alignment="CENTER_LEFT" spacing="20.0">
-        <Button fx:id="deleteReservationButton" mnemonicParsing="false" onAction="#handleDeleteReservationButton" styleClass="menu-button" text="Delete Reservation" />
-    </HBox>
-</VBox>
+						<!-- Reservation ID TextField (same width as the ones above) -->
+						<TextField fx:id="reservationIdField" prefHeight="73.0" prefWidth="521.0" promptText="Numbers only" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-        </VBox>
+						<!-- Load Button -->
+						<Button fx:id="loadButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleLoadButton" styleClass="button-blue" text="Load" GridPane.columnIndex="2" GridPane.rowIndex="0">
+						</Button>
 
-        <!-- Back button in the bottom-right corner -->
-        <Button fx:id="backButton" onAction="#handleBackButton" styleClass="disconnect-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-    </children>
+						<Label fx:id="reservationIdWarningLabel" ellipsisString="ID must be numeric" text="Label" textAlignment="CENTER" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="0">
+							<GridPane.margin>
+								<Insets left="100.0" />
+							</GridPane.margin>
+							<font>
+								<Font size="18.0" />
+							</font>
+						</Label>
+					</children>
+				</GridPane>
+
+				<!-- Delete Reservation button -->
+				<HBox alignment="CENTER_LEFT" spacing="20.0">
+					<Button fx:id="deleteReservationButton" mnemonicParsing="false" onAction="#handleDeleteReservationButton" styleClass="menu-button" text="Delete Reservation" />
+				</HBox>
+			</VBox>
+
+		</VBox>
+
+		<!-- Back button in the bottom-right corner -->
+		<Button fx:id="backButton" onAction="#handleBackButton" styleClass="disconnect-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+	</children>
 </AnchorPane>

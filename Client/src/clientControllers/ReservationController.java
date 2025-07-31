@@ -337,7 +337,7 @@ public class ReservationController extends Controller{
             		clearForm();
             		if(!reservationIdField.getText().trim().isEmpty()) {
             			reservationIdField.clear();
-            			reservationIdWarningLabel.setText("");
+            			reservationIdWarningLabel.setVisible(false);
             		}
             	}
             }
