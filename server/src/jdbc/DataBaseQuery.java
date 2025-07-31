@@ -238,7 +238,6 @@ public class DataBaseQuery extends MySQLConnection {
                     java.util.Date outTime = rs.getTimestamp("out_time"); 
                     boolean extended = rs.getBoolean("extended");
                     boolean late     = rs.getBoolean("late");
-                    boolean active   = rs.getBoolean("active");
                     historyList.add(new Parkingsession(sessionId,subscriberId,spotId,code,inTime,outTime,extended,late,false));
                 }
             }
@@ -413,7 +412,7 @@ public class DataBaseQuery extends MySQLConnection {
    
             ps.setInt(9, session.getSessionId());
 
-            int rowsAffected = ps.executeUpdate();
+            ps.executeUpdate();
          }
         catch (SQLException e) {
             e.printStackTrace();
@@ -452,7 +451,7 @@ public class DataBaseQuery extends MySQLConnection {
             ps.setInt   (8, user.getId());
 
             // 5) Execute the update
-            int rowsAffected = ps.executeUpdate();
+            ps.executeUpdate();
             // (Optional) you can log or check rowsAffected to ensure one row was updated
         } catch (SQLException e) {
             e.printStackTrace();
@@ -474,7 +473,7 @@ public class DataBaseQuery extends MySQLConnection {
         try (PreparedStatement ps = getCon().prepareStatement(sql)) {
             ps.setString(1, spot.getStatus().name());
             ps.setInt   (2, spot.getSpotId());
-            int rows = ps.executeUpdate();
+            ps.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
