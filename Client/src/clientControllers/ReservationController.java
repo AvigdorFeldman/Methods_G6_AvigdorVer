@@ -264,6 +264,9 @@ public class ReservationController extends Controller{
         client.sendToServerSafely(req);
     }
 
+    /**
+     * Loads the reservation by id
+     */
     @FXML
     public void handleLoadButton() {
         String reservationId = reservationIdField.getText().trim();
@@ -284,6 +287,9 @@ public class ReservationController extends Controller{
         reservationIdWarningLabel.setVisible(false);
     }
     
+    /**
+     * Deletes reservation by its id
+     */
     @FXML
     public void handleDeleteReservationButton() {
 
