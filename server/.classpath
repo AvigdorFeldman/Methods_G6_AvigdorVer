@@ -5,6 +5,12 @@
 	<classpathentry exported="true" kind="lib" path="mysql-connector-java-8.0.13.jar"/>
 	<classpathentry kind="lib" path="jakarta.activation-2.0.1.jar"/>
 	<classpathentry kind="lib" path="jakarta.mail-2.0.1.jar"/>
+	<classpathentry kind="lib" path="io-9.2.0.jar"/>
+	<classpathentry kind="lib" path="kernel-9.2.0.jar"/>
+	<classpathentry kind="lib" path="layout-9.2.0.jar"/>
+	<classpathentry kind="lib" path="commons-9.2.0.jar"/>
+	<classpathentry kind="lib" path="slf4j-api-1.7.32.jar"/>
+	<classpathentry kind="lib" path="slf4j-simple-1.7.32.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/bpark"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
 		<attributes>

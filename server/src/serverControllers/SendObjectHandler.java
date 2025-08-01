@@ -1,7 +1,11 @@
 package serverControllers;
 
 import logic.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -81,7 +85,19 @@ public class SendObjectHandler {
 				System.err.println("Unknown SendObject received: action = " + action + ", object = " + object);
 				throw new Exception("No send option is capable without subscriber object");
 			}
-		} else { // Default for not unknown SendObject
+			
+		} else if(action.contains("File to server")) { // Creates reports directory and creates a new file in it
+			if (object instanceof FileTransferMessage) {
+				FileTransferMessage fileMsg = (FileTransferMessage)object; 
+			    File reportsDir = new File("reports");
+			    if (!reportsDir.exists()) reportsDir.mkdirs();
+
+			    File reportFile = new File(reportsDir, fileMsg.getFilename());
+			    try (FileOutputStream fos = new FileOutputStream(reportFile)) {
+			        fos.write(fileMsg.getData());
+			    }
+			}
+		}else { // Default for not unknown SendObject
 			System.err.println("Unknown SendObject received: action = " + action + ", object = " + object);
 			throw new Exception("No possible classes were chosen");
 		}// Default
@@ -291,6 +307,22 @@ public class SendObjectHandler {
 				allActiveParkingsessions = con.getAllActiveParkingsession();
 				return new SendObject<T1>("Received active parking sessions",
 						(T1) (List<Parkingsession>) allActiveParkingsessions);
+			}else if(action.contains("Get ActiveSessions")) {
+				System.out.println("1");
+				File reportsDir = new File("reports"); // Relative path to your reports directory
+				if (!reportsDir.exists()) {
+				    reportsDir.mkdirs(); // Ensure the directory exists
+				}
+				File csvFile = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".csv");
+				File pngFile = new File(reportsDir, "ActiveSessionsChart_" + object.toString() + ".png");
+				System.out.println("CSV File Path: " + csvFile.getAbsolutePath());
+		        System.out.println("PNG File Path: " + pngFile.getAbsolutePath());
+				File ActiveSessionsPdf = new File(reportsDir, "ActiveSessionsReport_"+object.toString()+".pdf");
+				System.out.println("PDF File Path: " + ActiveSessionsPdf.getAbsolutePath());
+				PDFReport.generatePdfReport(csvFile,pngFile,ActiveSessionsPdf);
+				byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
+				FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
+				return new SendObject<T1>("ActiveSessionsPDF",(T1)(FileTransferMessage)message);
 			}
 
 		}

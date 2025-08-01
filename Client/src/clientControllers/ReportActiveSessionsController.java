@@ -1,17 +1,25 @@
 package clientControllers;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
-import logic.Parkingsession;
+import logic.*;
 
 
 /**
@@ -34,7 +42,8 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 	private NumberAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
-
+	@FXML
+	private Button showPDF;
 	@FXML
 	@Override
 	public void initialize() {
@@ -45,9 +54,17 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 				try {
 					FileChooser fileChooser = new FileChooser();
 					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String defaultName = "ActiveSessionsReport_" + LocalDateTime.now().format(formatter) + ".csv";
+					fileChooser.setInitialFileName(defaultName);
+
 					File file = fileChooser.showSaveDialog(exportCsvButton.getScene().getWindow());
 					if (file != null) {
+						File imageFile = new File("ActiveSessionsChart_"+LocalDateTime.now().format(formatter)+".png");
+						saveChartAsImage(activeSessionLineChart, imageFile);
 						Util.exportToCSV(sessionTable, file);
+						Util.sendReportFileToServer(file, client, "File to server");
+						Util.sendReportFileToServer(imageFile, client, "File to server");
 						showAlert("Exported table to " + file.getName());
 					}
 				} catch (Exception ex) {
@@ -55,7 +72,18 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 				}
 			});
 		}
+		showPDF.setOnAction(e ->{
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String today = LocalDateTime.now().format(formatter);
+			try {
+				client.sendToServer(new SendObject<String>("Get ActiveSessions", today));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 	}
+	
 	
     /**
      * Sets the list of sessions and updates the line chart with active session data.
@@ -96,6 +124,21 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 
 	    activeSessionLineChart.getData().clear();
 	    activeSessionLineChart.getData().add(series);
+	    
+	    
 	}
 
+	private void saveChartAsImage(LineChart<Number, Number> chart, File file) {
+        try {
+            // Snapshot the chart to an image
+            WritableImage image = chart.snapshot(null, null);
+
+            // Convert JavaFX image to BufferedImage and save to file
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+
+            System.out.println("Chart saved to " + file.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

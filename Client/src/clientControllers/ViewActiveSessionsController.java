@@ -1,5 +1,10 @@
 package clientControllers;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import logic.FileTransferMessage;
 import logic.Parkingsession;
 import logic.SendObject;
 
@@ -105,6 +111,23 @@ public class ViewActiveSessionsController extends Controller {
 				List<?> updated = (List<?>) ((SendObject<?>) msg).getObj();
 				if (!updated.isEmpty() && updated.get(0) instanceof Parkingsession) {
 					Platform.runLater(() -> setSessions((List<Parkingsession>) updated));
+				}
+			}
+			else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ActiveSessionsPDF")) {
+				System.out.println("1");
+				FileTransferMessage fileMsg = (FileTransferMessage)((SendObject<?>) msg).getObj(); 
+				File reportsDir = new File("reports");
+			    if (!reportsDir.exists()) reportsDir.mkdirs();
+			    File reportFile = new File(reportsDir, fileMsg.getFilename());
+			    try (FileOutputStream fos = new FileOutputStream(reportFile)) {
+			        fos.write(fileMsg.getData());
+			        Desktop.getDesktop().open(reportFile);
+			    } catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
