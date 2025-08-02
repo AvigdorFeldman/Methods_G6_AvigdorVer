@@ -82,7 +82,6 @@ public class ReportSubscriberController extends ViewSubscriberController {
 		}if (createReportButton != null) {
 			createReportButton.setOnAction(e -> {
 				try {
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					String defaultName = "SubscriberReport_" + subId + ".csv";
 
 					File reportFile = new File("reports/" + defaultName);
@@ -104,7 +103,7 @@ public class ReportSubscriberController extends ViewSubscriberController {
 				String today=subId+",";
 				for (logic.subscriber subscriber : allSubscribers) {
 					if(subscriber.getId()==subId) {
-						today += String.format("Sub. ID: %d\nSub. name: %s\nEmail: %s\nPhone: %s\nRole: %s\nLogged in: %s",subscriber.getId(),subscriber.getName(),subscriber.getEmail(),subscriber.getPhone(),subscriber.getRole(),subscriber.getLoggedIn());
+						today += String.format("Sub. ID: %d\nSub. name: %s\nEmail: %s\nPhone: %s\nRole: %s\nLogged in: %s\nParking Session History",subscriber.getId(),subscriber.getName(),subscriber.getEmail(),subscriber.getPhone(),subscriber.getRole(),subscriber.getLoggedIn());
 					}
 				}
 				try {
