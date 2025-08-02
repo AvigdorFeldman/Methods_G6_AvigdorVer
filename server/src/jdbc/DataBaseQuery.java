@@ -1160,6 +1160,25 @@ public class DataBaseQuery extends MySQLConnection {
         return list;
     }
 
+	public List<ParkingSpot> getAllParkingSpots() {
+		List<ParkingSpot> list = new ArrayList<>();
+        String sql =
+            "SELECT * " +
+            "FROM parking_spots ";
+        try (PreparedStatement ps = getCon().prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+               while (rs.next()) {
+                   int    spotId       = rs.getInt("spot_id");
+                   String    status    = rs.getString("status");
+                   list.add(new ParkingSpot(spotId,SpotStatus.valueOf(status)));
+               }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+	}
+
 	
 
 }

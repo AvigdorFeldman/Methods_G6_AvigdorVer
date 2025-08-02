@@ -19,6 +19,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import logic.FileTransferMessage;
+import logic.ParkingSpot;
 import logic.Parkingsession;
 import logic.SendObject;
 
@@ -59,7 +60,7 @@ public class ViewActiveSessionsController extends Controller {
 	protected Button backButton;
 
 	protected List<Parkingsession> allSessions = new ArrayList<>();
-
+	protected List<ParkingSpot> parkingSpots = new ArrayList<>();
     /**
      * Initializes the table view and its columns.
      *
@@ -112,9 +113,12 @@ public class ViewActiveSessionsController extends Controller {
 				if (!updated.isEmpty() && updated.get(0) instanceof Parkingsession) {
 					Platform.runLater(() -> setSessions((List<Parkingsession>) updated));
 				}
+				if (!updated.isEmpty() && updated.get(0) instanceof ParkingSpot) {
+					System.out.println("1");
+					Platform.runLater(() -> parkingSpots=(List<ParkingSpot>)updated);
+				}
 			}
 			else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ActiveSessionsPDF")) {
-				System.out.println("1");
 				FileTransferMessage fileMsg = (FileTransferMessage)((SendObject<?>) msg).getObj(); 
 				File reportsDir = new File("reports");
 			    if (!reportsDir.exists()) reportsDir.mkdirs();

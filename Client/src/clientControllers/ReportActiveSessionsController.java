@@ -2,23 +2,18 @@ package clientControllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import javafx.embed.swing.SwingFXUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.image.WritableImage;
-import javafx.stage.FileChooser;
 import logic.*;
 
 
@@ -45,43 +40,57 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 	@FXML
 	private Button showPDF;
 	@FXML
+	private Button refreshButton;
+	@FXML
+	private PieChart parkingSpotChart;
+	@FXML
 	@Override
 	public void initialize() {
 		super.initialize();
-
+		
 		if (exportCsvButton != null) {
 			exportCsvButton.setOnAction(e -> {
 				try {
-					FileChooser fileChooser = new FileChooser();
-					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					String defaultName = "ActiveSessionsReport_" + LocalDateTime.now().format(formatter) + ".csv";
-					fileChooser.setInitialFileName(defaultName);
 
-					File file = fileChooser.showSaveDialog(exportCsvButton.getScene().getWindow());
-					if (file != null) {
-						File imageFile = new File("ActiveSessionsChart_"+LocalDateTime.now().format(formatter)+".png");
-						saveChartAsImage(activeSessionLineChart, imageFile);
-						Util.exportToCSV(sessionTable, file);
-						Util.sendReportFileToServer(file, client, "File to server");
-						Util.sendReportFileToServer(imageFile, client, "File to server");
-						showAlert("Exported table to " + file.getName());
+					 File reportFile = new File("reports/" + defaultName);
+					if (reportFile != null) {
+						File imageFile1 = new File("reports/ActiveSessionsChart_"+LocalDateTime.now().format(formatter)+".png");
+						Util.saveChartAsImage(activeSessionLineChart, imageFile1);
+						File imageFile2 = new File("reports/ParkingSpotsChart_"+LocalDateTime.now().format(formatter)+".png");
+						Util.saveChartAsImage(parkingSpotChart, imageFile2);
+						Util.exportToCSV(sessionTable, reportFile);
+						Util.sendReportFileToServer(reportFile, client, "File to server");
+						Util.sendReportFileToServer(imageFile1, client, "File to server");
+						Util.sendReportFileToServer(imageFile2, client, "File to server");
+						showAlert("Exported table to " + reportFile.getName());
 					}
 				} catch (Exception ex) {
 					showAlert("Failed to export CSV: " + ex.getMessage());
 				}
 			});
 		}
-		showPDF.setOnAction(e ->{
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String today = LocalDateTime.now().format(formatter);
-			try {
-				client.sendToServer(new SendObject<String>("Get ActiveSessions", today));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
+		if (showPDF != null) {
+			showPDF.setOnAction(e ->{
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				String today = LocalDateTime.now().format(formatter);
+				try {
+					client.sendToServer(new SendObject<String>("Get ActiveSessions", today));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+		}
+		if(refreshButton != null) {
+			refreshButton.setOnAction(e ->{
+				SendObject<String> request = new SendObject<>("Get", "active parking sessions");
+				client.sendToServerSafely(request);
+				SendObject<String> request2 = new SendObject<>("Get", "all parking spots");
+				client.sendToServerSafely(request2);
+			});
+		}
 	}
 	
 	
@@ -95,6 +104,8 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 		super.setSessions(sessions);
 		sessionTable.refresh();
 		updateLineChart();
+		Platform.runLater(()->updatePieChart());
+		
 	}
 
     /**
@@ -125,20 +136,44 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 	    activeSessionLineChart.getData().clear();
 	    activeSessionLineChart.getData().add(series);
 	    
-	    
+	    Platform.runLater(() -> activeSessionLineChart.layout());
+	        
 	}
+	
+	 /**
+     * Updates the pie chart with parking spot statuses: Occupied, Free, Reserved.
+     */
+    private void updatePieChart() {
+        int occupiedCount = 0;
+        int freeCount = 0;
+        int reservedCount = 0;
 
-	private void saveChartAsImage(LineChart<Number, Number> chart, File file) {
-        try {
-            // Snapshot the chart to an image
-            WritableImage image = chart.snapshot(null, null);
-
-            // Convert JavaFX image to BufferedImage and save to file
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-
-            System.out.println("Chart saved to " + file.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Loop through the sessions and count the different parking spot statuses
+        for (ParkingSpot spot : parkingSpots) {
+            if (spot.getStatus() == SpotStatus.OCCUPIED) {
+                occupiedCount++;
+            } else if (spot.getStatus() == SpotStatus.FREE) {
+                freeCount++;
+            } else if (spot.getStatus() == SpotStatus.RESERVED) {
+                reservedCount++;
+            }
         }
+
+        // Clear old data and update with new data
+        parkingSpotChart.getData().clear();
+
+        // Create new pie chart data with updated counts
+        PieChart.Data occupied = new PieChart.Data("Occupied", occupiedCount);
+        PieChart.Data free = new PieChart.Data("Free", freeCount);
+        PieChart.Data reserved = new PieChart.Data("Reserved", reservedCount);
+
+        // Add the updated data to the pie chart
+        parkingSpotChart.getData().addAll(occupied, free, reserved);
+
+        // Force layout update to reflect changes
+        Platform.runLater(() -> {
+            parkingSpotChart.layout();
+        });
     }
+	
 }

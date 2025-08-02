@@ -8,8 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.function.Supplier;
 
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.WritableImage;
 import logic.FileTransferMessage;
 import logic.SendObject;
 import ocsf.client.BParkClient;
@@ -112,5 +117,19 @@ public class Util {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void saveChartAsImage(Chart chart, File file) {
+        try {
+            // Snapshot the chart to an image
+            WritableImage image = chart.snapshot(null, null);
+
+            // Convert JavaFX image to BufferedImage and save to file
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+
+            System.out.println("Chart saved to " + file.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

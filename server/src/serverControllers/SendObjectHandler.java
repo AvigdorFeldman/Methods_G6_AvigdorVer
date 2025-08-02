@@ -307,19 +307,22 @@ public class SendObjectHandler {
 				allActiveParkingsessions = con.getAllActiveParkingsession();
 				return new SendObject<T1>("Received active parking sessions",
 						(T1) (List<Parkingsession>) allActiveParkingsessions);
+			}else if(object.equals("all parking spots")){
+				List<ParkingSpot> allParkingSpots = new ArrayList<ParkingSpot>();
+				allParkingSpots = con.getAllParkingSpots();
+				return new SendObject<T1>("Received active parking sessions",
+						(T1) (List<ParkingSpot>) allParkingSpots);
 			}else if(action.contains("Get ActiveSessions")) {
-				System.out.println("1");
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
 				    reportsDir.mkdirs(); // Ensure the directory exists
 				}
 				File csvFile = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".csv");
-				File pngFile = new File(reportsDir, "ActiveSessionsChart_" + object.toString() + ".png");
-				System.out.println("CSV File Path: " + csvFile.getAbsolutePath());
-		        System.out.println("PNG File Path: " + pngFile.getAbsolutePath());
+				File pngFile1 = new File(reportsDir, "ActiveSessionsChart_" + object.toString() + ".png");
+				File pngFile2 = new File(reportsDir, "ParkingSpotsChart_" + object.toString() + ".png");
+				File[] images = new File[]{pngFile1,pngFile2};
 				File ActiveSessionsPdf = new File(reportsDir, "ActiveSessionsReport_"+object.toString()+".pdf");
-				System.out.println("PDF File Path: " + ActiveSessionsPdf.getAbsolutePath());
-				PDFReport.generatePdfReport(csvFile,pngFile,ActiveSessionsPdf);
+				PDFReport.generatePdfReport(csvFile,images,ActiveSessionsPdf, "Active Sessions "+object.toString());
 				byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
 				FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
 				return new SendObject<T1>("ActiveSessionsPDF",(T1)(FileTransferMessage)message);

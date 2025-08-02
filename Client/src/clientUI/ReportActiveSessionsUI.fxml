@@ -2,6 +2,7 @@
 
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -14,21 +15,22 @@
 
 	<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;" styleClass="menu-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
       <Label styleClass="title-label" text="Active Sessions Report" />
-
-		<TableView fx:id="sessionTable" prefHeight="400.0" prefWidth="1050.0" styleClass="main-table">
-			<columns>
-				<TableColumn fx:id="colSessionId" minWidth="80.0" prefWidth="100.0" text="Session ID" />
-				<TableColumn fx:id="colSubscriberId" minWidth="100.0" prefWidth="120.0" text="Subscriber ID" />
-				<TableColumn fx:id="colSpotId" minWidth="80.0" prefWidth="100.0" text="Spot ID" />
-				<TableColumn fx:id="colParkingCode" minWidth="100.0" prefWidth="120.0" text="Parking Code" />
-				<TableColumn fx:id="colInTime" minWidth="150.0" prefWidth="180.0" text="In Time" />
-				<TableColumn fx:id="colOutTime" minWidth="150.0" prefWidth="180.0" text="Out Time" />
-				<TableColumn fx:id="colExtended" minWidth="70.0" prefWidth="90.0" text="Extended" />
-				<TableColumn fx:id="colLate" minWidth="70.0" prefWidth="80.0" text="Late" />
-				<TableColumn fx:id="colActive" minWidth="70.0" prefWidth="80.0" text="Active" />
-			</columns>
-		</TableView>
-
+		<HBox>
+			<TableView fx:id="sessionTable" prefHeight="400.0" prefWidth="1050.0" styleClass="main-table">
+				<columns>
+					<TableColumn fx:id="colSessionId" minWidth="80.0" prefWidth="100.0" text="Session ID" />
+					<TableColumn fx:id="colSubscriberId" minWidth="100.0" prefWidth="120.0" text="Subscriber ID" />
+					<TableColumn fx:id="colSpotId" minWidth="80.0" prefWidth="100.0" text="Spot ID" />
+					<TableColumn fx:id="colParkingCode" minWidth="100.0" prefWidth="120.0" text="Parking Code" />
+					<TableColumn fx:id="colInTime" minWidth="150.0" prefWidth="180.0" text="In Time" />
+					<TableColumn fx:id="colOutTime" minWidth="150.0" prefWidth="180.0" text="Out Time" />
+					<TableColumn fx:id="colExtended" minWidth="70.0" prefWidth="90.0" text="Extended" />
+					<TableColumn fx:id="colLate" minWidth="70.0" prefWidth="80.0" text="Late" />
+					<TableColumn fx:id="colActive" minWidth="70.0" prefWidth="80.0" text="Active" />
+				</columns>
+			</TableView>
+			<PieChart fx:id="parkingSpotChart" title="Parking Spots" />
+		</HBox>
 		<!-- Line Chart -->
 		<LineChart fx:id="activeSessionLineChart" prefHeight="300.0" prefWidth="1050.0" title="Active Sessions per Hour">
 			<xAxis>
@@ -38,14 +40,15 @@
 				<NumberAxis fx:id="yAxis" label="Session Count" />
 			</yAxis>
 		</LineChart>
+      
 
 		<!-- CSV Export -->
 		<HBox alignment="CENTER" spacing="15.0">
-			<Button fx:id="exportCsvButton" styleClass="button-blue" text="Export as CSV" />
+			<Button fx:id="exportCsvButton" styleClass="button-blue" text="Create report" />
 			<Button fx:id="showPDF" styleClass="button-blue" text="Show PDF" />
 		</HBox>
 		<HBox alignment="CENTER" spacing="15.0">
-		<Button styleClass="button-blue" text="🔄Refresh" />
+		<Button fx:id="refreshButton" styleClass="button-blue" text="🔄Refresh" />
 		<!-- Back Button -->
 		<Button fx:id="backButton" onAction="#handleBackButton" styleClass="button-red" text="Back" />
 		</HBox>

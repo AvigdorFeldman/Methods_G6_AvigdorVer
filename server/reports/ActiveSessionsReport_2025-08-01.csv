@@ -1,6 +1,0 @@
-Session ID,Subscriber ID,Spot ID,Parking Code,In Time,Out Time,Extended,Late,Active
-1,2001,103,123001,01/05/2025 08:00,01/05/2025 12:00,false,false,true
-2,2002,105,123002,02/05/2025 09:30,02/05/2025 12:30,false,false,true
-6,2008,109,123008,03/07/2025 14:00,03/07/2025 17:00,true,false,true
-8,2007,113,123010,05/07/2025 16:00,05/07/2025 19:00,false,false,true
-10,2001,101,509633,31/07/2025 16:51,31/07/2025 20:51,false,false,true

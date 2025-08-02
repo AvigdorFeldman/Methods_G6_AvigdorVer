@@ -37,6 +37,7 @@ public class AdminScreenController extends Controller{
 			// Send request to the server
 			SendObject<String> request = new SendObject<>("Get", "all reservations");
 			client.sendToServerSafely(request);
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,6 +74,8 @@ public class AdminScreenController extends Controller{
 			// Send request to the server
 			SendObject<String> request = new SendObject<>("Get", "active parking sessions");
 			client.sendToServerSafely(request);
+			SendObject<String> request2 = new SendObject<>("Get", "all parking spots");
+			client.sendToServerSafely(request2);
 
 		} catch (Exception e) {
 			e.printStackTrace();

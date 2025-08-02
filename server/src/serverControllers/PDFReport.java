@@ -1,12 +1,19 @@
 
 package serverControllers;
+
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.layout.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,15 +21,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import com.itextpdf.io.image.*;
 
 public class PDFReport {
 
 
-	public static void generatePdfReport(File csvFile, File chartImageFile, File pdfOutputFile) throws Exception {
+	public static void generatePdfReport(File csvFile, File[] chartImageFiles, File pdfOutputFile, String reportName) throws Exception {
 	    System.out.println("Generating PDF report...");
-	    System.out.println("CSV File Path: " + csvFile.getAbsolutePath());
-	    System.out.println("Image File Path: " + chartImageFile.getAbsolutePath());
 
 	    // Check if CSV and image files exist and are readable
 	    if (!csvFile.exists() || csvFile.length() == 0) {
@@ -30,17 +34,18 @@ public class PDFReport {
 	        return;  // Exit if CSV is missing
 	    }
 
-	    if (!chartImageFile.exists() || chartImageFile.length() == 0) {
-	        System.out.println("Image file is missing or empty.");
-	        return;  // Exit if image is missing
-	    }
-
 	    try {
 	        // Attempt to initialize PDF writer and document
 	        PdfWriter writer = new PdfWriter(pdfOutputFile);
 	        PdfDocument pdfDoc = new PdfDocument(writer);
 	        Document document = new Document(pdfDoc);
-
+	        PdfFont boldFont = PdfFontFactory.createFont("Helvetica-Bold");
+	        // Step 1: Add the main report title
+	        Paragraph title = new Paragraph(reportName)
+	                .setFont(boldFont)       // Apply bold font
+	                .setFontSize(24)         // Set font size to 24
+	                .setTextAlignment(TextAlignment.CENTER);  // Center the text
+	        document.add(title);
 	        // Step 1: Add CSV data as a table to the PDF
 	        List<String[]> csvData = readCsv(csvFile);
 	        if (csvData.isEmpty()) {
@@ -57,16 +62,17 @@ public class PDFReport {
 	        document.add(table);
 	        System.out.println("CSV data added to the PDF.");
 
-	        // Step 2: Add chart image to the PDF
-	        if (chartImageFile.exists() && chartImageFile.length() > 0) {
-	            ImageData imageData = ImageDataFactory.create(chartImageFile.getAbsolutePath());
-	            Image image = new Image(imageData);
-	            document.add(image);
-	            System.out.println("Image added to the PDF.");
-	        } else {
-	            System.out.println("Chart image file is missing or empty.");
+	        // Step 2: Add chart image to the PD
+	        for(File file: chartImageFiles) {
+		        if (file.exists() && file.length() > 0) {
+		            ImageData imageData = ImageDataFactory.create(file.getAbsolutePath());
+		            Image image = new Image(imageData);
+		            document.add(image);
+		            System.out.println("Image added to the PDF.");
+		        } else {
+		            System.out.println("Chart image file is missing or empty.");
+		        }
 	        }
-
 	        // Step 3: Close the document and write content to the file
 	        document.close();
 
