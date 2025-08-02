@@ -25,7 +25,7 @@ import java.util.List;
 public class PDFReport {
 
 
-	public static void generatePdfReport(File csvFile, File[] chartImageFiles, File pdfOutputFile, String reportName) throws Exception {
+	public static void generatePdfReport(File csvFile, File[] chartImageFiles, File pdfOutputFile, String reportName, String extraInfo) throws Exception {
 	    System.out.println("Generating PDF report...");
 
 	    // Check if CSV and image files exist and are readable
@@ -46,6 +46,12 @@ public class PDFReport {
 	                .setFontSize(24)         // Set font size to 24
 	                .setTextAlignment(TextAlignment.CENTER);  // Center the text
 	        document.add(title);
+	        if(extraInfo!=null) {
+		        Paragraph par = new Paragraph(extraInfo)
+		                .setFontSize(12)         // Set font size to 24
+		                .setTextAlignment(TextAlignment.LEFT);  // Center the text
+		        document.add(par);
+		    }
 	        // Step 1: Add CSV data as a table to the PDF
 	        List<String[]> csvData = readCsv(csvFile);
 	        if (csvData.isEmpty()) {
@@ -56,21 +62,25 @@ public class PDFReport {
 	        Table table = new Table(csvData.get(0).length);
 	        for (String[] row : csvData) {
 	            for (String cell : row) {
-	                table.addCell(new Cell().add(new Paragraph(cell)));
+	                table.addCell(new Cell().add(new Paragraph(cell).setWidth(70)));
 	            }
 	        }
+
+	        table.setWidth(csvData.get(0).length);
 	        document.add(table);
 	        System.out.println("CSV data added to the PDF.");
 
 	        // Step 2: Add chart image to the PD
-	        for(File file: chartImageFiles) {
-		        if (file.exists() && file.length() > 0) {
-		            ImageData imageData = ImageDataFactory.create(file.getAbsolutePath());
-		            Image image = new Image(imageData);
-		            document.add(image);
-		            System.out.println("Image added to the PDF.");
-		        } else {
-		            System.out.println("Chart image file is missing or empty.");
+	        if(chartImageFiles!=null) {
+		        for(File file: chartImageFiles) {
+			        if (file.exists() && file.length() > 0) {
+			            ImageData imageData = ImageDataFactory.create(file.getAbsolutePath());
+			            Image image = new Image(imageData);
+			            document.add(image);
+			            System.out.println("Image added to the PDF.");
+			        } else {
+			            System.out.println("Chart image file is missing or empty.");
+			        }
 		        }
 	        }
 	        // Step 3: Close the document and write content to the file

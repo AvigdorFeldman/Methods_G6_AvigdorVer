@@ -1,7 +1,11 @@
 package clientControllers;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -117,19 +121,37 @@ public class Util {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void saveChartAsImage(Chart chart, File file) {
-        try {
-            // Snapshot the chart to an image
-            WritableImage image = chart.snapshot(null, null);
+		try {
+			// Snapshot the chart to an image
+			WritableImage image = chart.snapshot(null, null);
 
-            // Convert JavaFX image to BufferedImage and save to file
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+			// Convert JavaFX image to BufferedImage and save to file
+			ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
 
-            System.out.println("Chart saved to " + file.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			System.out.println("Chart saved to " + file.getAbsolutePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void getPDF(Object msg) {
+		FileTransferMessage fileMsg = (FileTransferMessage) ((SendObject<?>) msg).getObj();
+		File reportsDir = new File("reports");
+		if (!reportsDir.exists())
+			reportsDir.mkdirs();
+		File reportFile = new File(reportsDir, fileMsg.getFilename());
+		try (FileOutputStream fos = new FileOutputStream(reportFile)) {
+			fos.write(fileMsg.getData());
+			Desktop.getDesktop().open(reportFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

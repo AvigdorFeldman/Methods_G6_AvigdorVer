@@ -1,9 +1,12 @@
 package clientControllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -13,8 +16,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.stage.FileChooser;
 import logic.Parkingsession;
+import logic.SendObject;
 
 /**
  * Controller for managing subscriber reports in a client-server parking management system.
@@ -31,7 +34,12 @@ import logic.Parkingsession;
 public class ReportSubscriberController extends ViewSubscriberController {
 	@FXML
 	private Button exportCsvButton;
-
+	@FXML
+	private Button viewSubscribersReport;
+	@FXML
+	private Button createReportButton;
+	@FXML
+	private Button viewSubscriberReport;
 	@FXML
 	private BarChart<String, Number> barChart;
 	@FXML
@@ -46,17 +54,67 @@ public class ReportSubscriberController extends ViewSubscriberController {
 		if (exportCsvButton != null) {
 			exportCsvButton.setOnAction(e -> {
 				try {
-					FileChooser fileChooser = new FileChooser();
-					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-					File file = fileChooser.showSaveDialog(exportCsvButton.getScene().getWindow());
-					if (file != null) {
-						Util.exportToCSV(subscriberTable, file);
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String defaultName = "SubscribersReport_" + LocalDateTime.now().format(formatter) + ".csv";
+
+					File reportFile = new File("reports/" + defaultName);
+					
+					if (reportFile != null) {
+						Util.exportToCSV(subscriberTable, reportFile);
+						Util.sendReportFileToServer(reportFile, client, "File to server");						
 						showAlert("Exported table to subscribers.csv!");
 					}
 				} catch (Exception ex) {
 					showAlert("Failed to export CSV: " + ex.getMessage());
 				}
 			});
+		}
+		if (viewSubscribersReport != null) {
+			viewSubscribersReport.setOnAction(e -> {
+				try {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					client.sendToServer(new SendObject<String>("Get Subscribers Report",LocalDateTime.now().format(formatter)));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+		}if (createReportButton != null) {
+			createReportButton.setOnAction(e -> {
+				try {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String defaultName = "SubscriberReport_" + subId + ".csv";
+
+					File reportFile = new File("reports/" + defaultName);
+					
+					if (reportFile != null) {
+						Util.exportToCSV(historyTable, reportFile);
+						File imageFile = new File("reports/SubscriberHistorySessionsChart_" + subId +".png");
+						Util.saveChartAsImage(barChart, imageFile);
+						Util.sendReportFileToServer(reportFile, client, "File to server");	
+						Util.sendReportFileToServer(imageFile, client, "File to server");	
+						showAlert("Exported table to subscribers.csv!");
+					}
+				} catch (Exception ex) {
+					showAlert("Failed to export CSV: " + ex.getMessage());
+				}
+			});
+		}if (viewSubscriberReport != null) {
+			viewSubscriberReport.setOnAction(e -> {
+				String today=subId+",";
+				for (logic.subscriber subscriber : allSubscribers) {
+					if(subscriber.getId()==subId) {
+						today += String.format("Sub. ID: %d\nSub. name: %s\nEmail: %s\nPhone: %s\nRole: %s\nLogged in: %s",subscriber.getId(),subscriber.getName(),subscriber.getEmail(),subscriber.getPhone(),subscriber.getRole(),subscriber.getLoggedIn());
+					}
+				}
+				try {
+					client.sendToServer(new SendObject<String>("Get Subscriber Report", today));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+			
 		}
 	}
 

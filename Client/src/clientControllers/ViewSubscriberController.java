@@ -20,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import logic.FileTransferMessage;
 import logic.Parkingsession;
 import logic.Role;
 import logic.SendObject;
@@ -73,19 +74,20 @@ public class ViewSubscriberController extends Controller {
 	private Button viewHistoryButton;
 
 	@FXML
-	private TableView<Parkingsession> historyTable;
+	protected TableView<Parkingsession> historyTable;
 
 	@FXML
-	private TableColumn<Parkingsession, Integer> colSessionId;
+	protected TableColumn<Parkingsession, Integer> colSessionId;
 	@FXML
-	private TableColumn<Parkingsession, Integer> colSpotId;
+	protected TableColumn<Parkingsession, Integer> colSpotId;
 	@FXML
-	private TableColumn<Parkingsession, String> colInTime;
+	protected TableColumn<Parkingsession, String> colInTime;
 	@FXML
-	private TableColumn<Parkingsession, String> colOutTime;
+	protected TableColumn<Parkingsession, String> colOutTime;
 	@FXML
-	private TableColumn<Parkingsession, String> colLate;
-
+	protected TableColumn<Parkingsession, String> colLate;
+	@FXML
+	protected Integer subId = null;
 	@SuppressWarnings("unused")
 	private List<Parkingsession> historySessions;
 
@@ -141,8 +143,8 @@ public class ViewSubscriberController extends Controller {
 		}
 
 		try {
-			int subscriberId = Integer.parseInt(idText);
-			client.sendToServerSafely(new SendObject<Integer>("Get history", subscriberId));
+			subId = Integer.parseInt(idText);
+			client.sendToServerSafely(new SendObject<Integer>("Get history", subId));
 		} catch (NumberFormatException e) {
 			showAlert("Subscriber ID must be a number.");
 		}
@@ -221,7 +223,7 @@ public class ViewSubscriberController extends Controller {
 			SendObject<?> so = (SendObject<?>) msg;
 
 			// Handle subscriber list updates
-			if (so.getObj() instanceof List<?>) {
+			if (so.getObj() instanceof List<?> && !so.getObjectMessage().equals("Parkingsession list of subscriber")) {
 				List<?> updated = (List<?>) so.getObj();
 				if (!updated.isEmpty() && updated.get(0) instanceof subscriber) {
 					Platform.runLater(() -> setSubscribers((List<subscriber>) updated));
@@ -229,10 +231,11 @@ public class ViewSubscriberController extends Controller {
 			}
 
 			// Handle history data per specific subscriber
-			if ("Parkingsession list of subscriber".equals(so.getObjectMessage())) {
+			else if ("Parkingsession list of subscriber".equals(so.getObjectMessage())) {
 				Object obj = so.getObj();
 				if (obj instanceof List<?>) {
 					List<?> list = (List<?>) obj;
+					System.out.println("2");
 					if (!list.isEmpty() && list.get(0) instanceof Parkingsession) {
 						setHistorySessions((List<Parkingsession>) list);
 					} else {
@@ -240,6 +243,10 @@ public class ViewSubscriberController extends Controller {
 						setHistorySessions(new ArrayList<>());
 					}
 				}
+			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("SubscribersReportPDF")) {
+				Util.getPDF(msg);
+			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("SubscriberReportPDF")) {
+				Util.getPDF(msg);
 			}
 		}
 	}

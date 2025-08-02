@@ -40,6 +40,7 @@
 			<ComboBox fx:id="roleComboBox" prefWidth="140.0" />
 			<Button fx:id="sortBySubscriberIdButton" styleClass="button-blue" text="Sort by Subscriber ID" />
 			<Button fx:id="exportCsvButton" styleClass="button-blue" text="Export as CSV" />
+			<Button fx:id="viewSubscribersReport" styleClass="button-blue" text="Show PDF" />
 		</HBox>
 
 		<!-- BOTTOM SECTION: History View -->
@@ -57,6 +58,8 @@
                <children>
       					<TextField fx:id="subscriberIdField" maxWidth="298.0" prefHeight="73.0" prefWidth="298.0" promptText="Subscriber ID" />
       					<Button fx:id="viewHistoryButton" styleClass="button-blue" text="View Subscriber History" GridPane.columnIndex="1" />
+      					<Button fx:id="createReportButton" styleClass="button-blue" text="Create Report" GridPane.columnIndex="2" />
+      					<Button fx:id="viewSubscriberReport" styleClass="button-blue" text="View Subscriber PDF" GridPane.columnIndex="3" />
                </children>
             </GridPane>
 
