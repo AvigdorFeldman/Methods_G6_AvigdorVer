@@ -17,10 +17,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
 import logic.Parkingsession;
 import logic.SendObject;
-import logic.subscriber;
 
 /**
  * Controller for managing subscriber reports in a client-server parking management system.

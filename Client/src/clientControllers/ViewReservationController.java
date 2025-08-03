@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import logic.FileTransferMessage;
 import logic.Reservation;
 import logic.SendObject;
 
@@ -193,6 +194,8 @@ public class ViewReservationController extends Controller {
 				if (!updated.isEmpty() && updated.get(0) instanceof Reservation) {
 					Platform.runLater(() -> setReservations((List<Reservation>) updated));
 				}
+			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ReservationReportPDF")) {
+				Util.getPDF(msg);
 			}
 		}
 	}

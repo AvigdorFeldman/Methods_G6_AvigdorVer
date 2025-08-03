@@ -1,15 +1,16 @@
 package clientControllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Year;
-
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.stage.FileChooser;
+import logic.SendObject;
 
 /**
  * Controller for exporting parking reservations to a CSV file in a client-server parking management system.
@@ -27,6 +28,10 @@ public class ReportReservationController extends ViewReservationController {
 
 	@FXML
 	private Button exportCsvButton;
+	@FXML
+	private Button showPDF;
+	@FXML
+	private Button refreshButton;
 
 	@FXML
 	public void initialize() {
@@ -34,14 +39,41 @@ public class ReportReservationController extends ViewReservationController {
 		if (exportCsvButton != null) {
 			exportCsvButton.setOnAction(e -> {
 				try {
-					FileChooser fileChooser = new FileChooser();
-					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-					File file = fileChooser.showSaveDialog(exportCsvButton.getScene().getWindow());
-					Util.exportToCSV(reservationTable, file);
-					showAlert("Exported table to reservations.csv!");
+					String selectedMonth = monthComboBox.getValue();
+					Integer selectedYear = yearComboBox.getValue();
+					String defaultName = "ReservationsReport_" + selectedMonth + "_" + selectedYear + ".csv";
+
+					 File reportFile = new File("reports/" + defaultName);
+					if (reportFile != null) {
+						File imageFile = new File("reports/ReservationsChart_"+ selectedMonth + "_" + selectedYear + ".png");
+						Util.saveChartAsImage(reservationsLineChart, imageFile);
+						Util.exportToCSV(reservationTable, reportFile);
+						Util.sendReportFileToServer(reportFile, client, "File to server");
+						Util.sendReportFileToServer(imageFile, client, "File to server");
+						showAlert("Exported table to " + reportFile.getName());
+					}
 				} catch (Exception ex) {
 					showAlert("Failed to export CSV: " + ex.getMessage());
 				}
+			});
+		}
+		if (showPDF != null) {
+			showPDF.setOnAction(e ->{
+				String selectedMonth = monthComboBox.getValue();
+				Integer selectedYear = yearComboBox.getValue();
+				String today = selectedMonth + "_" + selectedYear;
+				try {
+					client.sendToServer(new SendObject<String>("Get Reservation Report", today));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+		}
+		if(refreshButton != null) {
+			refreshButton.setOnAction(e ->{
+				SendObject<String> request = new SendObject<>("Get", "all reservations");
+				client.sendToServerSafely(request);
 			});
 		}
 	}
@@ -86,6 +118,8 @@ public class ReportReservationController extends ViewReservationController {
 		}
 		reservationsLineChart.getData().add(series);
 		reservationsLineChart.setTitle("Reservations in " + selectedMonth + " " + selectedYear);
+		
+		Platform.runLater(() -> reservationsLineChart.layout());
 	}
 
 	private void showAlert(String msg) {
