@@ -52,13 +52,13 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 			exportCsvButton.setOnAction(e -> {
 				try {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-					String defaultName = "ActiveSessionsReport_" + LocalDateTime.now().format(formatter) + ".csv";
+					String defaultName = "ActiveSessionsReport_" + date.format(formatter) + ".csv";
 
 					 File reportFile = new File("reports/" + defaultName);
 					if (reportFile != null) {
-						File imageFile1 = new File("reports/ActiveSessionsChart_"+LocalDateTime.now().format(formatter)+".png");
+						File imageFile1 = new File("reports/ActiveSessionsChart_"+date.format(formatter)+".png");
 						Util.saveChartAsImage(activeSessionLineChart, imageFile1);
-						File imageFile2 = new File("reports/ParkingSpotsChart_"+LocalDateTime.now().format(formatter)+".png");
+						File imageFile2 = new File("reports/ParkingSpotsChart_"+date.format(formatter)+".png");
 						Util.saveChartAsImage(parkingSpotChart, imageFile2);
 						Util.exportToCSV(sessionTable, reportFile);
 						Util.sendReportFileToServer(reportFile, client, "File to server");
@@ -74,7 +74,7 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 		if (showPDF != null) {
 			showPDF.setOnAction(e ->{
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String today = LocalDateTime.now().format(formatter);
+				String today = date.format(formatter);
 				try {
 					client.sendToServer(new SendObject<String>("Get ActiveSessions", today));
 				} catch (IOException e1) {
@@ -89,6 +89,12 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 				client.sendToServerSafely(request);
 				SendObject<String> request2 = new SendObject<>("Get", "all parking spots");
 				client.sendToServerSafely(request2);
+			});
+		}if(datePick != null) {
+			datePick.setOnAction(event -> {
+				refresh();
+				Platform.runLater(()->updateLineChart());
+				
 			});
 		}
 	}
@@ -113,7 +119,7 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
      */
 	private void updateLineChart() {
 	    int[] hourlyCounts = new int[24];
-	    for (Parkingsession session : allSessions) {
+	    for (Parkingsession session : dateSessions) {
 	        if (session.getActive()) {
 	            LocalDateTime in = session.getInTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 	            int hour = in.getHour();

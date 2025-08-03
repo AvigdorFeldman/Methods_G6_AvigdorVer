@@ -1,32 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane styleClass="main-pane" stylesheets="@ReportScreen.css, @styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.ViewActiveSessionsController">
+<AnchorPane styleClass="main-pane"
+	stylesheets="@ReportScreen.css, @styles.css"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="clientControllers.ViewActiveSessionsController">
 
-	<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;" styleClass="menu-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-      <Label styleClass="title-label" text="Active Sessions View" />
+	<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;"
+		styleClass="menu-container" AnchorPane.bottomAnchor="20.0"
+		AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+		AnchorPane.topAnchor="20.0">
+		<Label styleClass="title-label" text="Active Sessions View" />
 
-		<TableView fx:id="sessionTable" prefHeight="400.0" prefWidth="1050.0" styleClass="main-table">
+		<TableView fx:id="sessionTable" prefHeight="400.0"
+			prefWidth="1050.0" styleClass="main-table">
 			<columns>
-				<TableColumn fx:id="colSessionId" prefWidth="200.0" text="Session ID" />
-				<TableColumn fx:id="colSubscriberId" prefWidth="200.0" text="Subscriber ID" />
-				<TableColumn fx:id="colSpotId" prefWidth="200.0" text="Spot ID" />
-				<TableColumn fx:id="colParkingCode" prefWidth="200.0" text="Parking Code" />
-				<TableColumn fx:id="colInTime" prefWidth="200.0" text="In Time" />
-				<TableColumn fx:id="colOutTime" prefWidth="200.0" text="Out Time" />
-				<TableColumn fx:id="colExtended" prefWidth="200.0" text="Extended" />
-				<TableColumn fx:id="colLate" prefWidth="200.0" text="Late" />
-				<TableColumn fx:id="colActive" prefWidth="200.0" text="Active" />
+				<TableColumn fx:id="colSessionId" prefWidth="200.0"
+					text="Session ID" />
+				<TableColumn fx:id="colSubscriberId" prefWidth="200.0"
+					text="Subscriber ID" />
+				<TableColumn fx:id="colSpotId" prefWidth="200.0"
+					text="Spot ID" />
+				<TableColumn fx:id="colParkingCode" prefWidth="200.0"
+					text="Parking Code" />
+				<TableColumn fx:id="colInTime" prefWidth="200.0"
+					text="In Time" />
+				<TableColumn fx:id="colOutTime" prefWidth="200.0"
+					text="Out Time" />
+				<TableColumn fx:id="colExtended" prefWidth="200.0"
+					text="Extended" />
+				<TableColumn fx:id="colLate" prefWidth="200.0"
+					text="Late" />
+				<TableColumn fx:id="colActive" prefWidth="200.0"
+					text="Active" />
 			</columns>
 		</TableView>
+		<GridPane alignment="CENTER" hgap="10" vgap="10">
+			<columnConstraints>
+				<ColumnConstraints hgrow="ALWAYS" maxWidth="200.0"
+					minWidth="10.0" prefWidth="150.0" />
+				<ColumnConstraints hgrow="ALWAYS" maxWidth="500.0"
+					minWidth="200.0" prefWidth="300.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<!-- Label with left alignment -->
+				<Label text="Choose Date:" GridPane.columnIndex="0"
+					GridPane.rowIndex="0" alignment="CENTER_LEFT" contentDisplay="LEFT"
+					styleClass="form-label" />
 
-		<Button fx:id="backButton" onAction="#handleBackButton" styleClass="button-red" text="Back" />
+				<!-- DatePicker with proper column placement -->
+				<DatePicker fx:id="datePick" prefHeight="73.0"
+					prefWidth="590.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+			</children>
+		</GridPane>
+
+		<Button fx:id="backButton" onAction="#handleBackButton"
+			styleClass="button-red" text="Back" />
 
 	</VBox>
 </AnchorPane>

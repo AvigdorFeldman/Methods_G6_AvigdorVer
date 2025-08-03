@@ -17,65 +17,124 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane styleClass="main-pane" stylesheets="@ReportScreen.css, @styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.ReportSubscriberController">
+<AnchorPane styleClass="main-pane"
+	stylesheets="@ReportScreen.css, @styles.css"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="clientControllers.ReportSubscriberController">
 
-	<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;" styleClass="menu-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-      <Label styleClass="title-label" text="Subscribers Report" />
+	<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;"
+		styleClass="menu-container" AnchorPane.bottomAnchor="20.0"
+		AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+		AnchorPane.topAnchor="20.0">
+		<Label styleClass="title-label" text="Subscribers Report" />
 
 		<!-- TOP SECTION: Subscriber Table -->
-		<TableView fx:id="subscriberTable" prefHeight="300.0" styleClass="main-table">
+		<TableView fx:id="subscriberTable" prefHeight="300.0"
+			styleClass="main-table">
 			<columns>
-				<TableColumn fx:id="colSubscriberId" prefWidth="120.0" text="Subscriber ID" />
-				<TableColumn fx:id="colName" prefWidth="120.0" text="Name" />
-				<TableColumn fx:id="colEmail" prefWidth="180.0" text="Email" />
-				<TableColumn fx:id="colPhone" prefWidth="140.0" text="Phone" />
+				<TableColumn fx:id="colSubscriberId" prefWidth="120.0"
+					text="Subscriber ID" />
+				<TableColumn fx:id="colName" prefWidth="120.0"
+					text="Name" />
+				<TableColumn fx:id="colEmail" prefWidth="180.0"
+					text="Email" />
+				<TableColumn fx:id="colPhone" prefWidth="140.0"
+					text="Phone" />
 				<TableColumn fx:id="colTag" prefWidth="140.0" text="Tag" />
-				<TableColumn fx:id="colRole" prefWidth="100.0" text="Role" />
-				<TableColumn fx:id="colLoggedIn" prefWidth="100.0" text="Logged in?" />
+				<TableColumn fx:id="colRole" prefWidth="100.0"
+					text="Role" />
+				<TableColumn fx:id="colLoggedIn" prefWidth="100.0"
+					text="Logged in?" />
 			</columns>
 		</TableView>
 
 		<HBox alignment="CENTER" spacing="15.0">
 			<Label styleClass="form-label" text="Role:" />
 			<ComboBox fx:id="roleComboBox" prefWidth="140.0" />
-			<Button fx:id="sortBySubscriberIdButton" styleClass="button-blue" text="Sort by Subscriber ID" />
-			<Button fx:id="exportCsvButton" styleClass="button-blue" text="Export as CSV" />
-			<Button fx:id="viewSubscribersReport" styleClass="button-blue" text="Show PDF" />
+			<Button fx:id="sortBySubscriberIdButton"
+				styleClass="button-blue" text="Sort by Subscriber ID" />
+			<Button fx:id="exportCsvButton" styleClass="button-blue"
+				text="Export as CSV" />
+			<Button fx:id="viewSubscribersReport" styleClass="button-blue"
+				text="Show PDF" />
 		</HBox>
 
 		<!-- BOTTOM SECTION: History View -->
-		<SplitPane dividerPositions="0.55" orientation="HORIZONTAL" prefHeight="330.0">
+		<SplitPane dividerPositions="0.55" orientation="HORIZONTAL"
+			prefHeight="330.0">
 			<!-- LEFT SIDE: History Table -->
-			<VBox alignment="TOP_LEFT" spacing="10.0" style="-fx-padding: 10;">
-            <GridPane>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="348.0" minWidth="10.0" prefWidth="308.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="201.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-      					<TextField fx:id="subscriberIdField" maxWidth="298.0" prefHeight="73.0" prefWidth="298.0" promptText="Subscriber ID" />
-      					<Button fx:id="viewHistoryButton" styleClass="button-blue" text="View Subscriber History" GridPane.columnIndex="1" />
-      					<Button fx:id="createReportButton" styleClass="button-blue" text="Create Report" GridPane.columnIndex="2" />
-      					<Button fx:id="viewSubscriberReport" styleClass="button-blue" text="View Subscriber PDF" GridPane.columnIndex="3" />
-               </children>
-            </GridPane>
+			<VBox alignment="TOP_LEFT" spacing="10.0"
+				style="-fx-padding: 10;">
+				<GridPane hgap="15" vgap="15">
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES"
+							maxWidth="348.0" minWidth="10.0" prefWidth="308.0" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							maxWidth="100.0" minWidth="10.0" prefWidth="138.0" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							maxWidth="150.0" minWidth="10.0" prefWidth="209.0" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							maxWidth="200.0" minWidth="10.0" prefWidth="220.0" />
+						<ColumnConstraints maxWidth="80.0"
+							minWidth="120.0" prefWidth="80.0" />
+						<ColumnConstraints hgrow="SOMETIMES"
+							maxWidth="200.0" minWidth="10.0" prefWidth="144.0" />
+					</columnConstraints>
+
+					<rowConstraints>
+						<RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+					</rowConstraints>
+
+					<children>
+						<!-- Subscriber ID Field -->
+						<TextField fx:id="subscriberIdField" maxWidth="298.0"
+							prefHeight="73.0" prefWidth="298.0" promptText="Subscriber ID"
+							GridPane.columnIndex="0" GridPane.rowIndex="0" />
+
+						<!-- View Subscriber History Button -->
+						<Button fx:id="viewHistoryButton" styleClass="button-blue"
+							text="View Subscriber History" GridPane.columnIndex="3"
+							GridPane.rowIndex="0" />
+
+						<!-- Create Report Button -->
+						<Button fx:id="createReportButton" styleClass="button-blue"
+							text="Create Report" GridPane.columnIndex="4"
+							GridPane.rowIndex="0" />
+
+						<!-- View Subscriber PDF Button -->
+						<Button fx:id="viewSubscriberReport"
+							styleClass="button-blue" text="View Report"
+							GridPane.columnIndex="5" GridPane.rowIndex="0" />
+
+						<!-- Year ComboBox -->
+						<ComboBox fx:id="yearComboBox" prefWidth="150.0"
+							GridPane.columnIndex="2" GridPane.rowIndex="0" />
+
+						<!-- Year Label -->
+						<Label styleClass="form-label" text="Year:"
+							GridPane.columnIndex="1" GridPane.rowIndex="0" />
+					</children>
+				</GridPane>
 
 				<TableView fx:id="historyTable" prefHeight="250.0">
 					<columns>
-						<TableColumn fx:id="colSessionId" prefWidth="80.0" text="Session ID" />
-						<TableColumn fx:id="colSpotId" prefWidth="80.0" text="Spot ID" />
-						<TableColumn fx:id="colInTime" prefWidth="160.0" text="In Time" />
-						<TableColumn fx:id="colOutTime" prefWidth="160.0" text="Out Time" />
-						<TableColumn fx:id="colLate" prefWidth="60.0" text="Late?" />
+						<TableColumn fx:id="colSessionId" prefWidth="80.0"
+							text="Session ID" />
+						<TableColumn fx:id="colSpotId" prefWidth="80.0"
+							text="Spot ID" />
+						<TableColumn fx:id="colInTime" prefWidth="160.0"
+							text="In Time" />
+						<TableColumn fx:id="colOutTime" prefWidth="160.0"
+							text="Out Time" />
+						<TableColumn fx:id="colLate" prefWidth="60.0"
+							text="Late?" />
 					</columns>
 				</TableView>
 			</VBox>
 
 			<!-- RIGHT SIDE: Bar Chart -->
-			<BarChart fx:id="barChart" prefHeight="300.0" prefWidth="400.0" title="Sessions Per Month">
+			<BarChart fx:id="barChart" prefHeight="300.0"
+				prefWidth="400.0" title="Sessions Per Month">
 				<xAxis>
 					<CategoryAxis label="Month" fx:id="xAxis" />
 				</xAxis>
@@ -84,7 +143,8 @@
 				</yAxis>
 			</BarChart>
 		</SplitPane>
-   			<Button fx:id="backButton" onAction="#handleBackButton" styleClass="button-red" text="Back" />
+		<Button fx:id="backButton" onAction="#handleBackButton"
+			styleClass="button-red" text="Back" />
 
 	</VBox>
 </AnchorPane>

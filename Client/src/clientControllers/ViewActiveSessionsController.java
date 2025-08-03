@@ -1,5 +1,7 @@
 package clientControllers;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +13,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import logic.FileTransferMessage;
 import logic.ParkingSpot;
 import logic.Parkingsession;
@@ -53,9 +57,14 @@ public class ViewActiveSessionsController extends Controller {
 	protected TableColumn<Parkingsession, Boolean> colActive;
 	@FXML
 	protected Button backButton;
-
+	@FXML
+	protected DatePicker datePick;
+	
+	protected LocalDate date;
 	protected List<Parkingsession> allSessions = new ArrayList<>();
+	protected List<Parkingsession> dateSessions = new ArrayList<>();
 	protected List<ParkingSpot> parkingSpots = new ArrayList<>();
+	
     /**
      * Initializes the table view and its columns.
      *
@@ -64,6 +73,7 @@ public class ViewActiveSessionsController extends Controller {
      */
 	@FXML
 	public void initialize() {
+		datePick.setValue(LocalDate.now());
 		colSessionId.setCellValueFactory(
 				cellData -> new SimpleIntegerProperty(cellData.getValue().getSessionId()).asObject());
 		colSubscriberId.setCellValueFactory(
@@ -79,6 +89,11 @@ public class ViewActiveSessionsController extends Controller {
 		colLate.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().isLate()).asObject());
 		colActive
 				.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getActive()).asObject());
+		if(datePick != null) {
+			datePick.setOnAction(event -> {
+				refresh();
+			});
+		}
 	}
 
     /**
@@ -88,7 +103,34 @@ public class ViewActiveSessionsController extends Controller {
      */
 	public void setSessions(List<Parkingsession> sessions) {
 		this.allSessions = sessions;
-		sessionTable.getItems().setAll(allSessions);
+		filterByDate();
+	}
+	
+	protected void refresh() {
+		if (datePick.getValue() != null) {
+            if(!datePick.getValue().isAfter(LocalDate.now())) {
+            	date = datePick.getValue();
+            	filterByDate();
+            	sessionTable.refresh();
+            }
+            else {
+            	ShowAlert.showAlert("Error", "Enter a past or current date only!", AlertType.ERROR);
+            }
+        } else {
+            date = null;                
+        }
+	}
+	
+	private void filterByDate() {
+		dateSessions.clear();
+		if(allSessions !=null) {
+			for (Parkingsession parkingsession : allSessions) {
+				if ((parkingsession.getInTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).equals(date)){
+					dateSessions.add(parkingsession);
+				}
+			}
+		}
+		sessionTable.getItems().setAll(dateSessions);
 	}
 
     /**

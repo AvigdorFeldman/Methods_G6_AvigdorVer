@@ -16,8 +16,11 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
 import logic.Parkingsession;
 import logic.SendObject;
+import logic.subscriber;
 
 /**
  * Controller for managing subscriber reports in a client-server parking management system.
@@ -46,11 +49,22 @@ public class ReportSubscriberController extends ViewSubscriberController {
 	private CategoryAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
+	@FXML
+	private ComboBox<Integer> yearComboBox;
 
 	@Override
 	public void initialize() {
-		super.initialize(); // Setup from parent
+		super.initialize(); // Setup from parent		
+	    int currentYear = LocalDate.now().getYear();
+	    yearComboBox.getItems().add(currentYear);  // Add the current year
+	    for (int i = 1; i < 10; i++) {  // Add the previous 9 years (or adjust as needed)
+	        yearComboBox.getItems().add(currentYear - i);
+	    }
+	    // Set default selection to the current year
+	    yearComboBox.setValue(currentYear);
 
+	    // Add listener to the ComboBox to update the chart when the year changes
+	    yearComboBox.setOnAction(event -> updateBarChartForSelectedYear(historySessions));
 		if (exportCsvButton != null) {
 			exportCsvButton.setOnAction(e -> {
 				try {
@@ -100,14 +114,14 @@ public class ReportSubscriberController extends ViewSubscriberController {
 			});
 		}if (viewSubscriberReport != null) {
 			viewSubscriberReport.setOnAction(e -> {
-				String today=subId+",";
+				String subInfo=subId+",";
 				for (logic.subscriber subscriber : allSubscribers) {
 					if(subscriber.getId()==subId) {
-						today += String.format("Sub. ID: %d\nSub. name: %s\nEmail: %s\nPhone: %s\nRole: %s\nLogged in: %s\nParking Session History",subscriber.getId(),subscriber.getName(),subscriber.getEmail(),subscriber.getPhone(),subscriber.getRole(),subscriber.getLoggedIn());
+						subInfo += String.format("Sub. ID: %d\nSub. name: %s\nEmail: %s\nPhone: %s\nRole: %s\nLogged in: %s\n\nParking Session History:",subscriber.getId(),subscriber.getName(),subscriber.getEmail(),subscriber.getPhone(),subscriber.getRole(),subscriber.getLoggedIn());
 					}
 				}
 				try {
-					client.sendToServer(new SendObject<String>("Get Subscriber Report", today));
+					client.sendToServer(new SendObject<String>("Get Subscriber Report", subInfo));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -125,7 +139,7 @@ public class ReportSubscriberController extends ViewSubscriberController {
 	@Override
 	public void setHistorySessions(List<Parkingsession> history) {
 		super.setHistorySessions(history);
-		Platform.runLater(() -> populateBarChart(history));
+		Platform.runLater(() -> updateBarChartForSelectedYear(history));
 	}
 
     /**
@@ -133,10 +147,9 @@ public class ReportSubscriberController extends ViewSubscriberController {
      *
      * @param sessions The list of parking sessions to analyze.
      */
-	private void populateBarChart(List<Parkingsession> sessions) {
+	private void updateBarChartForSelectedYear(List<Parkingsession> sessions) {
 		int[] monthly = new int[12];
-		int currentYear = LocalDate.now().getYear();
-
+		int currentYear = yearComboBox.getValue();
 		for (Parkingsession s : sessions) {
 			LocalDate date = s.getInTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			if (date.getYear() == currentYear) {
@@ -145,6 +158,7 @@ public class ReportSubscriberController extends ViewSubscriberController {
 		}
 
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
+		series.setName("Sessions Per Month of Sub. ID: "+subId);
 		for (int i = 0; i < 12; i++) {
 			series.getData().add(new XYChart.Data<>(Month.of(i + 1).name(), monthly[i]));
 		}

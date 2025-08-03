@@ -89,7 +89,7 @@ public class ViewSubscriberController extends Controller {
 	@FXML
 	protected Integer subId = null;
 	@SuppressWarnings("unused")
-	private List<Parkingsession> historySessions;
+	protected List<Parkingsession> historySessions;
 
 	/**
 	 * Initializes the UI components and sets up event handlers for buttons and
@@ -126,6 +126,12 @@ public class ViewSubscriberController extends Controller {
 		colLate.setCellValueFactory(cellData -> javafx.beans.binding.Bindings
 				.createStringBinding(() -> cellData.getValue().isLate() ? "Yes" : "No"));
 		viewHistoryButton.setOnAction(e -> fetchHistory());
+		
+		subscriberIdField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) {
+				subscriberIdField.setText(oldValue); // Revert to old value if invalid
+			}
+		});
 	}
 
 	/**
