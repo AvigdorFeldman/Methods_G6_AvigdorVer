@@ -19,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class PDFReport {
 
@@ -45,6 +46,11 @@ public class PDFReport {
 	                .setFontSize(24)         // Set font size to 24
 	                .setTextAlignment(TextAlignment.CENTER);  // Center the text
 	        document.add(title);
+	        Paragraph dateParagraph = new Paragraph("Created on: " + new Date())
+	                .setFontSize(12)          // Set font size to 12 for the date
+	                .setTextAlignment(TextAlignment.RIGHT);  // Right-align the date
+	        document.add(dateParagraph);
+	        
 	        if(extraInfo!=null) {
 		        Paragraph par = new Paragraph(extraInfo)
 		                .setFontSize(12)         // Set font size to 24
