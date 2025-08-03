@@ -12,10 +12,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -228,7 +226,6 @@ public class ViewSubscriberController extends Controller {
 	public void handleServerMessage(Object msg) {
 		if (msg instanceof SendObject<?>) {
 			SendObject<?> so = (SendObject<?>) msg;
-
 			// Handle subscriber list updates
 			if (so.getObj() instanceof List<?> && !so.getObjectMessage().equals("Parkingsession list of subscriber")) {
 				List<?> updated = (List<?>) so.getObj();

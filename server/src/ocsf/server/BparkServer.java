@@ -48,7 +48,6 @@ public class BparkServer extends AbstractServer {
 			try {
 				// Call the handler, which could return any type
 				Object result = SendObjectHandler.sendObjectHandle(obj, con);
-
 				// If the result is a SendObject, you can send it directly
 				if (result instanceof SendObject<?>) {
 
@@ -82,6 +81,7 @@ public class BparkServer extends AbstractServer {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}
 	}
 

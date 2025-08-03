@@ -16,17 +16,17 @@ import java.util.Random;
 import jdbc.DataBaseQuery;
 
 /**
- * Handles the processing of SendObject requests, routing them to appropriate handlers
- * based on the action string and the type of the embedded object.
+ * Handles the processing of SendObject requests, routing them to appropriate
+ * handlers based on the action string and the type of the embedded object.
  */
 public class SendObjectHandler {
 	/**
 	 * Main method to process incoming SendObject requests.
-     * 
-     * @param obj The received SendObject containing action and payload
-     * @param con A DataBaseQuery instance for database operations
-     * @return A response SendObject with results or messages
-     * @throws Exception if action is null or unprocessable
+	 * 
+	 * @param obj The received SendObject containing action and payload
+	 * @param con A DataBaseQuery instance for database operations
+	 * @return A response SendObject with results or messages
+	 * @throws Exception if action is null or unprocessable
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends Serializable, T1 extends Serializable> SendObject<T1> sendObjectHandle(SendObject<T> obj,
@@ -54,10 +54,10 @@ public class SendObjectHandler {
 			// Connects the subscriber to the client application
 			Object genericObject = handleGetAction(object, con);
 			return replyDefiner(genericObject);
-		}else if(action.contains("loggedoff")||action.contains("login")) {
-			if(object!=null)
-				con.updateUserInDatabase((subscriber)object);
-		}else if (action.contains("Update")) {
+		} else if (action.contains("loggedoff") || action.contains("login")) {
+			if (object != null)
+				con.updateUserInDatabase((subscriber) object);
+		} else if (action.contains("Update")) {
 			if (action.contains("time in session")) {
 				// Manages time extension update of parking sessions
 				Parkingsession session = (Parkingsession) obj.getObj();
@@ -85,31 +85,32 @@ public class SendObjectHandler {
 				System.err.println("Unknown SendObject received: action = " + action + ", object = " + object);
 				throw new Exception("No send option is capable without subscriber object");
 			}
-			
-		} else if(action.contains("File to server")) { // Creates reports directory and creates a new file in it
-			if (object instanceof FileTransferMessage) {
-				FileTransferMessage fileMsg = (FileTransferMessage)object; 
-			    File reportsDir = new File("reports");
-			    if (!reportsDir.exists()) reportsDir.mkdirs();
 
-			    File reportFile = new File(reportsDir, fileMsg.getFilename());
-			    try (FileOutputStream fos = new FileOutputStream(reportFile)) {
-			        fos.write(fileMsg.getData());
-			    }
+		} else if (action.contains("File to server")) { // Creates reports directory and creates a new file in it
+			if (object instanceof FileTransferMessage) {
+				FileTransferMessage fileMsg = (FileTransferMessage) object;
+				File reportsDir = new File("reports");
+				if (!reportsDir.exists())
+					reportsDir.mkdirs();
+
+				File reportFile = new File(reportsDir, fileMsg.getFilename());
+				try (FileOutputStream fos = new FileOutputStream(reportFile)) {
+					fos.write(fileMsg.getData());
+				}
 			}
-		}else { // Default for not unknown SendObject
+		} else { // Default for not unknown SendObject
 			System.err.println("Unknown SendObject received: action = " + action + ", object = " + object);
 			throw new Exception("No possible classes were chosen");
-		}// Default
+		} // Default
 		return null;
 	}
 
 	/**
 	 * Defines a reply based on the type of the object returned.
-     * 
-     * @param <T1> The type of the response object, must be Serializable
-     * @param genericObject Object to evaluate
-     * @return A new SendObject instance containing a descriptive message and object
+	 * 
+	 * @param <T1>          The type of the response object, must be Serializable
+	 * @param genericObject Object to evaluate
+	 * @return A new SendObject instance containing a descriptive message and object
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T1 extends Serializable> SendObject<T1> replyDefiner(Object genericObject) {
@@ -136,13 +137,13 @@ public class SendObjectHandler {
 	}
 
 	/**
-     * Handles actions where the object is an Integer.
-     * 
-     * @param <T1> The return type, must be Serializable
-     * @param action The specified action to perform
-     * @param intObject The Integer object received
-     * @param con A DataBaseQuery instance
-     * @return A SendObject containing result based on integer processing
+	 * Handles actions where the object is an Integer.
+	 * 
+	 * @param <T1>      The return type, must be Serializable
+	 * @param action    The specified action to perform
+	 * @param intObject The Integer object received
+	 * @param con       A DataBaseQuery instance
+	 * @return A SendObject containing result based on integer processing
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleIntegerType(String action,
@@ -165,7 +166,7 @@ public class SendObjectHandler {
 			if (action.contains("Update spot to Free")) {
 				// Update spot to free
 				int spotId = intObject;
-				ParkingSpot spot = new ParkingSpot(spotId,SpotStatus.FREE);
+				ParkingSpot spot = new ParkingSpot(spotId, SpotStatus.FREE);
 				con.updateParkingSpotInDatabase(spot);
 			}
 		} else if (action.contains("Get")) {
@@ -214,7 +215,7 @@ public class SendObjectHandler {
 				Reservation reservation;
 				int reservationId = intObject;
 				reservation = con.getReservationById(reservationId);
-				if(reservation==null)
+				if (reservation == null)
 					return new SendObject<T1>("No such", (T1) "Reservation");
 				else
 					return new SendObject<T1>("Received reservation", (T1) reservation);
@@ -224,12 +225,12 @@ public class SendObjectHandler {
 	}
 
 	/**
-     * Handles Email/SMS sending for subscribers based on action.
-     * 
-     * @param action The send action
-     * @param object The subscriber object
-     * @param con Database connector
-     * @throws Exception if the email is invalid or no active session found
+	 * Handles Email/SMS sending for subscribers based on action.
+	 * 
+	 * @param action The send action
+	 * @param object The subscriber object
+	 * @param con    Database connector
+	 * @throws Exception if the email is invalid or no active session found
 	 */
 	private static <T extends Serializable> void handleSendAction(String action, subscriber object, DataBaseQuery con)
 			throws Exception {
@@ -258,21 +259,21 @@ public class SendObjectHandler {
 	}
 
 	/**
-     * Handles actions where the object is a String.
-     * 
-     * @param <T1> Return type, must be Serializable
-     * @param action The specified action to perform
-     * @param object The String object received
-     * @param con A DataBaseQuery instance
-     * @return A SendObject containing result based on string processing
-     * @throws Exception if database query fails
+	 * Handles actions where the object is a String.
+	 * 
+	 * @param <T1>   Return type, must be Serializable
+	 * @param action The specified action to perform
+	 * @param object The String object received
+	 * @param con    A DataBaseQuery instance
+	 * @return A SendObject containing result based on string processing
+	 * @throws Exception if database query fails
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleStringType(String action,
 			String object, DataBaseQuery con) throws Exception {
 		if (action.contains("Check") && object.contains("Availability")) {
 			// Returns availablity boolean
-			double availablePrecentage = 0; 
+			double availablePrecentage = 0;
 			availablePrecentage = con.getPrecentageAvailableSpaceFromDatabase();
 			if (availablePrecentage > 0)
 				return new SendObject<T1>("Availability", (T1) (Boolean) true);
@@ -307,92 +308,82 @@ public class SendObjectHandler {
 				allActiveParkingsessions = con.getAllActiveParkingsession();
 				return new SendObject<T1>("Received active parking sessions",
 						(T1) (List<Parkingsession>) allActiveParkingsessions);
-			}else if(object.equals("all parking spots")){
+			} else if (object.equals("all parking spots")) {
 				List<ParkingSpot> allParkingSpots = new ArrayList<ParkingSpot>();
 				allParkingSpots = con.getAllParkingSpots();
-				return new SendObject<T1>("Received active parking sessions",
-						(T1) (List<ParkingSpot>) allParkingSpots);
-			}else if(action.contains("Get ActiveSessions")) {
+				return new SendObject<T1>("Received active parking sessions", (T1) (List<ParkingSpot>) allParkingSpots);
+			} else if (action.contains("Get ActiveSessions")) {
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
-				    reportsDir.mkdirs(); // Ensure the directory exists
+					reportsDir.mkdirs(); // Ensure the directory exists
 				}
 				File csvFile = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".csv");
 				File pngFile1 = new File(reportsDir, "ActiveSessionsChart_" + object.toString() + ".png");
 				File pngFile2 = new File(reportsDir, "ParkingSpotsChart_" + object.toString() + ".png");
-				File[] images = new File[]{pngFile1,pngFile2};
-				File ActiveSessionsPdf = new File(reportsDir, "ActiveSessionsReport_"+object.toString()+".pdf");
-				boolean isCreated = PDFReport.generatePdfReport(csvFile,images,ActiveSessionsPdf, "Active Sessions "+object.toString(),null);
-				if(isCreated) {
-					byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
-					FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
-					return new SendObject<T1>("ActiveSessionsPDF",(T1)(FileTransferMessage)message);
-				}else {
-					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
-				}
-			}else if(action.contains("Subscribers Report")) {
+				File[] images = new File[] { pngFile1, pngFile2 };
+				File ActiveSessionsPdf = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".pdf");
+				PDFReport.generatePdfReport(csvFile, images, ActiveSessionsPdf, "Active Sessions " + object.toString(),
+						null);
+				byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
+				FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
+				return new SendObject<T1>("ActiveSessionsPDF", (T1) (FileTransferMessage) message);
+			} else if (action.contains("Subscribers Report")) {
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
-				    reportsDir.mkdirs(); // Ensure the directory exists
+					reportsDir.mkdirs(); // Ensure the directory exists
 				}
 				File csvFile = new File(reportsDir, "SubscribersReport_" + object.toString() + ".csv");
-				File SubscribersReportPdf = new File(reportsDir, "SubscribersReport_"+object.toString()+".pdf");
-				boolean isCreated = PDFReport.generatePdfReport(csvFile,null,SubscribersReportPdf, "Subscribers Report "+object.toString(),null);
-				if(isCreated) {
-					byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
-					FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
-					return new SendObject<T1>("SubscribersReportPDF",(T1)(FileTransferMessage)message);
-				}else {
-					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
-				}
-			}else if(action.contains("Subscriber Report")) {
+				File SubscribersReportPdf = new File(reportsDir, "SubscribersReport_" + object.toString() + ".pdf");
+				PDFReport.generatePdfReport(csvFile, null, SubscribersReportPdf,
+						"Subscribers Report " + object.toString(), null);
+				byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
+				FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
+				return new SendObject<T1>("SubscribersReportPDF", (T1) (FileTransferMessage) message);
+			} else if (action.contains("Subscriber Report")) {
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
-				    reportsDir.mkdirs(); // Ensure the directory exists
+					reportsDir.mkdirs(); // Ensure the directory exists
 				}
-				String subIdAndInfo []= object.split(",");
+				String subIdAndInfo[] = object.split(",");
 				File csvFile = new File(reportsDir, "SubscriberReport_" + subIdAndInfo[0] + ".csv");
 				File pngFile = new File(reportsDir, "SubscriberHistorySessionsChart_" + subIdAndInfo[0] + ".png");
-				File SubscribersReportPdf = new File(reportsDir, "SubscriberReport_"+ subIdAndInfo[0] +".pdf");
-				boolean isCreated = PDFReport.generatePdfReport(csvFile,new File[] {pngFile},SubscribersReportPdf, "Subscriber Report ID:"+subIdAndInfo[0], subIdAndInfo[1]);
-				if(isCreated) {
-					byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
-					FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
-					return new SendObject<T1>("SubscriberReportPDF",(T1)(FileTransferMessage)message);
-				}else {
-					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
-				}
-			}else if(action.contains("Get Reservation Report")) {
-				File reportsDir = new File("reports"); // Relative path to your reports directory
-				if (!reportsDir.exists()) {
-				    reportsDir.mkdirs(); // Ensure the directory exists
-				}
-				File csvFile = new File(reportsDir, "ReservationsReport_" + object.toString() + ".csv");
-				File pngFile = new File(reportsDir, "ReservationsChart_" + object.toString() + ".png");
-				File ReservationsReportPdf = new File(reportsDir, "ReservationsReport_"+ object.toString() +".pdf");
-				boolean IsCreated = PDFReport.generatePdfReport(csvFile,new File[] {pngFile},ReservationsReportPdf, "Reservations Report "+object.toString(), null);
-				if(IsCreated) {
-					byte[] data = Files.readAllBytes(ReservationsReportPdf.toPath());
-					FileTransferMessage message = new FileTransferMessage(ReservationsReportPdf.getName(), data);
-					return new SendObject<T1>("ReservationReportPDF",(T1)(FileTransferMessage)message);
-				}else {
-					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
-				}
-			}
+				File SubscribersReportPdf = new File(reportsDir, "SubscriberReport_" + subIdAndInfo[0] + ".pdf");
+				PDFReport.generatePdfReport(csvFile, new File[] { pngFile }, SubscribersReportPdf,
+						"Subscriber Report ID:" + subIdAndInfo[0], subIdAndInfo[1]);
+				byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
+				FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
+				return new SendObject<T1>("SubscriberReportPDF", (T1) (FileTransferMessage) message);
 
+			} else if (action.contains("Get Reservation Report")) {
+				// File handling and creation logic
+				File reportsDir = new File("reports");
+				if (!reportsDir.exists())
+					reportsDir.mkdirs();
+				File ReservationsReportPdf = new File(reportsDir, "ReservationsReport_" + object.toString() + ".pdf");
+				File reportFile = new File(reportsDir, "ReservationsReport_" + object.toString() + ".csv");
+				File pngFile = new File(reportsDir, "ReservationsChart_" + object.toString() + ".png");
+				PDFReport.generatePdfReport(reportFile, new File[] { pngFile }, ReservationsReportPdf,
+						"Reservations Report", null);
+				byte[] data = Files.readAllBytes(ReservationsReportPdf.toPath());
+				FileTransferMessage message = new FileTransferMessage(ReservationsReportPdf.getName(), data);
+				// Send back the successful result
+				return new SendObject<T1>("ReservationReportPDF", (T1) (FileTransferMessage) message);
+
+			}
 		}
 		// Default or fallback return value
 		return new SendObject<T1>("Invalid request", null);
 	}
 
 	/**
-     * Retrieves an object from the database based on the subscriber details.
-     * 
-     * @param object<T>, must be Serializable. The input object to process (subscriber expected)
-     * @param <T1> Return type, must be Serializable.
-     * @param con Database connector
-     * @return Retrieved object or error message
-     * @throws Exception if retrieval fails
+	 * Retrieves an object from the database based on the subscriber details.
+	 * 
+	 * @param object<T>, must be Serializable. The input object to process
+	 *                   (subscriber expected)
+	 * @param <T1>       Return type, must be Serializable.
+	 * @param con        Database connector
+	 * @return Retrieved object or error message
+	 * @throws Exception if retrieval fails
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> T1 handleGetAction(T object, DataBaseQuery con)
@@ -420,24 +411,26 @@ public class SendObjectHandler {
 	}
 
 	/**
-     * Updates objects in the database.
-     * 
-     * @param object <T> Input object type, must extend Serializable, Object to be updated
-     * @param <T1> Return object type, must extend Serializable
-     * @param con Database connector
-     * @return A SendObject response if applicable, else null
-     * @throws Exception if database update fails
+	 * Updates objects in the database.
+	 * 
+	 * @param object <T> Input object type, must extend Serializable, Object to be
+	 *               updated
+	 * @param <T1>   Return object type, must extend Serializable
+	 * @param con    Database connector
+	 * @return A SendObject response if applicable, else null
+	 * @throws Exception if database update fails
 	 */
 	@SuppressWarnings("unchecked")
-	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleUpdateAction(T object, DataBaseQuery con) throws Exception {
+	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleUpdateAction(T object,
+			DataBaseQuery con) throws Exception {
 		try {
 			if (object instanceof subscriber) {
 				subscriber user = (subscriber) object;
 				// Update User In the database using received object
 				con.updateUserInDatabase(user);
-				if(user.getEmail().equals(con.getUserUsingTagFromDatabase(user.getTag()).getEmail()))
-					return new SendObject<T1>("Subscriber",(T1)"updated successfully");
-				return new SendObject<T1>("Subscriber",(T1)"could not be updated, another user has this email");
+				if (user.getEmail().equals(con.getUserUsingTagFromDatabase(user.getTag()).getEmail()))
+					return new SendObject<T1>("Subscriber", (T1) "updated successfully");
+				return new SendObject<T1>("Subscriber", (T1) "could not be updated, another user has this email");
 			} else if (object instanceof Parkingsession) {
 				Parkingsession session = (Parkingsession) object;
 				// Update Parkingsession In the database using received object
@@ -447,13 +440,13 @@ public class SendObjectHandler {
 				// Update ParkingSpot In the database using received object
 				con.updateParkingSpotInDatabase(spot);
 			} else if (object instanceof Object[]) {
-				if(((Object[])object)[1] instanceof Reservation) {
-					Object objectArr[] = (Object[])object;
+				if (((Object[]) object)[1] instanceof Reservation) {
+					Object objectArr[] = (Object[]) object;
 					int reservationNum = (Integer) objectArr[0];
 					Reservation reservation = (Reservation) objectArr[1];
 					// Update Reservation In the database using received object
-					con.updateReservationInDatabase(reservationNum,reservation);
-					return new SendObject<T1>("Reservation",(T1)"Updated");
+					con.updateReservationInDatabase(reservationNum, reservation);
+					return new SendObject<T1>("Reservation", (T1) "Updated");
 				}
 			}
 		} catch (Exception e) { // SQLException e
@@ -463,13 +456,14 @@ public class SendObjectHandler {
 	}
 
 	/**
-     * Handles creation of new objects in the database.
-     * 
-     * @param object <T> Input object type, must extend Serializable, Object to create
-     * @param <T1> Return object type, must extend Serializable
-     * @param con Database connector
-     * @return A SendObject response describing the creation result
-     * @throws Exception if creation fails
+	 * Handles creation of new objects in the database.
+	 * 
+	 * @param object <T> Input object type, must extend Serializable, Object to
+	 *               create
+	 * @param <T1>   Return object type, must extend Serializable
+	 * @param con    Database connector
+	 * @return A SendObject response describing the creation result
+	 * @throws Exception if creation fails
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T extends Serializable, T1 extends Serializable> SendObject<T1> handleCreateAction(T object,
@@ -515,9 +509,10 @@ public class SendObjectHandler {
 				if (spot != null) {
 					spot.setStatus(SpotStatus.RESERVED);
 					con.updateParkingSpotInDatabase(spot);
-					int reservationCode = generateCode(con,"Reservation");
+					int reservationCode = generateCode(con, "Reservation");
 					Reservation reservationToBeSent = new Reservation(spot.getSpotId(), reservation.getSubscriberId(),
-							reservation.getDate(), reservation.getStartTime(), reservation.getEndTime(),reservationCode);
+							reservation.getDate(), reservation.getStartTime(), reservation.getEndTime(),
+							reservationCode);
 					int reservationId = con.createReservationInDatabase(reservationToBeSent);
 					reservationToBeSent.setId(reservationId);
 					con.updateReservationInDatabase(reservationId, reservationToBeSent);
@@ -536,9 +531,9 @@ public class SendObjectHandler {
 
 	/**
 	 * Generates a unique RFID tag string.
-     * 
-     * @param con Database connector
-     * @return A unique RFID tag string
+	 * 
+	 * @param con Database connector
+	 * @return A unique RFID tag string
 	 */
 	private static String generateTag(DataBaseQuery con) {
 		Random random = new Random();
@@ -557,9 +552,9 @@ public class SendObjectHandler {
 
 	/**
 	 * Generates a unique subscriber code.
-     * 
-     * @param con Database connector
-     * @return A unique integer code
+	 * 
+	 * @param con Database connector
+	 * @return A unique integer code
 	 */
 	private static Integer generateCode(DataBaseQuery con, String type) {
 		int code;
@@ -567,7 +562,7 @@ public class SendObjectHandler {
 		boolean isDifferent = false;
 		do {
 			code = 100000 + random.nextInt(900000);
-			if(type.equals("Subscriber"))
+			if (type.equals("Subscriber"))
 				isDifferent = con.checkCodeDifferentFromAllSubscribers(code);
 			else
 				isDifferent = con.checkCodeDifferentFromAllReservations(code);

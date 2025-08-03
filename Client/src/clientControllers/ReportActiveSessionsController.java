@@ -54,7 +54,10 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 				try {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					String defaultName = "ActiveSessionsReport_" + date.format(formatter) + ".csv";
-
+					File reportsDir = new File("reports"); // Relative path to your reports directory
+					if (!reportsDir.exists()) {
+					    reportsDir.mkdirs(); // Ensure the directory exists
+					}
 					 File reportFile = new File("reports/" + defaultName);
 					if (reportFile != null) {
 						File imageFile1 = new File("reports/ActiveSessionsChart_"+date.format(formatter)+".png");
@@ -76,6 +79,17 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 			showPDF.setOnAction(e ->{
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				String today = date.format(formatter);
+				File reportsDir = new File("reports");
+		        File csvFile = new File(reportsDir, "ActiveSessionsReport_" + today + ".csv");
+		        File pngFile1 = new File(reportsDir, "ActiveSessionsChart_" + today + ".png");
+		        File pngFile2 = new File(reportsDir, "ParkingSpotsChart_" + today + ".png");
+
+		        // Check if the necessary files exist before sending the request
+		        if (!csvFile.exists() || !pngFile1.exists() || !pngFile2.exists()) {
+		            // If either file is missing, show an alert to inform the user
+		            ShowAlert.showAlert("Error", "Required files are missing or could not be found.", AlertType.ERROR);
+		            return;  // Prevent sending the request if the files are missing
+		        }			
 				try {
 					client.sendToServer(new SendObject<String>("Get ActiveSessions", today));
 				} catch (IOException e1) {

@@ -69,7 +69,10 @@ public class ReportSubscriberController extends ViewSubscriberController {
 				try {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					String defaultName = "SubscribersReport_" + LocalDateTime.now().format(formatter) + ".csv";
-
+					File reportsDir = new File("reports"); // Relative path to your reports directory
+					if (!reportsDir.exists()) {
+					    reportsDir.mkdirs(); // Ensure the directory exists
+					}
 					File reportFile = new File("reports/" + defaultName);
 					
 					if (reportFile != null) {
@@ -84,8 +87,18 @@ public class ReportSubscriberController extends ViewSubscriberController {
 		}
 		if (viewSubscribersReport != null) {
 			viewSubscribersReport.setOnAction(e -> {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				File reportsDir = new File("reports");
+		        File csvFile = new File(reportsDir, "SubscribersReport_" + LocalDateTime.now().format(formatter) + ".csv");
+
+		        // Check if the necessary files exist before sending the request
+		        if (!csvFile.exists()) {
+		            // If either file is missing, show an alert to inform the user
+		            ShowAlert.showAlert("Error", "Required files are missing or could not be found.", AlertType.ERROR);
+		            return;  // Prevent sending the request if the files are missing
+		        }	
 				try {
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					
 					client.sendToServer(new SendObject<String>("Get Subscribers Report",LocalDateTime.now().format(formatter)));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -120,6 +133,16 @@ public class ReportSubscriberController extends ViewSubscriberController {
 						subInfo += String.format("Sub. ID: %d\nSub. name: %s\nEmail: %s\nPhone: %s\nRole: %s\nLogged in: %s\n\nParking Session History:",subscriber.getId(),subscriber.getName(),subscriber.getEmail(),subscriber.getPhone(),subscriber.getRole(),subscriber.getLoggedIn());
 					}
 				}
+				File reportsDir = new File("reports");
+		        File csvFile = new File(reportsDir, "SubscriberReport_" + subId + ".csv");
+		        File pngFile1 = new File(reportsDir, "SubscriberHistorySessionsChart_" + subId + ".png");
+
+		        // Check if the necessary files exist before sending the request
+		        if (!csvFile.exists() || !pngFile1.exists()) {
+		            // If either file is missing, show an alert to inform the user
+		            ShowAlert.showAlert("Error", "Required files are missing or could not be found.", AlertType.ERROR);
+		            return;  // Prevent sending the request if the files are missing
+		        }	
 				try {
 					client.sendToServer(new SendObject<String>("Get Subscriber Report", subInfo));
 				} catch (IOException e1) {

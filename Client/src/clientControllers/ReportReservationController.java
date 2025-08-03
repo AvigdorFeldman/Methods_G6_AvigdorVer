@@ -41,7 +41,10 @@ public class ReportReservationController extends ViewReservationController {
 					String selectedMonth = monthComboBox.getValue();
 					Integer selectedYear = yearComboBox.getValue();
 					String defaultName = "ReservationsReport_" + selectedMonth + "_" + selectedYear + ".csv";
-
+					File reportsDir = new File("reports"); // Relative path to your reports directory
+					if (!reportsDir.exists()) {
+					    reportsDir.mkdirs(); // Ensure the directory exists
+					}
 					 File reportFile = new File("reports/" + defaultName);
 					if (reportFile != null) {
 						File imageFile = new File("reports/ReservationsChart_"+ selectedMonth + "_" + selectedYear + ".png");
@@ -49,7 +52,6 @@ public class ReportReservationController extends ViewReservationController {
 						Util.exportToCSV(reservationTable, reportFile);
 						Util.sendReportFileToServer(reportFile, client, "File to server");
 						Util.sendReportFileToServer(imageFile, client, "File to server");
-						//"Exported table to " + reportFile.getName()
 						ShowAlert.showSuccessAlert("Success", "Exported table to " + reportFile.getName());
 					}
 				} catch (Exception ex) {
@@ -62,6 +64,16 @@ public class ReportReservationController extends ViewReservationController {
 				String selectedMonth = monthComboBox.getValue();
 				Integer selectedYear = yearComboBox.getValue();
 				String today = selectedMonth + "_" + selectedYear;
+				File reportsDir = new File("reports");
+		        File csvFile = new File(reportsDir, "ReservationsReport_" + today + ".csv");
+		        File pngFile = new File(reportsDir, "ReservationsChart_" + today + ".png");
+
+		        // Check if the necessary files exist before sending the request
+		        if (!csvFile.exists() || !pngFile.exists()) {
+		            // If either file is missing, show an alert to inform the user
+		            ShowAlert.showAlert("Error", "Required files are missing or could not be found.", AlertType.ERROR);
+		            return;  // Prevent sending the request if the files are missing
+		        }
 				try {
 					client.sendToServer(new SendObject<String>("Get Reservation Report", today));
 				} catch (IOException e1) {
