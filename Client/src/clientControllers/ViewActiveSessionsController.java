@@ -156,12 +156,10 @@ public class ViewActiveSessionsController extends Controller {
 			}
 			else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ActiveSessionsPDF")) {
 				Util.getPDF(msg);
+			}else if(((SendObject<?>) msg).getObjectMessage().equals("Error")) {
+				ShowAlert.showAlert("Error", "Failed to create PDF", AlertType.ERROR);
 			}
 		}
 	}
 
-	protected void showAlert(String msg) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
-		alert.showAndWait();
-	}
 }

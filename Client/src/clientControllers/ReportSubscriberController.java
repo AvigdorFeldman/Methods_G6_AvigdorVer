@@ -17,6 +17,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Alert.AlertType;
 import logic.Parkingsession;
 import logic.SendObject;
 
@@ -74,10 +75,10 @@ public class ReportSubscriberController extends ViewSubscriberController {
 					if (reportFile != null) {
 						Util.exportToCSV(subscriberTable, reportFile);
 						Util.sendReportFileToServer(reportFile, client, "File to server");						
-						showAlert("Exported table to subscribers.csv!");
+						ShowAlert.showSuccessAlert("Success", "Exported table to subscribers.csv!");
 					}
 				} catch (Exception ex) {
-					showAlert("Failed to export CSV: " + ex.getMessage());
+					ShowAlert.showAlert("Error", "Failed to export CSV, try again " ,AlertType.ERROR);
 				}
 			});
 		}
@@ -104,10 +105,11 @@ public class ReportSubscriberController extends ViewSubscriberController {
 						Util.saveChartAsImage(barChart, imageFile);
 						Util.sendReportFileToServer(reportFile, client, "File to server");	
 						Util.sendReportFileToServer(imageFile, client, "File to server");	
-						showAlert("Exported table to subscribers.csv!");
+						//"Exported table to subscribers.csv!"
+						ShowAlert.showSuccessAlert("Success", "Exported table to subscribers.csv!");
 					}
 				} catch (Exception ex) {
-					showAlert("Failed to export CSV: " + ex.getMessage());
+					ShowAlert.showAlert("Error", "Failed to export CSV, try again " ,AlertType.ERROR);
 				}
 			});
 		}if (viewSubscriberReport != null) {

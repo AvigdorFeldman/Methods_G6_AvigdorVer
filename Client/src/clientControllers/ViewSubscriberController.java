@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -144,7 +145,7 @@ public class ViewSubscriberController extends Controller {
 	private void fetchHistory() {
 		String idText = subscriberIdField.getText().trim();
 		if (idText.isEmpty()) {
-			showAlert("Please enter a Subscriber ID");
+			ShowAlert.showAlert("Error","Please enter a Subscriber ID",AlertType.ERROR);
 			return;
 		}
 
@@ -152,7 +153,7 @@ public class ViewSubscriberController extends Controller {
 			subId = Integer.parseInt(idText);
 			client.sendToServerSafely(new SendObject<Integer>("Get history", subId));
 		} catch (NumberFormatException e) {
-			showAlert("Subscriber ID must be a number.");
+			ShowAlert.showAlert("Error","Subscriber ID must be a number.",AlertType.ERROR);
 		}
 	}
 
@@ -252,12 +253,10 @@ public class ViewSubscriberController extends Controller {
 				Util.getPDF(msg);
 			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("SubscriberReportPDF")) {
 				Util.getPDF(msg);
+			}else if(((SendObject<?>) msg).getObjectMessage().equals("Error")) {
+				ShowAlert.showAlert("Error", "Failed to create PDF", AlertType.ERROR);
 			}
 		}
 	}
 
-	protected void showAlert(String msg) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
-		alert.showAndWait();
-	}
 }

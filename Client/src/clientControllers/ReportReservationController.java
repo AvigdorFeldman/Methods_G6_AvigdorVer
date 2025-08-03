@@ -7,9 +7,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import logic.SendObject;
 
 /**
@@ -50,10 +49,11 @@ public class ReportReservationController extends ViewReservationController {
 						Util.exportToCSV(reservationTable, reportFile);
 						Util.sendReportFileToServer(reportFile, client, "File to server");
 						Util.sendReportFileToServer(imageFile, client, "File to server");
-						showAlert("Exported table to " + reportFile.getName());
+						//"Exported table to " + reportFile.getName()
+						ShowAlert.showSuccessAlert("Success", "Exported table to " + reportFile.getName());
 					}
 				} catch (Exception ex) {
-					showAlert("Failed to export CSV: " + ex.getMessage());
+					ShowAlert.showAlert("Error", "Failed to export CSV, try again " ,AlertType.ERROR);
 				}
 			});
 		}
@@ -120,10 +120,5 @@ public class ReportReservationController extends ViewReservationController {
 		reservationsLineChart.setTitle("Reservations in " + selectedMonth + " " + selectedYear);
 		
 		Platform.runLater(() -> reservationsLineChart.layout());
-	}
-
-	private void showAlert(String msg) {
-		Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
-		alert.showAndWait();
 	}
 }

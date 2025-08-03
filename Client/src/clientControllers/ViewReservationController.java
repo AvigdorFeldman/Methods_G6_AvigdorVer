@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import logic.FileTransferMessage;
 import logic.Reservation;
 import logic.SendObject;
@@ -196,6 +197,8 @@ public class ViewReservationController extends Controller {
 				}
 			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ReservationReportPDF")) {
 				Util.getPDF(msg);
+			}else if(((SendObject<?>) msg).getObjectMessage().equals("Error")) {
+				ShowAlert.showAlert("Error", "Failed to create PDF", AlertType.ERROR);
 			}
 		}
 	}

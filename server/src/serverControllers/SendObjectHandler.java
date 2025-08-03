@@ -322,10 +322,14 @@ public class SendObjectHandler {
 				File pngFile2 = new File(reportsDir, "ParkingSpotsChart_" + object.toString() + ".png");
 				File[] images = new File[]{pngFile1,pngFile2};
 				File ActiveSessionsPdf = new File(reportsDir, "ActiveSessionsReport_"+object.toString()+".pdf");
-				PDFReport.generatePdfReport(csvFile,images,ActiveSessionsPdf, "Active Sessions "+object.toString(),null);
-				byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
-				FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
-				return new SendObject<T1>("ActiveSessionsPDF",(T1)(FileTransferMessage)message);
+				boolean isCreated = PDFReport.generatePdfReport(csvFile,images,ActiveSessionsPdf, "Active Sessions "+object.toString(),null);
+				if(isCreated) {
+					byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
+					FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
+					return new SendObject<T1>("ActiveSessionsPDF",(T1)(FileTransferMessage)message);
+				}else {
+					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
+				}
 			}else if(action.contains("Subscribers Report")) {
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
@@ -333,10 +337,14 @@ public class SendObjectHandler {
 				}
 				File csvFile = new File(reportsDir, "SubscribersReport_" + object.toString() + ".csv");
 				File SubscribersReportPdf = new File(reportsDir, "SubscribersReport_"+object.toString()+".pdf");
-				PDFReport.generatePdfReport(csvFile,null,SubscribersReportPdf, "Subscribers Report "+object.toString(),null);
-				byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
-				FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
-				return new SendObject<T1>("SubscribersReportPDF",(T1)(FileTransferMessage)message);
+				boolean isCreated = PDFReport.generatePdfReport(csvFile,null,SubscribersReportPdf, "Subscribers Report "+object.toString(),null);
+				if(isCreated) {
+					byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
+					FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
+					return new SendObject<T1>("SubscribersReportPDF",(T1)(FileTransferMessage)message);
+				}else {
+					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
+				}
 			}else if(action.contains("Subscriber Report")) {
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
@@ -346,10 +354,14 @@ public class SendObjectHandler {
 				File csvFile = new File(reportsDir, "SubscriberReport_" + subIdAndInfo[0] + ".csv");
 				File pngFile = new File(reportsDir, "SubscriberHistorySessionsChart_" + subIdAndInfo[0] + ".png");
 				File SubscribersReportPdf = new File(reportsDir, "SubscriberReport_"+ subIdAndInfo[0] +".pdf");
-				PDFReport.generatePdfReport(csvFile,new File[] {pngFile},SubscribersReportPdf, "Subscriber Report ID:"+subIdAndInfo[0], subIdAndInfo[1]);
-				byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
-				FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
-				return new SendObject<T1>("SubscriberReportPDF",(T1)(FileTransferMessage)message);
+				boolean isCreated = PDFReport.generatePdfReport(csvFile,new File[] {pngFile},SubscribersReportPdf, "Subscriber Report ID:"+subIdAndInfo[0], subIdAndInfo[1]);
+				if(isCreated) {
+					byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
+					FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
+					return new SendObject<T1>("SubscriberReportPDF",(T1)(FileTransferMessage)message);
+				}else {
+					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
+				}
 			}else if(action.contains("Get Reservation Report")) {
 				File reportsDir = new File("reports"); // Relative path to your reports directory
 				if (!reportsDir.exists()) {
@@ -358,10 +370,14 @@ public class SendObjectHandler {
 				File csvFile = new File(reportsDir, "ReservationsReport_" + object.toString() + ".csv");
 				File pngFile = new File(reportsDir, "ReservationsChart_" + object.toString() + ".png");
 				File ReservationsReportPdf = new File(reportsDir, "ReservationsReport_"+ object.toString() +".pdf");
-				PDFReport.generatePdfReport(csvFile,new File[] {pngFile},ReservationsReportPdf, "Reservations Report "+object.toString(), null);
-				byte[] data = Files.readAllBytes(ReservationsReportPdf.toPath());
-				FileTransferMessage message = new FileTransferMessage(ReservationsReportPdf.getName(), data);
-				return new SendObject<T1>("ReservationReportPDF",(T1)(FileTransferMessage)message);
+				boolean IsCreated = PDFReport.generatePdfReport(csvFile,new File[] {pngFile},ReservationsReportPdf, "Reservations Report "+object.toString(), null);
+				if(IsCreated) {
+					byte[] data = Files.readAllBytes(ReservationsReportPdf.toPath());
+					FileTransferMessage message = new FileTransferMessage(ReservationsReportPdf.getName(), data);
+					return new SendObject<T1>("ReservationReportPDF",(T1)(FileTransferMessage)message);
+				}else {
+					return new SendObject<T1>("Error",(T1)(String)"Failed to create PDF");
+				}
 			}
 
 		}

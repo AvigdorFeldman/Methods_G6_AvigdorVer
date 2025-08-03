@@ -129,8 +129,6 @@ public class Util {
 
 			// Convert JavaFX image to BufferedImage and save to file
 			ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-
-			System.out.println("Chart saved to " + file.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -13,8 +13,6 @@ import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.layout.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,13 +23,14 @@ import java.util.List;
 public class PDFReport {
 
 
-	public static void generatePdfReport(File csvFile, File[] chartImageFiles, File pdfOutputFile, String reportName, String extraInfo) throws Exception {
+	@SuppressWarnings("resource")
+	public static boolean generatePdfReport(File csvFile, File[] chartImageFiles, File pdfOutputFile, String reportName, String extraInfo) throws Exception {
 	    System.out.println("Generating PDF report...");
 
 	    // Check if CSV and image files exist and are readable
 	    if (!csvFile.exists() || csvFile.length() == 0) {
 	        System.out.println("CSV file is missing or empty.");
-	        return;  // Exit if CSV is missing
+	        return false;  // Exit if CSV is missing
 	    }
 
 	    try {
@@ -56,7 +55,7 @@ public class PDFReport {
 	        List<String[]> csvData = readCsv(csvFile);
 	        if (csvData.isEmpty()) {
 	            System.out.println("CSV data is empty. Cannot proceed with PDF generation.");
-	            return;  // Exit if CSV data is empty
+	            return false;  // Exit if CSV data is empty
 	        }
 
 	        Table table = new Table(csvData.get(0).length);
@@ -68,7 +67,6 @@ public class PDFReport {
 
 	        table.setWidth(csvData.get(0).length);
 	        document.add(table);
-	        System.out.println("CSV data added to the PDF.");
 
 	        // Step 2: Add chart image to the PD
 	        if(chartImageFiles!=null) {
@@ -88,18 +86,20 @@ public class PDFReport {
 
 	        // Debugging: Confirm the PDF file has been created
 	        if (pdfOutputFile.exists() && pdfOutputFile.length() > 0) {
-	            System.out.println("PDF file successfully created at: " + pdfOutputFile.getAbsolutePath());
+	            return true;
 	        } else {
-	            System.out.println("Failed to create PDF file.");
+	            return false;
 	        }
 	    } catch (IOException e) {
 	        // If there was an error with the file writing process
 	        System.out.println("Error writing the PDF file:");
 	        e.printStackTrace();
+	        return false;
 	    } catch (Exception e) {
 	        // Catch any other exceptions and print the details
 	        System.out.println("Error generating PDF:");
 	        e.printStackTrace();
+	        return false;
 	    }
 	}
 
@@ -119,7 +119,6 @@ public class PDFReport {
 	        while ((line = reader.readLine()) != null) {
 	            if (line.trim().isEmpty()) {
 	                // Skip empty lines (optional, depends on your requirement)
-	            	System.out.println("Skip");
 	                continue;
 	            }
 

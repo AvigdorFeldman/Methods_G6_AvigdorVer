@@ -14,6 +14,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import logic.*;
 
 
@@ -64,10 +65,10 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 						Util.sendReportFileToServer(reportFile, client, "File to server");
 						Util.sendReportFileToServer(imageFile1, client, "File to server");
 						Util.sendReportFileToServer(imageFile2, client, "File to server");
-						showAlert("Exported table to " + reportFile.getName());
+						ShowAlert.showSuccessAlert("Success", "Exported table to " + reportFile.getName());
 					}
 				} catch (Exception ex) {
-					showAlert("Failed to export CSV: " + ex.getMessage());
+					ShowAlert.showAlert("Error", "Failed to export CSV, try again " ,AlertType.ERROR);
 				}
 			});
 		}
