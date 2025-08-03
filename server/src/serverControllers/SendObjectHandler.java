@@ -179,13 +179,11 @@ public class SendObjectHandler {
 				// Return list of past parking sessions of the subscriber intObject
 				List<Parkingsession> historyParkingsessionsListOfSubscriber = new ArrayList<>();
 				int subscriberId = intObject;
-				System.out.println("1");
 				historyParkingsessionsListOfSubscriber = con
 						.gethistoryParkingsessionsListOfSubscriberbyIdFromDatabase(subscriberId);
 				if (historyParkingsessionsListOfSubscriber == null) {
 				}
 				// send back the list
-				System.out.println("3");
 				return new SendObject<T1>("Parkingsession list of subscriber",
 						(T1) (List<Parkingsession>) historyParkingsessionsListOfSubscriber);
 			} else if (action.contains("Active Parkingsessions")) {

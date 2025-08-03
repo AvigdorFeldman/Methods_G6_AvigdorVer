@@ -241,7 +241,6 @@ public class ViewSubscriberController extends Controller {
 				Object obj = so.getObj();
 				if (obj instanceof List<?>) {
 					List<?> list = (List<?>) obj;
-					System.out.println("2");
 					if (!list.isEmpty() && list.get(0) instanceof Parkingsession) {
 						setHistorySessions((List<Parkingsession>) list);
 					} else {
