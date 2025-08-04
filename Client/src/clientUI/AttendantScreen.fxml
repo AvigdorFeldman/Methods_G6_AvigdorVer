@@ -19,7 +19,14 @@
 	
 	    <Button fx:id="registerNewSubscriberButton" onAction="#registerNewSubscriber" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📝 Register New Subscriber" />
 	
-	    <Button fx:id="backButton" onAction="#handleBackButton" prefHeight="45" prefWidth="180" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;" styleClass="disconnect-button" text="Disconnect" />
 	</VBox>
+	<Button fx:id="backButton"
+            text="Disconnect"
+            onAction="#handleBackButton"
+            styleClass="disconnect-button"
+            AnchorPane.bottomAnchor="40.0"
+            AnchorPane.rightAnchor="60.0"
+            maxWidth="Infinity" maxHeight="Infinity"
+            prefWidth="200.0" prefHeight="50.0"/>
 
 </AnchorPane>

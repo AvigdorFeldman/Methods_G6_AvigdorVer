@@ -56,7 +56,7 @@ public class GuestScreenController extends Controller {
      * @param percent The percentage of free parking spaces to display.
      */
     public void updateFreeSpace(double percent) {
-        freeSpaceLabel.setText("Free Space: " + percent + "%");
+        freeSpaceLabel.setText(String.format("Free Space: %.2f%%", percent));
         double progress = percent / 100.0;
         progressInd.setProgress(progress);
     }

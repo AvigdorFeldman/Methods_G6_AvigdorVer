@@ -24,8 +24,13 @@
 		<ProgressIndicator fx:id="progressInd"
 			progress="0.0" maxWidth="200.0" maxHeight="200.0" VBox.vgrow="ALWAYS" />
 
-		<Button fx:id="backButton" onAction="#handleBackButton"
-			styleClass="disconnect-button" text="Back" />
-
 	</VBox>
+	<Button fx:id="backButton"
+            text="Disconnect"
+            onAction="#handleBackButton"
+            styleClass="disconnect-button"
+            AnchorPane.bottomAnchor="40.0"
+            AnchorPane.rightAnchor="60.0"
+            maxWidth="Infinity" maxHeight="Infinity"
+            prefWidth="200.0" prefHeight="50.0"/>
 </AnchorPane>

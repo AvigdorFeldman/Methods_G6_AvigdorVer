@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="mainPane" prefHeight="1080" prefWidth="1920" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.DropOffScreenController">
 	<children>
-      <VBox alignment="CENTER" prefHeight="891.0" prefWidth="1339.0"  AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0">
+      <VBox alignment="CENTER" spacing="30.0" prefHeight="891.0" prefWidth="1339.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
          <children>
       				<!-- Title Row with more space below it -->
       				<Label styleClass="title-label" text="Drop Off Screen" VBox.vgrow="ALWAYS" />
@@ -51,7 +51,7 @@
          </children>
       </VBox>
 
-		<!-- Back Button -->
-		<Button onAction="#handleBackButton" styleClass="disconnect-button" text="⬅ Back" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+      		<!-- Back Button -->
+		<Button alignment="CENTER" contentDisplay="CENTER" layoutX="902.0" layoutY="1032.0" onAction="#handleBackButton" styleClass="button-red" text="⬅ Back" />
 	</children>
 </AnchorPane>

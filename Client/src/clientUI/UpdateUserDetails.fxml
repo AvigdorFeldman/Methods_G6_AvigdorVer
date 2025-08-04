@@ -24,20 +24,23 @@
             <!-- Name -->
             <Label styleClass="reg-label" text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
             <TextField fx:id="nameField" promptText="Enter full name" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="nameWarningLabel" alignment="CENTER" contentDisplay="CENTER" text="Name must contain only letters and spaces" textAlignment="CENTER" textFill="RED" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER"/>
+            <Label fx:id="nameWarningLabel" alignment="CENTER" contentDisplay="CENTER" text="Name must contain only letters and spaces" textAlignment="CENTER" textFill="RED" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
 
             <!-- Phone -->
             <Label styleClass="reg-label" text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <TextField fx:id="phoneField" promptText="XXX-XXX-XXXX" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="phoneWarningLabel" style="-fx-text-fill: red;" text="Phone must be 10 digits: XXX-XXX-XXXX" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.halignment="CENTER"/>
+            <Label fx:id="phoneWarningLabel" style="-fx-text-fill: red;" text="Phone must be 10 digits: XXX-XXX-XXXX" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
 
             <!-- Email -->
             <Label styleClass="reg-label" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
             <TextField fx:id="emailField" promptText="Enter email address" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label fx:id="emailWarningLabel" style="-fx-text-fill: red;" text="Invalid email format (e.g. user@example.com)" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.halignment="CENTER"/>
+            <Label fx:id="emailWarningLabel" style="-fx-text-fill: red;" text="Invalid email format (e.g. user@example.com)" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
 
             <!-- Update Button -->
             <Button onAction="#handleUpdate" styleClass="menu-button" text="Update Subscriber Details" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+   
+           <!-- Back Button -->
+           <Button fx:id="back" onAction="#handleBackButton" styleClass="button-red" text="⬅ Back" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
          <rowConstraints>
             <RowConstraints />
             <RowConstraints />
@@ -47,10 +50,8 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
          </rowConstraints>
         </GridPane>
-
-        <!-- Back Button -->
-        <Button fx:id="back" onAction="#handleBackButton" prefHeight="50.0" prefWidth="200.0" styleClass="disconnect-button" text="⬅ Back" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="60.0" />
     </children>
 </AnchorPane>

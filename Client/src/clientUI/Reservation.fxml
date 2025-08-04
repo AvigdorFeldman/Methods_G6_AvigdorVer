@@ -114,10 +114,10 @@
 					<Button fx:id="deleteReservationButton" mnemonicParsing="false" onAction="#handleDeleteReservationButton" styleClass="menu-button" text="Delete Reservation" />
 				</HBox>
 			</VBox>
+   
+   		<!-- Back button in the bottom-right corner -->
+   		<Button fx:id="backButton" onAction="#handleBackButton" styleClass="button-red" text="⬅ Back" />
 
 		</VBox>
-
-		<!-- Back button in the bottom-right corner -->
-		<Button fx:id="backButton" onAction="#handleBackButton" styleClass="disconnect-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
 	</children>
 </AnchorPane>
