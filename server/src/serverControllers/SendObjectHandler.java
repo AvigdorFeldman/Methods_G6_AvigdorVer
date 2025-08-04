@@ -312,10 +312,10 @@ public class SendObjectHandler {
 				List<ParkingSpot> allParkingSpots = new ArrayList<ParkingSpot>();
 				allParkingSpots = con.getAllParkingSpots();
 				return new SendObject<T1>("Received active parking sessions", (T1) (List<ParkingSpot>) allParkingSpots);
-			} else if (action.contains("Get ActiveSessions")) {
-				File reportsDir = new File("reports"); // Relative path to your reports directory
+			} else if (action.contains("Get ActiveSessions")) { // Creates ActiveSessions PDF file
+				File reportsDir = new File("reports"); 
 				if (!reportsDir.exists()) {
-					reportsDir.mkdirs(); // Ensure the directory exists
+					reportsDir.mkdirs(); 
 				}
 				File csvFile = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".csv");
 				File pngFile1 = new File(reportsDir, "ActiveSessionsChart_" + object.toString() + ".png");
@@ -327,10 +327,10 @@ public class SendObjectHandler {
 				byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
 				FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
 				return new SendObject<T1>("ActiveSessionsPDF", (T1) (FileTransferMessage) message);
-			} else if (action.contains("Subscribers Report")) {
-				File reportsDir = new File("reports"); // Relative path to your reports directory
+			} else if (action.contains("Subscribers Report")) { // // Creates Subscribers PDF file
+				File reportsDir = new File("reports"); 
 				if (!reportsDir.exists()) {
-					reportsDir.mkdirs(); // Ensure the directory exists
+					reportsDir.mkdirs();
 				}
 				File csvFile = new File(reportsDir, "SubscribersReport_" + object.toString() + ".csv");
 				File SubscribersReportPdf = new File(reportsDir, "SubscribersReport_" + object.toString() + ".pdf");
@@ -339,10 +339,10 @@ public class SendObjectHandler {
 				byte[] data = Files.readAllBytes(SubscribersReportPdf.toPath());
 				FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
 				return new SendObject<T1>("SubscribersReportPDF", (T1) (FileTransferMessage) message);
-			} else if (action.contains("Subscriber Report")) {
-				File reportsDir = new File("reports"); // Relative path to your reports directory
+			} else if (action.contains("Subscriber Report")) { // Creates a subscriber's PDF file
+				File reportsDir = new File("reports");
 				if (!reportsDir.exists()) {
-					reportsDir.mkdirs(); // Ensure the directory exists
+					reportsDir.mkdirs(); 
 				}
 				String subIdAndInfo[] = object.split(",");
 				File csvFile = new File(reportsDir, "SubscriberReport_" + subIdAndInfo[0] + ".csv");
@@ -354,7 +354,7 @@ public class SendObjectHandler {
 				FileTransferMessage message = new FileTransferMessage(SubscribersReportPdf.getName(), data);
 				return new SendObject<T1>("SubscriberReportPDF", (T1) (FileTransferMessage) message);
 
-			} else if (action.contains("Get Reservation Report")) {
+			} else if (action.contains("Get Reservation Report")) { // Creates Reservations PDF file
 				// File handling and creation logic
 				File reportsDir = new File("reports");
 				if (!reportsDir.exists())

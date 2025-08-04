@@ -21,9 +21,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
+/**
+ * The {@code PDFReport} class provides methods to generate PDF reports from a CSV file and accompanying chart images.
+ * This class supports reading data from a CSV file, inserting that data as a table into a PDF document,
+ * and appending one or more chart images to the generated report.
+ * The report includes a customizable title, creation date, and optional extra information.
+ */
 public class PDFReport {
 
 
+	/**
+	 * Generates a PDF report from the provided CSV file and chart images.
+     * The report will contain a title, creation date, an optional extra information section, and a table populated
+     * with the CSV data. Additionally, any provided chart images will be added to the PDF.
+     *
+     * @param csvFile         The CSV file containing data to be included in the report as a table.
+     * @param chartImageFiles An array of image files to be included in the report (e.g., charts).
+     * @param pdfOutputFile   The output PDF file where the generated report will be saved.
+     * @param reportName      The title of the report, which will be displayed at the top of the PDF.
+     * @param extraInfo       Optional extra information to be displayed below the title in the PDF.
+     * @throws Exception If an error occurs while generating the PDF (e.g., file writing errors, invalid CSV data).
+	 */
 	@SuppressWarnings("resource")
 	public static void generatePdfReport(File csvFile, File[] chartImageFiles, File pdfOutputFile, String reportName, String extraInfo) throws Exception {
 	    System.out.println("Generating PDF report...");
@@ -109,6 +127,14 @@ public class PDFReport {
 
 
 	
+	/**
+	 * Reads data from a CSV file and returns it as a list of string arrays, where each array represents a row of data.
+     * The method handles CSV lines, ensuring quoted fields are processed correctly.
+	 * 
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	private static List<String[]> readCsv(File file) throws Exception {
 	    List<String[]> rows = new ArrayList<>();
 
