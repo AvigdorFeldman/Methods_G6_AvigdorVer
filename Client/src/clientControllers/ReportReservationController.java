@@ -32,11 +32,15 @@ public class ReportReservationController extends ViewReservationController {
 	@FXML
 	private Button refreshButton;
 
+	/**
+	 * Initializes UI componants
+	 */
 	@FXML
+	@Override
 	public void initialize() {
 		super.initialize(); // Load base logic
 		if (exportCsvButton != null) {
-			exportCsvButton.setOnAction(e -> {
+			exportCsvButton.setOnAction(e -> { // Sends all files to the server
 				try {
 					String selectedMonth = monthComboBox.getValue();
 					Integer selectedYear = yearComboBox.getValue();
@@ -59,7 +63,7 @@ public class ReportReservationController extends ViewReservationController {
 				}
 			});
 		}
-		if (showPDF != null) {
+		if (showPDF != null) { // Creates PDF file and shows it
 			showPDF.setOnAction(e ->{
 				String selectedMonth = monthComboBox.getValue();
 				Integer selectedYear = yearComboBox.getValue();
@@ -82,7 +86,7 @@ public class ReportReservationController extends ViewReservationController {
 				}
 			});
 		}
-		if(refreshButton != null) {
+		if(refreshButton != null) { // Refreshes reservation list
 			refreshButton.setOnAction(e ->{
 				SendObject<String> request = new SendObject<>("Get", "all reservations");
 				client.sendToServerSafely(request);

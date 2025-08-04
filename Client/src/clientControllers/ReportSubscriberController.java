@@ -51,6 +51,10 @@ public class ReportSubscriberController extends ViewSubscriberController {
 	@FXML
 	private ComboBox<Integer> yearComboBox;
 
+	/**
+	 * Initializes UI componants
+	 */
+	@FXML
 	@Override
 	public void initialize() {
 		super.initialize(); // Setup from parent		

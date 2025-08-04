@@ -44,6 +44,11 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 	private Button refreshButton;
 	@FXML
 	private PieChart parkingSpotChart;
+	
+	
+	/**
+	 * Initializes UI componants
+	 */
 	@FXML
 	@Override
 	public void initialize() {
@@ -76,7 +81,7 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 			});
 		}
 		if (showPDF != null) {
-			showPDF.setOnAction(e ->{
+			showPDF.setOnAction(e ->{ // Shows PDF, if one of the files that create the PDF don't exist an Error message will be displayed
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				String today = date.format(formatter);
 				File reportsDir = new File("reports");
@@ -98,14 +103,14 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 				}
 			});
 		}
-		if(refreshButton != null) {
+		if(refreshButton != null) { // Refreshes the parking session and parking spots list
 			refreshButton.setOnAction(e ->{
 				SendObject<String> request = new SendObject<>("Get", "active parking sessions");
 				client.sendToServerSafely(request);
 				SendObject<String> request2 = new SendObject<>("Get", "all parking spots");
 				client.sendToServerSafely(request2);
 			});
-		}if(datePick != null) {
+		}if(datePick != null) { // Choose date, date picker default is today
 			datePick.setOnAction(event -> {
 				refresh();
 				Platform.runLater(()->updateLineChart());
