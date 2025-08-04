@@ -9,6 +9,7 @@ import java.io.Serializable;
  *
  * @param <T> the type of the object to be sent, which must implement {@link Serializable}
  */
+@SuppressWarnings("serial")
 public class SendObject<T extends Serializable> implements Serializable {
     private T obj;
     private String objectMessage;

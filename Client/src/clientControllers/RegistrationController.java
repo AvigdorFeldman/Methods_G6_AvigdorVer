@@ -217,7 +217,7 @@ public class RegistrationController extends Controller{
         */             
         
         // create the subscriber locally
-        subscriber newSubscriber = new subscriber(id, name, phone, email, Role.SUBSCRIBER, null, "", 0);;
+        subscriber newSubscriber = new subscriber(id, name, phone, email, Role.SUBSCRIBER, false, null, "", 0);;
         // send it to server to check if it already exists
         // if it does, the server will return an error message
         // if it doesn't, the server will create the new subscriber and return success

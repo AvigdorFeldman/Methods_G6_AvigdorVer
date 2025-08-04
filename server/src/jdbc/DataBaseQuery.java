@@ -321,8 +321,7 @@ public class DataBaseQuery extends MySQLConnection {
                     boolean isLoggedIn  = rs.getBoolean("logged_in");
                     List<Parkingsession> history = new ArrayList<>();
                     // Construct the subscriber
-                    subscribe = new subscriber(subscriberId,nameDb,phone, email,role,history,tag,codeDb);
-                    subscribe.setLoggedIn(isLoggedIn);
+                    subscribe = new subscriber(subscriberId,nameDb,phone, email,role,isLoggedIn,history,tag,codeDb);
                 }
             }
         }
@@ -363,8 +362,7 @@ public class DataBaseQuery extends MySQLConnection {
                     boolean isLoggedIn  = rs.getBoolean("logged_in");
                     List<Parkingsession> history = new ArrayList<>();
                     // Construct the subscriber
-                    subscribe = new subscriber(subscriberId,nameDb,phone, email,role,history,tag,codeDb);
-                    subscribe.setLoggedIn(isLoggedIn);
+                    subscribe = new subscriber(subscriberId,nameDb,phone, email,role,isLoggedIn,history,tag,codeDb);
                 }
             }
         }
@@ -1112,8 +1110,7 @@ public class DataBaseQuery extends MySQLConnection {
                 boolean isLoggedIn = rs.getBoolean("logged_in");
                 // empty history list for now
                 List<Parkingsession> history = new ArrayList<>();
-                subscriber s = new subscriber(id, name, phone, email, role, history, tag, code);
-                s.setLoggedIn(isLoggedIn);
+                subscriber s = new subscriber(id, name, phone, email, role,isLoggedIn, history, tag, code);
                 list.add(s);
             }
         } catch (SQLException e) {

@@ -87,7 +87,6 @@ public class ViewSubscriberController extends Controller {
 	protected TableColumn<Parkingsession, String> colLate;
 	@FXML
 	protected Integer subId = null;
-	@SuppressWarnings("unused")
 	protected List<Parkingsession> historySessions;
 
 	/**

@@ -7,6 +7,7 @@ import java.util.List;
  * Represents a subscriber user in the system, extending the base user class.
  * A subscriber has a parking session history, a uniqe tag for identification, and a unique subscriber code for identification.
  */
+@SuppressWarnings("serial")
 public class subscriber  extends user implements Serializable{
 	    private List<Parkingsession> history;
 	    private String tag;
@@ -24,9 +25,9 @@ public class subscriber  extends user implements Serializable{
 	      * @param tag     the subscriber's unique
 	      * @param code    the subscriber's unique login code
 	     */
-	    public subscriber(int id, String name, String phone, String email, Role role,
+	    public subscriber(int id, String name, String phone, String email, Role role, boolean loggedIn,
 	                      List<Parkingsession> history,String tag, int code){
-	    	super(id, name, phone, email, role);
+	    	super(id, name, phone, email, role, loggedIn);
 	        this.history = history;
 	        this.tag = tag;
 	        this.code = code;

@@ -7,6 +7,7 @@ import java.io.Serializable;
  * Each parking spot has a unique ID and a status indicating whether it is free, occupied, or reserved.
  * Implements Serializable to allow object transfer between client and server.
  */
+@SuppressWarnings("serial")
 public class ParkingSpot implements Serializable{
     private int spotId;
     private SpotStatus status;

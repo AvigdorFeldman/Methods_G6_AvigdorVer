@@ -13,6 +13,7 @@ import java.util.Date;
  * Implements {@link Serializable} to allow the session object to be transmitted
  * over the network between client and server.
  */
+@SuppressWarnings("serial")
 public class Parkingsession implements Serializable{
 	    private int sessionId;
 	    private int subscriberId;

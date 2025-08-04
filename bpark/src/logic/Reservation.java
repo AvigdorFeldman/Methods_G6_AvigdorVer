@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * This class holds information such as subscriber ID, parking spot ID,
  * reservation date, and start/end times.
  */
+@SuppressWarnings("serial")
 public class Reservation implements Serializable{
 	private int id;
 	private final int subscriberId;

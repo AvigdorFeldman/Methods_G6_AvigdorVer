@@ -135,17 +135,17 @@ public class LoginController {
         try {
             if (isTag && isConsoleChecked) {
             	String tag = tagField.getText().trim();
-                return new subscriber(0, null, null, null, null, null, tag, 0);
+                return new subscriber(0, null, null, null, null, true, null, tag, 0);
                 
             } else {
                 int passwordInt = Integer.parseInt(subscriberIdField.getText().trim());
                 return new subscriber(0, nameField.getText().trim(), null, null, null,
-                        null, null, passwordInt);
+                        true, null, null, passwordInt);
             }
         } catch (Exception e) {
             ShowAlert.showAlert("Error", "The type of the fields is wrong", Alert.AlertType.ERROR);
             return new subscriber(0,null ,null, null, null,
-                        null, null,0);
+                        false, null, null,0);
         }
     }
 

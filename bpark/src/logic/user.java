@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Represents a user in the system with basic profile and role information.
  */
+@SuppressWarnings("serial")
 public class user implements Serializable{
 	private int id;
     private String name;
@@ -21,8 +22,9 @@ public class user implements Serializable{
      * @param phone the user's phone number
      * @param email the user's email address
      * @param role  the role assigned to the user (SUBSCRIBER, ATTENDANT, MANAGER)
+     * @param loggedIn the user is either logged in to the system or not
      */
-    public user(int id, String name, String phone, String email, Role role) {
+    public user(int id, String name, String phone, String email, Role role, boolean loggedIn) {
         this.id = id;
         this.name = name;
         this.phone = phone;
