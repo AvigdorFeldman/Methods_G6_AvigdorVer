@@ -517,7 +517,6 @@ public class DataBaseQuery extends MySQLConnection {
             // Handle start_time using Time.valueOf() by ensuring the format is HH:mm:ss
             String startTimeStr = reservation.getStartTime();
             if (startTimeStr == null || startTimeStr.trim().isEmpty()) {
-            	System.out.println("Late");
                 ps.setNull(4, java.sql.Types.TIME);  // Set null if start_time is null or empty
             } else {
                 // Append :00 for seconds to make the format HH:mm:ss

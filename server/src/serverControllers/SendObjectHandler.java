@@ -439,15 +439,11 @@ public class SendObjectHandler {
 				ParkingSpot spot = (ParkingSpot) object;
 				// Update ParkingSpot In the database using received object
 				con.updateParkingSpotInDatabase(spot);
-			} else if (object instanceof Object[]) {
-				if (((Object[]) object)[1] instanceof Reservation) {
-					Object objectArr[] = (Object[]) object;
-					int reservationNum = (Integer) objectArr[0];
-					Reservation reservation = (Reservation) objectArr[1];
-					// Update Reservation In the database using received object
-					con.updateReservationInDatabase(reservationNum, reservation);
-					return new SendObject<T1>("Reservation", (T1) "Updated");
-				}
+			} else if (object instanceof Reservation) {
+				Reservation reservation = (Reservation) object;
+				// Update Reservation In the database using received object
+				con.updateReservationInDatabase(reservation.getId(), reservation);
+				return new SendObject<T1>("Reservation", (T1) "Updated");
 			}
 		} catch (Exception e) { // SQLException e
 			throw new Exception("Error updating data to database", e);

@@ -25,7 +25,6 @@
 				<TableColumn fx:id="colName" prefWidth="120.0" text="Name" />
 				<TableColumn fx:id="colEmail" prefWidth="180.0" text="Email" />
 				<TableColumn fx:id="colPhone" prefWidth="140.0" text="Phone" />
-				<TableColumn fx:id="colTag" prefWidth="140.0" text="Tag" />
 				<TableColumn fx:id="colRole" prefWidth="100.0" text="Role" />
 				<TableColumn fx:id="colLoggedIn" prefWidth="100.0" text="Logged in?" />
 			</columns>

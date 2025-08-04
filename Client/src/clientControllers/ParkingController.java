@@ -376,9 +376,7 @@ public class ParkingController {
 			            ).plusMinutes(15))
 			        ) {
 					reservation.setStartTime(null); // Indicates reservation hasn't been used	
-					reservationAndCode[0] = reservationCode;
-					reservationAndCode[1] = reservation;
-					client.sendToServerSafely(new SendObject<Object[]>("Update",reservationAndCode)); 		
+					client.sendToServerSafely(new SendObject<Reservation>("Update",reservation)); 		
 				}
 				throw new Exception("subscriber didn't come in the right time, cannot create parking session through reservation. Try Submit Parking Request.");
 			}
@@ -398,9 +396,7 @@ public class ParkingController {
 				// send session to server
 				client.sendToServerSafely(new SendObject<Parkingsession>("Create new", session));
 				reservation.setEndTime(null); // Indicates reservation has been used
-				reservationAndCode[0] = reservationCode;
-				reservationAndCode[1] = reservation;
-				client.sendToServerSafely(new SendObject<Object[]>("Update",reservationAndCode)); 
+				client.sendToServerSafely(new SendObject<Reservation>("Update",reservation)); 
 				int spotId = spot.getSpotId();
 				Platform.runLater(() -> {
 					dropOffScreen.showParkingSuccess(spotId,parkingCode); // show success message
