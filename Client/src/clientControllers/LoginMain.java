@@ -36,6 +36,7 @@ public class LoginMain extends Application {
      * @param args the command-line arguments passed to the application
      */
     public static void main(String[] args) {
+    	System.setProperty("prism.allowhidpi", "false");
         launch(args);
     }
 }
