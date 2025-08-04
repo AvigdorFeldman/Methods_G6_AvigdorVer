@@ -41,6 +41,7 @@ public class Util {
 	 * @param file  The destination CSV file.
 	 * @throws Exception if an I/O error occurs during writing.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void exportToCSV(TableView<?> table, File file) throws Exception {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm"); // hour date format
 
@@ -122,6 +123,12 @@ public class Util {
 		}
 	}
 
+	/**
+	 * Creates a png file from a chart
+	 * 
+	 * @param chart
+	 * @param file
+	 */
 	public static void saveChartAsImage(Chart chart, File file) {
 		try {
 			// Snapshot the chart to an image
@@ -134,6 +141,11 @@ public class Util {
 		}
 	}
 
+	/**
+	 * Gets the pdf file as an object and opens it 
+	 * 
+	 * @param msg
+	 */
 	public static void getPDF(Object msg) {
 		FileTransferMessage fileMsg = (FileTransferMessage) ((SendObject<?>) msg).getObj();
 		File reportsDir = new File("reports");

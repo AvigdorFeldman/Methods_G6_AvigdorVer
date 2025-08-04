@@ -16,7 +16,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 import logic.FileTransferMessage;
 import logic.Reservation;
 import logic.SendObject;
@@ -182,7 +181,7 @@ public class ViewReservationController extends Controller {
     /**
      * Handles incoming server messages and updates the reservation data accordingly.
      * This method processes messages containing updated reservation lists and refreshes
-     * the table view.
+     * the table view. And PDF showing
      *
      * @param msg The server message containing updated reservation data.
      */
@@ -197,8 +196,6 @@ public class ViewReservationController extends Controller {
 				}
 			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ReservationReportPDF")) {
 				Util.getPDF(msg);
-			}else if(((SendObject<?>) msg).getObjectMessage().equals("Error")) {
-				ShowAlert.showAlert("Error", "Failed to create PDF", AlertType.ERROR);
 			}
 		}
 	}

@@ -136,6 +136,9 @@ public class ViewActiveSessionsController extends Controller {
      *
      * If the message contains a list of parking sessions, the table view is
      * updated with the new data.
+     * If the message contains a list of parking spots, the pi chart is
+     * updated with the new data.
+     * Shows PDF
      *
      *
      * @param msg The server message containing session data.
@@ -154,8 +157,6 @@ public class ViewActiveSessionsController extends Controller {
 			}
 			else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ActiveSessionsPDF")) {
 				Util.getPDF(msg);
-			}else if(((SendObject<?>) msg).getObjectMessage().equals("Error")) {
-				ShowAlert.showAlert("Error", "Failed to create PDF", AlertType.ERROR);
 			}
 		}
 	}

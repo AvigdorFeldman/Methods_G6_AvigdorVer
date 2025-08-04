@@ -218,7 +218,7 @@ public class ViewSubscriberController extends Controller {
 
     /**
      * Handles server messages and updates the UI components based on the received data.
-     * 
+     * Shows PDF
      * @param msg The message received from the server.
      */
 	@SuppressWarnings("unchecked")
@@ -250,8 +250,6 @@ public class ViewSubscriberController extends Controller {
 				Util.getPDF(msg);
 			}else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("SubscriberReportPDF")) {
 				Util.getPDF(msg);
-			}else if(((SendObject<?>) msg).getObjectMessage().equals("Error")) {
-				ShowAlert.showAlert("Error", "Failed to create PDF", AlertType.ERROR);
 			}
 		}
 	}
