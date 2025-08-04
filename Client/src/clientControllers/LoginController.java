@@ -244,8 +244,8 @@ public class LoginController {
         }
 
         Stage stage = (Stage) connectButton.getScene().getWindow();
-        Scene scene = new Scene(tableRoot);
-        stage.setScene(scene);
+        //Scene scene = new Scene(tableRoot);
+        stage.setScene(controller.scaleScene(tableRoot));
         stage.sizeToScene();
         stage.centerOnScreen();
         stage.setTitle(title);
@@ -270,7 +270,7 @@ public class LoginController {
             try {
                 FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("login.fxml"));
                 Parent loginRoot = loginLoader.load();
-                stage.setScene(new Scene(loginRoot));
+                stage.setScene(new Scene(loginRoot, 400, 300));
                 stage.setTitle("Connect to Server");
                 ipField.setText(controller.ip);
             } catch (Exception ex) {

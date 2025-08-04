@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.*;
@@ -119,7 +120,7 @@ public abstract class Controller {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle(screen_name);
-            stage.setScene(new Scene(root));
+            stage.setScene(scaleScene(root));
             stage.setMaximized(true);
             stage.show();
             stage.setOnCloseRequest(new EventHandler<>() {
@@ -143,7 +144,7 @@ public abstract class Controller {
                 try {
                     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/clientUI/"+returnFxml));
                     Parent loginRoot = loginLoader.load();
-                    currentStage.setScene(new Scene(loginRoot));
+                    currentStage.setScene(scaleScene(loginRoot));
                     currentStage.setTitle(return_name);
 
                     Controller backC = loginLoader.getController();
@@ -179,9 +180,10 @@ public abstract class Controller {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientUI/login.fxml"));
             Parent root = loader.load();
+            
             Stage stage = new Stage();
             stage.setTitle("Login");
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 400, 300));
             stage.show();
             LoginController backC = loader.getController();
             backC.setIpField(ip);
@@ -192,5 +194,20 @@ public abstract class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public Scene scaleScene(Parent root) {
+    	double scaleFactor = 1.0; // Default scale (100%)
+
+    	// Get the scale factor of the primary screen
+    	Screen screen = Screen.getPrimary();
+    	double scale = screen.getDpi() / 96.0; // Calculate scaling ratio
+
+    	if (scale != 1.0) {
+    	    scaleFactor = scale; // Adjust for scaling
+    	}
+
+    	Scene scene = new Scene(root, 1920 * scaleFactor, 1080 * scaleFactor);
+    	return scene;
     }
 }
