@@ -72,6 +72,7 @@ public class ViewActiveSessionsController extends Controller {
 	@FXML
 	public void initialize() {
 		datePick.setValue(LocalDate.now());
+		refresh();
 		colSessionId.setCellValueFactory(
 				cellData -> new SimpleIntegerProperty(cellData.getValue().getSessionId()).asObject());
 		colSubscriberId.setCellValueFactory(
