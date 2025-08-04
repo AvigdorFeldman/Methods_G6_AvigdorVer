@@ -1127,12 +1127,11 @@ public class DataBaseQuery extends MySQLConnection {
      *
      * @return A list of Parkingsession objects representing active sessions.
      */
-    public List<Parkingsession> getAllActiveParkingsession() {
+    public List<Parkingsession> getAllParkingsession() {
         List<Parkingsession> list = new ArrayList<>();
         String sql =
             "SELECT * " +
-            "FROM parking_sessions " +
-            "WHERE active = TRUE";
+            "FROM parking_sessions ";
 
         try (PreparedStatement ps = getCon().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

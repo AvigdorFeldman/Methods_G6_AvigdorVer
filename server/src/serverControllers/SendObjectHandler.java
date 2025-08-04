@@ -302,12 +302,12 @@ public class SendObjectHandler {
 				List<subscriber> allSubscribersList = new ArrayList<subscriber>();
 				allSubscribersList = con.getAllSubscribersList();
 				return new SendObject<T1>("Received all subscribers", (T1) (List<subscriber>) allSubscribersList);
-			} else if (object.equals("active parking sessions")) {
+			} else if (object.equals("all parking sessions")) {
 				// Returns a list of all parkingsessions
-				List<Parkingsession> allActiveParkingsessions = new ArrayList<Parkingsession>();
-				allActiveParkingsessions = con.getAllActiveParkingsession();
+				List<Parkingsession> allParkingsessions = new ArrayList<Parkingsession>();
+				allParkingsessions = con.getAllParkingsession();
 				return new SendObject<T1>("Received active parking sessions",
-						(T1) (List<Parkingsession>) allActiveParkingsessions);
+						(T1) (List<Parkingsession>) allParkingsessions);
 			} else if (object.equals("all parking spots")) {
 				List<ParkingSpot> allParkingSpots = new ArrayList<ParkingSpot>();
 				allParkingSpots = con.getAllParkingSpots();

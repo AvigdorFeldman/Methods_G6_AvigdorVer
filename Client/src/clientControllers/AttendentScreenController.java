@@ -75,7 +75,7 @@ public class AttendentScreenController extends Controller {
 			setscreen("Active Sessions Report", "ViewActiveSessionsUI.fxml", "AttendantScreen.fxml", "Attendant Menu",
 					openActiveSessionsReportButton);
 			// Send request to the server
-			SendObject<String> request = new SendObject<>("Get", "active parking sessions");
+			SendObject<String> request = new SendObject<>("Get", "all parking sessions");
 			client.sendToServerSafely(request);
 
 		} catch (Exception e) {

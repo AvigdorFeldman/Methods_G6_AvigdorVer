@@ -72,7 +72,7 @@ public class AdminScreenController extends Controller{
 			setscreen("Active Sessions Report", "ReportActiveSessionsUI.fxml", "AdminScreen.fxml", "Admin Menu",
 					openActiveSessionsReportButton);
 			// Send request to the server
-			SendObject<String> request = new SendObject<>("Get", "active parking sessions");
+			SendObject<String> request = new SendObject<>("Get", "all parking sessions");
 			client.sendToServerSafely(request);
 			SendObject<String> request2 = new SendObject<>("Get", "all parking spots");
 			client.sendToServerSafely(request2);

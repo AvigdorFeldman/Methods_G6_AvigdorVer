@@ -6,13 +6,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="mainPane" prefHeight="1080" prefWidth="1920" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.DropOffScreenController">
 	<children>
-      <VBox alignment="CENTER" spacing="30.0" prefHeight="891.0" prefWidth="1339.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+      <VBox alignment="CENTER" prefHeight="891.0" prefWidth="1339.0" spacing="30.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
          <children>
       				<!-- Title Row with more space below it -->
       				<Label styleClass="title-label" text="Drop Off Screen" VBox.vgrow="ALWAYS" />
@@ -20,12 +19,10 @@
 
       				<Label fx:id="parkingCodeLabel" styleClass="reg-label" text="" />
 
-      				<Region />
-
       				<!-- Button Row with more space above it -->
 				<Button onAction="#submitParkingRequest" styleClass="menu-button" text="Submit Parking Request" />
       		<!-- Main GridPane layout with adjusted spacing -->
-      		<GridPane alignment="CENTER" hgap="20" maxHeight="300.0" maxWidth="1.7976931348623157E308" prefHeight="288.0" prefWidth="1339.0" vgap="40" VBox.vgrow="ALWAYS">
+      		<GridPane alignment="CENTER" hgap="20" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" vgap="40" VBox.vgrow="ALWAYS">
       			<columnConstraints>
                   <ColumnConstraints halignment="CENTER" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
       				<ColumnConstraints halignment="CENTER" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
@@ -48,10 +45,10 @@
                </rowConstraints>
       		</GridPane>
       				<Button onAction="#submitParkingRequestUsingReservation" styleClass="menu-button" text="Submit Dropoff using Reservation" />
+      
+            		<!-- Back Button -->
+      		<Button alignment="CENTER" contentDisplay="CENTER" onAction="#handleBackButton" styleClass="button-red" text="⬅ Back" />
          </children>
       </VBox>
-
-      		<!-- Back Button -->
-		<Button alignment="CENTER" contentDisplay="CENTER" layoutX="902.0" layoutY="1032.0" onAction="#handleBackButton" styleClass="button-red" text="⬅ Back" />
 	</children>
 </AnchorPane>
