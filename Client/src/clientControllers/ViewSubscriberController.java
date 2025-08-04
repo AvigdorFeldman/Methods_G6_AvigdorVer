@@ -48,8 +48,6 @@ public class ViewSubscriberController extends Controller {
 	@FXML
 	protected TableColumn<subscriber, String> colPhone;
 	@FXML
-	protected TableColumn<subscriber, String> colTag;
-	@FXML
 	protected TableColumn<subscriber, Role> colRole;
 	@FXML
 	protected TableColumn<subscriber, Boolean> colLoggedIn;
@@ -102,7 +100,6 @@ public class ViewSubscriberController extends Controller {
 		colName.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getName()));
 		colEmail.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getEmail()));
 		colPhone.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getPhone()));
-		colTag.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getTag()));
 		colRole.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getRole()));
 		colLoggedIn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getLoggedIn()));
 		// Combo box
