@@ -211,7 +211,7 @@ public class LoginController {
      */
     private void connectclient(subscriber sub, String fxml, String title, double percent) {
     	try {
-        	if(!sub.getLoggedIn()) {
+        	if(sub!=null&&!sub.getLoggedIn()) {
         		sub.setLoggedIn(true);
         		client.sendToServer(new SendObject<subscriber>("login",sub));
         	}
