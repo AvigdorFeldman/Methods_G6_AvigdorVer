@@ -29,7 +29,7 @@ public class Reservation implements Serializable{
      * @param endTime       the end time of the reservation (format: "HH:mm")
      * @param code          the reservation code
 	 */
-	public Reservation(int spotId,int subscriber_id , LocalDate date, String startTime, String endTime, int code) {
+	public Reservation(int subscriber_id, int spotId, LocalDate date, String startTime, String endTime, int code) {
 		this.subscriberId = subscriber_id;
 		this.spotId = spotId;
 		this.date = date;

@@ -311,7 +311,7 @@ public class SendObjectHandler {
 			} else if (object.equals("all parking spots")) {
 				List<ParkingSpot> allParkingSpots = new ArrayList<ParkingSpot>();
 				allParkingSpots = con.getAllParkingSpots();
-				return new SendObject<T1>("Received active parking sessions", (T1) (List<ParkingSpot>) allParkingSpots);
+				return new SendObject<T1>("Received active parking spots", (T1) (List<ParkingSpot>) allParkingSpots);
 			} else if (action.contains("Get ActiveSessions")) { // Creates ActiveSessions PDF file
 				File reportsDir = new File("reports"); 
 				if (!reportsDir.exists()) {
@@ -435,6 +435,7 @@ public class SendObjectHandler {
 				Parkingsession session = (Parkingsession) object;
 				// Update Parkingsession In the database using received object
 				con.updateParkingsessionInDatabase(session);
+				return new SendObject<T1>("Parkingsession", (T1) "Updated");
 			} else if (object instanceof ParkingSpot) {
 				ParkingSpot spot = (ParkingSpot) object;
 				// Update ParkingSpot In the database using received object
@@ -506,7 +507,7 @@ public class SendObjectHandler {
 					spot.setStatus(SpotStatus.RESERVED);
 					con.updateParkingSpotInDatabase(spot);
 					int reservationCode = generateCode(con, "Reservation");
-					Reservation reservationToBeSent = new Reservation(spot.getSpotId(), reservation.getSubscriberId(),
+					Reservation reservationToBeSent = new Reservation(reservation.getSubscriberId(), spot.getSpotId(),
 							reservation.getDate(), reservation.getStartTime(), reservation.getEndTime(),
 							reservationCode);
 					int reservationId = con.createReservationInDatabase(reservationToBeSent);

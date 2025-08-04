@@ -339,7 +339,7 @@ public class ReservationController extends Controller{
             		}
             	}
             }
-            else if(sendObject.getObj() instanceof List<?>) {
+            else if(sendObject.getObj() instanceof List<?>&&sendObject.getObjectMessage().equals("Reservation list of subscriber")) {
             		@SuppressWarnings("unchecked")
             		List<Reservation> list = (List<Reservation>) sendObject.getObj();        		
             		Platform.runLater(() -> futureReservationsTable.getItems().setAll(list));

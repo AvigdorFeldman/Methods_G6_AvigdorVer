@@ -50,8 +50,21 @@ public class BparkServer extends AbstractServer {
 				Object result = SendObjectHandler.sendObjectHandle(obj, con);
 				// If the result is a SendObject, you can send it directly
 				if (result instanceof SendObject<?>) {
-
 					SendObject<?> sendObjectResult = (SendObject<?>) result;
+					if(sendObjectResult.getObj() instanceof String) {
+						String str = (String)sendObjectResult.getObj();
+						Object resultToAll;
+						if(str.equals("Updated")||str.equals("updated successfully")||str.contains("Created with code")||str.equals("Created")||sendObjectResult.getObjectMessage().equals("Subscriber created")) {						
+							resultToAll = SendObjectHandler.sendObjectHandle(new SendObject<String>("Get","all reservations"), con);
+							sendToAllClients(resultToAll);
+							resultToAll = SendObjectHandler.sendObjectHandle(new SendObject<String>("Get","all subscribers"), con);
+							sendToAllClients(resultToAll);
+							resultToAll = SendObjectHandler.sendObjectHandle(new SendObject<String>("Get","all parking sessions"), con);
+							sendToAllClients(resultToAll);
+							resultToAll = SendObjectHandler.sendObjectHandle(new SendObject<String>("Get","all parking spots"), con);
+							sendToAllClients(resultToAll);
+						}				
+					}			
 					sendToSingleClient(sendObjectResult, client);
 				}
 			} catch (Exception e) {
@@ -73,6 +86,7 @@ public class BparkServer extends AbstractServer {
 				client.sendToClient(msg);
 			else if (msg instanceof SendObject<?>) {
 				SendObject<?> sendObject = (SendObject<?>) msg;
+				
 				client.sendToClient(sendObject);
 			} else if (msg instanceof ArrayList<?>) {
 				ArrayList<?> list = (ArrayList<?>) msg;

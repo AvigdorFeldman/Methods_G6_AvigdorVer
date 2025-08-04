@@ -740,8 +740,8 @@ public class DataBaseQuery extends MySQLConnection {
                     int       code   = rs.getInt("reservation_code");
 
                     reservation = new Reservation(
-                    	spotId,
-                        subId,
+                    	subId,
+                        spotId,
                         date,
                         startTime,
                         endTime,
@@ -784,8 +784,8 @@ public class DataBaseQuery extends MySQLConnection {
                     int       code   = rs.getInt("reservation_code");
 
                     reservation = new Reservation(
-                    	spotId,
                         subId,
+                        spotId,
                         date,
                         startTime,
                         endTime,
