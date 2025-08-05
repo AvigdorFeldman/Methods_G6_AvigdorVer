@@ -1,6 +1,7 @@
 package clientControllers;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,7 +86,10 @@ public class ViewSubscriberController extends Controller {
 	protected TableColumn<Parkingsession, String> colLate;
 	@FXML
 	protected Integer subId = null;
+	@FXML
+	protected ComboBox<Integer> yearComboBox;
 	protected List<Parkingsession> historySessions;
+	
 
 	/**
 	 * Initializes the UI components and sets up event handlers for buttons and
@@ -94,6 +98,14 @@ public class ViewSubscriberController extends Controller {
 	 */
 	@FXML
 	public void initialize() {
+		
+		int currentYear = LocalDate.now().getYear();
+	    yearComboBox.getItems().add(currentYear);  // Add the current year
+	    for (int i = 1; i < 10; i++) {  // Add the previous 9 years (or adjust as needed)
+	        yearComboBox.getItems().add(currentYear - i);
+	    }
+	    // Set default selection to the current year
+	    yearComboBox.setValue(currentYear);
 		// Column setup
 		colSubscriberId
 				.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
@@ -157,7 +169,16 @@ public class ViewSubscriberController extends Controller {
 	 * @param sessions The list of parking sessions to display in the history table.
 	 */
 	private void populateHistoryTable(List<Parkingsession> sessions) {
-		ObservableList<Parkingsession> data = FXCollections.observableArrayList(sessions);
+		int selectedYear = yearComboBox.getValue();
+		
+		List<Parkingsession> filteredByYear = sessions.stream()
+		    .filter(s -> {
+		        java.time.LocalDate date = s.getInTime().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+		        return date.getYear() == selectedYear;
+		    })
+		    .collect(Collectors.toList());
+
+		ObservableList<Parkingsession> data = FXCollections.observableArrayList(filteredByYear);
 		historyTable.setItems(data);
 	}
 

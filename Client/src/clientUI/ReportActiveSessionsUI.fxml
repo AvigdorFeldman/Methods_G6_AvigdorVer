@@ -24,7 +24,7 @@
 		styleClass="menu-container" AnchorPane.bottomAnchor="20.0"
 		AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
 		AnchorPane.topAnchor="20.0">
-		<Label styleClass="title-label" text="Active Sessions Report" />
+		<Label styleClass="title-label" text="Sessions Report" />
 		<HBox>
 			<TableView fx:id="sessionTable" prefHeight="400.0"
 				prefWidth="1050.0" styleClass="main-table">

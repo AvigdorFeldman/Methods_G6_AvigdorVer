@@ -7,6 +7,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.io.image.ImageData;
@@ -85,11 +86,11 @@ public class PDFReport {
 	        Table table = new Table(csvData.get(0).length);
 	        for (String[] row : csvData) {
 	            for (String cell : row) {
-	                table.addCell(new Cell().add(new Paragraph(cell).setWidth(70)));
+	                table.addCell(new Cell().add(new Paragraph(cell).setFontSize(8)).setPadding(2));
 	            }
 	        }
 
-	        table.setWidth(csvData.get(0).length);
+	        table.setWidth(UnitValue.createPercentValue(100));
 	        document.add(table);
 
 	        // Step 2: Add chart image to the PD

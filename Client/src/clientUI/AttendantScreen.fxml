@@ -11,7 +11,7 @@
 
 	    <Label style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;" styleClass="title-label" text="🛠️Attendant Panel" />
 	
-	    <Button fx:id="openActiveSessionsReportButton" onAction="#openActiveSessionsReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📊 View Active Parkings" />
+	    <Button fx:id="openActiveSessionsReportButton" onAction="#openActiveSessionsReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📊 View Parkings Sessions" />
 	
 	    <Button fx:id="openSubscribersReportButton" onAction="#openSubscribersReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="👥 View Subscribers" />
 	            

@@ -58,14 +58,14 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 			exportCsvButton.setOnAction(e -> {
 				try {
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-					String defaultName = "ActiveSessionsReport_" + date.format(formatter) + ".csv";
+					String defaultName = "SessionsReport_" + date.format(formatter) + ".csv";
 					File reportsDir = new File("reports"); // Relative path to your reports directory
 					if (!reportsDir.exists()) {
 					    reportsDir.mkdirs(); // Ensure the directory exists
 					}
 					 File reportFile = new File("reports/" + defaultName);
 					if (reportFile != null) {
-						File imageFile1 = new File("reports/ActiveSessionsChart_"+date.format(formatter)+".png");
+						File imageFile1 = new File("reports/SessionsChart_"+date.format(formatter)+".png");
 						Util.saveChartAsImage(activeSessionLineChart, imageFile1);
 						File imageFile2 = new File("reports/ParkingSpotsChart_"+date.format(formatter)+".png");
 						Util.saveChartAsImage(parkingSpotChart, imageFile2);
@@ -85,8 +85,8 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				String today = date.format(formatter);
 				File reportsDir = new File("reports");
-		        File csvFile = new File(reportsDir, "ActiveSessionsReport_" + today + ".csv");
-		        File pngFile1 = new File(reportsDir, "ActiveSessionsChart_" + today + ".png");
+		        File csvFile = new File(reportsDir, "SessionsReport_" + today + ".csv");
+		        File pngFile1 = new File(reportsDir, "SessionsChart_" + today + ".png");
 		        File pngFile2 = new File(reportsDir, "ParkingSpotsChart_" + today + ".png");
 
 		        // Check if the necessary files exist before sending the request
@@ -140,15 +140,13 @@ public class ReportActiveSessionsController extends ViewActiveSessionsController
 	private void updateLineChart() {
 	    int[] hourlyCounts = new int[24];
 	    for (Parkingsession session : dateSessions) {
-	        if (session.getActive()) {
-	            LocalDateTime in = session.getInTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-	            int hour = in.getHour();
-	            hourlyCounts[hour]++;
-	        }
+		    LocalDateTime in = session.getInTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		    int hour = in.getHour();
+		    hourlyCounts[hour]++;
 	    }
 
 	    XYChart.Series<Number, Number> series = new XYChart.Series<>();
-	    series.setName("Active Sessions by Hour");
+	    series.setName("Sessions by Hour");
 	    for (int hour = 0; hour < 24; hour++) {
 	        series.getData().add(new XYChart.Data<>(hour, hourlyCounts[hour]));
 	    }

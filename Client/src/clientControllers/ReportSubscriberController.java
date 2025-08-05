@@ -16,7 +16,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
 import logic.Parkingsession;
 import logic.SendObject;
@@ -48,8 +47,7 @@ public class ReportSubscriberController extends ViewSubscriberController {
 	private CategoryAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
-	@FXML
-	private ComboBox<Integer> yearComboBox;
+	
 
 	/**
 	 * Initializes UI componants
@@ -58,13 +56,7 @@ public class ReportSubscriberController extends ViewSubscriberController {
 	@Override
 	public void initialize() {
 		super.initialize(); // Setup from parent		
-	    int currentYear = LocalDate.now().getYear();
-	    yearComboBox.getItems().add(currentYear);  // Add the current year
-	    for (int i = 1; i < 10; i++) {  // Add the previous 9 years (or adjust as needed)
-	        yearComboBox.getItems().add(currentYear - i);
-	    }
-	    // Set default selection to the current year
-	    yearComboBox.setValue(currentYear);
+	    
 
 	    // Add listener to the ComboBox to update the chart when the year changes
 	    yearComboBox.setOnAction(event -> updateBarChartForSelectedYear(historySessions));

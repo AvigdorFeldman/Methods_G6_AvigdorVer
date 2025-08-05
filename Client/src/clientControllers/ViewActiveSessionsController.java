@@ -156,7 +156,7 @@ public class ViewActiveSessionsController extends Controller {
 					Platform.runLater(() -> parkingSpots=(List<ParkingSpot>)updated);
 				}
 			}
-			else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("ActiveSessionsPDF")) {
+			else if(((SendObject<?>) msg).getObj() instanceof FileTransferMessage &&((SendObject<?>) msg).getObjectMessage().equals("SessionsPDF")) {
 				Util.getPDF(msg);
 			}
 		}

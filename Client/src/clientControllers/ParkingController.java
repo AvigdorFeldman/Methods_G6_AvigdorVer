@@ -365,7 +365,6 @@ public class ParkingController {
      * @throws Exception if reservation is invalid or time constraints not met
 	 */
 	public void implementDropoffUsingReservation(int reservationCode) throws Exception {
-		Object reservationAndCode[] = new Object[2];
 		reservation = getReservation(reservationCode); // gets reservation through the received code
 		if (reservation.getEndTime() != null && reservation.getSubscriberId()==sub.getId()) {
 			// Validates implementation time

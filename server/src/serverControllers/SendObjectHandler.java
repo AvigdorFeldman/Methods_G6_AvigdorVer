@@ -317,16 +317,16 @@ public class SendObjectHandler {
 				if (!reportsDir.exists()) {
 					reportsDir.mkdirs(); 
 				}
-				File csvFile = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".csv");
-				File pngFile1 = new File(reportsDir, "ActiveSessionsChart_" + object.toString() + ".png");
+				File csvFile = new File(reportsDir, "SessionsReport_" + object.toString() + ".csv");
+				File pngFile1 = new File(reportsDir, "SessionsChart_" + object.toString() + ".png");
 				File pngFile2 = new File(reportsDir, "ParkingSpotsChart_" + object.toString() + ".png");
 				File[] images = new File[] { pngFile1, pngFile2 };
-				File ActiveSessionsPdf = new File(reportsDir, "ActiveSessionsReport_" + object.toString() + ".pdf");
-				PDFReport.generatePdfReport(csvFile, images, ActiveSessionsPdf, "Active Sessions " + object.toString(),
+				File ActiveSessionsPdf = new File(reportsDir, "SessionsReport_" + object.toString() + ".pdf");
+				PDFReport.generatePdfReport(csvFile, images, ActiveSessionsPdf, "Sessions " + object.toString(),
 						null);
 				byte[] data = Files.readAllBytes(ActiveSessionsPdf.toPath());
 				FileTransferMessage message = new FileTransferMessage(ActiveSessionsPdf.getName(), data);
-				return new SendObject<T1>("ActiveSessionsPDF", (T1) (FileTransferMessage) message);
+				return new SendObject<T1>("SessionsPDF", (T1) (FileTransferMessage) message);
 			} else if (action.contains("Subscribers Report")) { // // Creates Subscribers PDF file
 				File reportsDir = new File("reports"); 
 				if (!reportsDir.exists()) {
