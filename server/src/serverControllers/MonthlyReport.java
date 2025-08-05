@@ -9,7 +9,6 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.BarChart;
@@ -35,11 +34,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
@@ -62,7 +59,7 @@ public class MonthlyReport {
 		this.month = month;
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked" })
 	public void getPDF(File outputPdfFile) {
 		// TODO Auto-generated method stub
 		List<Parkingsession> parkingsessionList = new ArrayList<>();
@@ -200,6 +197,7 @@ public class MonthlyReport {
 
 	}
 
+	@SuppressWarnings("unused")
 	private Image renderBarChart(String title, String xAxisLabel, String yAxisLabel, Map<String, Integer> data,
 			int chartWidth, int chartHeight) throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -249,6 +247,7 @@ public class MonthlyReport {
 		return new Image(imageData).setWidth(UnitValue.createPercentValue(100));
 	}
 
+	@SuppressWarnings("unused")
 	private Image renderStackedBarChart(String title, String xAxisLabel, String yAxisLabel,
 			Map<String, Map<String, Integer>> seriesData, int chartWidth, int chartHeight) throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);

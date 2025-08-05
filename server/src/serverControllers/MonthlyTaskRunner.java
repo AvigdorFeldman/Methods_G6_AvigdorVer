@@ -18,7 +18,7 @@ public class MonthlyTaskRunner implements Runnable {
                 LocalDateTime now = LocalDateTime.now();
 
                 // If it's the 1st day of the month and around 00:00 (midnight)
-                if ((now.getDayOfMonth() == 1 && now.toLocalTime().isBefore(LocalTime.of(0, 1)))||true) {
+                if ((now.getDayOfMonth() == 1 && now.toLocalTime().isBefore(LocalTime.of(0, 1)))) {
                     System.out.println("Running monthly task at " + now);
                     File reportsDir = new File("reports");
     				if (!reportsDir.exists()) {
