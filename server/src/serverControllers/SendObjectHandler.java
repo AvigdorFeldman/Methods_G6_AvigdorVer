@@ -369,6 +369,22 @@ public class SendObjectHandler {
 				// Send back the successful result
 				return new SendObject<T1>("ReservationReportPDF", (T1) (FileTransferMessage) message);
 
+			}else if(object.contains("MonthlyReport_")){ // Sends Monthly report to client
+				// File handling and creation logic
+				try {
+					File reportsDir = new File("reports");
+					if (!reportsDir.exists())
+						reportsDir.mkdirs();
+					File MonthlyReportPdf = new File(reportsDir, object.toString() + ".pdf");
+					if(MonthlyReportPdf.exists()) {
+					byte[] data = Files.readAllBytes(MonthlyReportPdf.toPath());
+					FileTransferMessage message = new FileTransferMessage(MonthlyReportPdf.getName(), data);
+					// Send back the successful result
+					return new SendObject<T1>("MonthlyReportPDF", (T1) (FileTransferMessage) message);}
+				}catch(Exception e) {
+					e.printStackTrace();
+					return new SendObject<T1>("Error", (T1) "Such file doesn't exist");
+				}
 			}
 		}
 		// Default or fallback return value
