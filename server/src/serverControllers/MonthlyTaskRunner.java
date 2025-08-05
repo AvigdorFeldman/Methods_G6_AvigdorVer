@@ -3,8 +3,6 @@ package serverControllers;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
-
 import jdbc.DataBaseQuery;
 
 /**
@@ -17,8 +15,6 @@ import jdbc.DataBaseQuery;
  */
 public class MonthlyTaskRunner implements Runnable {
 	private DataBaseQuery con;
-	private int lastRunYear = -1;
-	private Month lastRunMonth = null;
 	
 	/**
 	 * Constructor of the class
@@ -42,10 +38,7 @@ public class MonthlyTaskRunner implements Runnable {
         while (true) {
             try {
             	LocalDateTime now = LocalDateTime.now();
-				int currentYear = now.getYear();
-				Month currentMonth = now.getMonth();
-				if (now.getDayOfMonth() == 1 &&
-					(currentMonth != lastRunMonth || currentYear != lastRunYear)) {
+				if (now.getDayOfMonth() == 1 && now.toLocalTime().isBefore(LocalTime.of(0, 59))) {
                     File reportsDir = new File("reports");
     				if (!reportsDir.exists()) {
     					reportsDir.mkdirs(); 
@@ -53,9 +46,6 @@ public class MonthlyTaskRunner implements Runnable {
                     MonthlyReport report = new MonthlyReport(con,now.getYear(),now.getMonth());
                     File monthlyReportPdf = new File(reportsDir, "MonthlyReport_" + now.getMonth()+"_"+now.getYear() + ".pdf");
                     report.getPDF(monthlyReportPdf);
-                    // Update last run
-					lastRunMonth = currentMonth;
-					lastRunYear = currentYear;
                     // Sleep for 1 hour to avoid multiple triggers on the same day
                     Thread.sleep(60 * 60 * 1000); // 1 hour
                 } else {
