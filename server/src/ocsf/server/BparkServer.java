@@ -108,6 +108,8 @@ public class BparkServer extends AbstractServer {
 		System.out.println(("Server listening for connections on port " + getPort()));
 		Thread monthlyThread = new Thread(new MonthlyTaskRunner(con));
 		monthlyThread.start();
+		Thread cancelOldReservationThread = new Thread(new cancelOldReservation(con));
+		cancelOldReservationThread.start();
 	}
 
 	public void serverStopped() {
