@@ -101,14 +101,16 @@ public class BparkServer extends AbstractServer {
 
 	/**
 	 * Prints to console that the server started
+	 * Starts a thread that will create monthly reports
+	 * Starts a thread that will cancel reservations that weren't used in the former day
 	 */
-	protected void serverStarted() {
+	public void serverStarted() {
 		System.out.println(("Server listening for connections on port " + getPort()));
 		Thread monthlyThread = new Thread(new MonthlyTaskRunner(con));
 		monthlyThread.start();
 	}
 
-	protected void serverStopped() {
+	public void serverStopped() {
 		// Honestly never used it...
 		System.out.println("Server has stopped listening for connections.");
 	}

@@ -46,6 +46,19 @@ import javax.imageio.ImageIO;
 import jdbc.DataBaseQuery;
 import logic.*;
 
+/**
+ * Generates a comprehensive monthly PDF report that includes data and visualizations
+ * for parking sessions, reservations, subscribers, and parking spots.
+ * 
+ * The report is generated using data fetched from the database via a {@link DataBaseQuery}
+ * and includes:
+ * 
+ * Tabular data for each entity type
+ * Bar charts and stacked bar charts for visual representation
+ * 
+ * Charts are rendered using JavaFX and embedded into the PDF using iText.
+ * 
+ */
 public class MonthlyReport {
 
 	private DataBaseQuery con;
@@ -53,12 +66,30 @@ public class MonthlyReport {
 	private Month month;
 	private boolean firstSection = true;
 
+	/**
+     * Constructs a MonthlyReport for the given year and month using the specified database connection.
+     *
+     * @param con   Database connection object.
+     * @param year  Year of the report.
+     * @param month Month of the report.
+	 */
 	public MonthlyReport(DataBaseQuery con, int year, Month month) {
 		this.con = con;
 		this.year = year;
 		this.month = month;
 	}
 
+	/**
+     * Generates a PDF report file summarizing the parking activity of the specified month and year.
+     *
+     * It retrieves all relevant data from the database, filters by date, and builds a report containing:
+     * Parking sessions
+     * Reservations (used and canceled)
+     * Parking spots usage
+     * Late subscriber sessions
+     * 
+     * @param outputPdfFile File to save the PDF report to.
+	 */
 	@SuppressWarnings({ "unchecked" })
 	public void getPDF(File outputPdfFile) {
 		// TODO Auto-generated method stub
@@ -101,12 +132,13 @@ public class MonthlyReport {
 					.setTextAlignment(TextAlignment.CENTER));
 			document.add(
 					new Paragraph("Generated on: " + new Date()).setFontSize(10).setTextAlignment(TextAlignment.RIGHT));
+			// BarCharts creations
 			Image parkingsessionBarChart = createSessionsPerDayChartFX(parkingsessionList);
 			Image reservationBarChart = createReservationsPerDayChartFX(reservationList);
 			Image parkingSpotsParkingSessionChart = createParkingSessionsPerSpotChart(parkingsessionList,
 					parkingSpotList);
 			Image lateSubscriberChart = createLateSubscribersChartFX(parkingsessionList, subscriberList);
-			// Sections
+			// Sections - Tables
 			addSection(document, "Parking Sessions", boldFont, parkingsessionList, parkingsessionBarChart);
 			addSection(document, "Reservations", boldFont, reservationList, reservationBarChart);
 			addSection(document, "Parking Spots", boldFont, parkingSpotList, parkingSpotsParkingSessionChart);
@@ -120,6 +152,17 @@ public class MonthlyReport {
 		}
 	}
 
+	/**
+     * Adds a section to the PDF document including a title, a table generated from the data,
+     * and an optional chart image.
+     *
+     * @param document PDF document to add content to.
+     * @param title    Section title.
+     * @param boldFont Font for section titles and headers.
+     * @param list     Data list to display in table form.
+     * @param chart    Chart image to include in the section (can be null).
+     * @param <T>      The type of data in the list.
+     */
 	private <T> void addSection(Document document, String title, PdfFont boldFont, List<T> list, Image chart) {
 		if (!firstSection) {
 			document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
@@ -197,6 +240,18 @@ public class MonthlyReport {
 
 	}
 
+	/**
+     * Renders a bar chart using JavaFX based on a given data map.
+     *
+     * @param title       Chart title.
+     * @param xAxisLabel  Label for the X-axis.
+     * @param yAxisLabel  Label for the Y-axis.
+     * @param data        Data to plot.
+     * @param chartWidth  Width of the chart.
+     * @param chartHeight Height of the chart.
+     * @return Image object to embed in a PDF.
+     * @throws Exception If JavaFX rendering fails.
+	 */
 	@SuppressWarnings("unused")
 	private Image renderBarChart(String title, String xAxisLabel, String yAxisLabel, Map<String, Integer> data,
 			int chartWidth, int chartHeight) throws Exception {
@@ -247,6 +302,18 @@ public class MonthlyReport {
 		return new Image(imageData).setWidth(UnitValue.createPercentValue(100));
 	}
 
+	/**
+     * Renders a stacked bar chart using JavaFX from multiple series of data.
+     *
+     * @param title       Chart title.
+     * @param xAxisLabel  Label for the X-axis.
+     * @param yAxisLabel  Label for the Y-axis.
+     * @param seriesData  Nested map representing data per series and category.
+     * @param chartWidth  Width of the chart.
+     * @param chartHeight Height of the chart.
+     * @return Image object to embed in a PDF.
+     * @throws Exception If JavaFX rendering fails.
+	 */
 	@SuppressWarnings("unused")
 	private Image renderStackedBarChart(String title, String xAxisLabel, String yAxisLabel,
 			Map<String, Map<String, Integer>> seriesData, int chartWidth, int chartHeight) throws Exception {
@@ -301,6 +368,13 @@ public class MonthlyReport {
 		return new Image(imageData).setWidth(UnitValue.createPercentValue(100));
 	}
 
+	/**
+     * Creates a bar chart showing how many parking sessions occurred each day of the month.
+     *
+     * @param sessions List of parking sessions.
+     * @return Image of the chart.
+     * @throws Exception If chart rendering fails.
+	 */
 	private Image createSessionsPerDayChartFX(List<Parkingsession> sessions) throws Exception {
 		YearMonth yearMonth = YearMonth.of(year, month.getValue());
 		int daysInMonth = yearMonth.lengthOfMonth();
@@ -322,6 +396,13 @@ public class MonthlyReport {
 				600);
 	}
 
+	/**
+     * Creates a stacked bar chart of daily reservations (used vs canceled) for the month.
+     *
+     * @param reservations List of reservations.
+     * @return Image of the chart.
+     * @throws Exception If chart rendering fails.
+	 */
 	private Image createReservationsPerDayChartFX(List<Reservation> reservations) throws Exception {
 		YearMonth yearMonth = YearMonth.of(year, month.getValue());
 		int daysInMonth = yearMonth.lengthOfMonth();
@@ -351,6 +432,14 @@ public class MonthlyReport {
 				Map.of("Used", activeCounts, "Canceled", canceledCounts), 800, 600);
 	}
 
+	/**
+     * Creates a bar chart of late parking session exits grouped by subscriber.
+     *
+     * @param sessions    List of parking sessions.
+     * @param subscribers List of subscribers.
+     * @return Image of the chart.
+     * @throws Exception If chart rendering fails.
+	 */
 	private Image createLateSubscribersChartFX(List<Parkingsession> sessions, List<subscriber> subscribers)
 			throws Exception {
 		Map<Integer, Integer> lateCounts = new TreeMap<>();
@@ -375,6 +464,14 @@ public class MonthlyReport {
 				displayData, 800, 500);
 	}
 
+	/**
+     * Creates a bar chart showing the number of sessions that occurred at each parking spot.
+     *
+     * @param sessions List of parking sessions.
+     * @param spots    List of parking spots.
+     * @return Image of the chart.
+     * @throws Exception If chart rendering fails.
+	 */
 	private Image createParkingSessionsPerSpotChart(List<Parkingsession> sessions, List<ParkingSpot> spots)
 			throws Exception {
 		Map<Integer, Integer> spotCounts = new TreeMap<>();
