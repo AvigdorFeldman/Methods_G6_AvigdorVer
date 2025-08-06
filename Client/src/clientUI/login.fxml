@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="clientControllers.LoginController"
-            prefWidth="400.0" prefHeight="580.0">
+<AnchorPane prefHeight="800.0" prefWidth="650.0" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientControllers.LoginController">
 
-    <VBox alignment="CENTER" spacing="12.0"
-          AnchorPane.topAnchor="10.0"
-          AnchorPane.leftAnchor="20.0"
-          AnchorPane.rightAnchor="20.0"
-          AnchorPane.bottomAnchor="10.0">
+    <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
-        <padding>
-            <Insets top="10" right="10" bottom="10" left="10"/>
-        </padding>
+        <Label styleClass="title-label" text="🔐 Login" />
 
-        <Label text="🔐 Login" />
+        <!-- Card-like container -->
+        <VBox alignment="CENTER_LEFT" spacing="20" styleClass="login-card">
 
-        <TextField fx:id="ipField" promptText="Server IP Address" />
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label styleClass="form-label" text="IP:" />
+                <TextField fx:id="ipField" promptText="Server IP Address" styleClass="text-field" />
+            </HBox>
 
-        <!-- ComboBox + Connect -->
-        <HBox alignment="CENTER" spacing="10">
-            <ComboBox fx:id="loginMethodComboBox" promptText="Select login method" HBox.hgrow="ALWAYS" />
-            <CheckBox fx:id="consoleCheckBox" text="Terminal" />
-        </HBox>
+            <HBox alignment="CENTER" spacing="30.0">
+                <ComboBox fx:id="loginMethodComboBox" promptText="Select login method" HBox.hgrow="ALWAYS" />
+                <CheckBox fx:id="consoleCheckBox" text="Terminal" textFill="RED" />
+            </HBox>
 
-        <!-- Subscriber fields -->
-        <TextField fx:id="nameField" promptText="Enter name" />
-        <TextField fx:id="subscriberIdField" promptText="Enter subscriber Code" />
-        <TextField fx:id="tagField" promptText="Enter tag" visible="false" managed="false" />
+            <TextField fx:id="nameField" promptText="Enter name" styleClass="text-field" />
+            <TextField fx:id="subscriberIdField" promptText="Enter subscriber code" styleClass="text-field" />
 
-        <!-- Admin/Attendant fields -->
-        <TextField fx:id="usernameField" promptText="Enter username" visible="false" managed="false" />
-        <PasswordField fx:id="passwordField" promptText="Enter password" visible="false" managed="false" />
+            <TextField fx:id="tagField" managed="false" promptText="Enter tag" styleClass="text-field" visible="false" />
+            <TextField fx:id="usernameField" managed="false" promptText="Enter username" styleClass="text-field" visible="false" />
+            <PasswordField fx:id="passwordField" managed="false" promptText="Enter password" styleClass="text-field" visible="false" />
 
-        <!-- Terminal checkbox -->
-        
-		<Button fx:id="connectButton" text="Connect" onAction="#handleLogin"/>
-        <Button text="Guest Access" onAction="#openGuestScreen"/>
-        <Button fx:id="exitButton" text="Exit" onAction="#handleExit" />
+            <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="connectButton" onAction="#handleLogin" styleClass="connect-button" text="Connect" />
+                <Button onAction="#openGuestScreen" styleClass="guest-button" text="Guest Access" />
+                <Button fx:id="exitButton" onAction="#handleExit" styleClass="exit-button" text="Exit" />
+            </HBox>
+
+        </VBox>
     </VBox>
 </AnchorPane>

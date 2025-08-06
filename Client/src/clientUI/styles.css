@@ -163,3 +163,126 @@
     -fx-scale-y: 1.03;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
 }
+
+.login-button {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 70px;
+    -fx-text-fill: white;
+    -fx-background-radius: 35; /* smoother corners */
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to right, #2196f3, #1e88e5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.login-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e88e5, #1565c0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.login-button:pressed {
+    -fx-background-color: #0d47a1;
+    -fx-translate-y: 2px;
+}
+
+/* Login Card Container */
+.login-card {
+    -fx-background-color: linear-gradient(to bottom right, #dbeafe, #90caf9);
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 4);
+}
+
+.combo-box {
+    -fx-font-size: 18px;           /* adjust to match your UI scale */
+    -fx-pref-width: 270px;         /* wider if month names get cut off */
+    -fx-pref-height: 50px;         /* taller for more balanced look */
+    -fx-background-radius: 20;     /* make corners less pointy */
+    -fx-border-width: 2px;
+}
+
+.combo-box .arrow-button {
+    -fx-background-radius: 20;
+}
+
+.connect-button {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 70px;
+    -fx-text-fill: white;
+    -fx-background-radius: 35;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to right, #2196f3, #1e88e5);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
+    -fx-transition: all 0.3s ease-in-out;
+}
+.connect-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e88e5, #1565c0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.connect-button:pressed {
+    -fx-background-color: #0d47a1;
+    -fx-translate-y: 2px;
+}
+
+.guest-button {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 70px;
+    -fx-text-fill: white;
+    -fx-background-radius: 35;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to right, #9e9e9e, #757575);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
+    -fx-transition: all 0.3s ease-in-out;
+}
+.guest-button:hover {
+    -fx-background-color: linear-gradient(to right, #757575, #616161);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.guest-button:pressed {
+    -fx-background-color: #424242;
+    -fx-translate-y: 2px;
+}
+
+.exit-button {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 70px;
+    -fx-text-fill: white;
+    -fx-background-radius: 35;
+    -fx-background-insets: 0;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to right, #ef4444, #d32f2f);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0.4, 0, 6);
+    -fx-transition: all 0.3s ease-in-out;
+}
+.exit-button:hover {
+    -fx-background-color: linear-gradient(to right, #d32f2f, #b71c1c);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+.exit-button:pressed {
+    -fx-background-color: #b71c1c;
+    -fx-translate-y: 2px;
+}
+
+.check-box {
+    -fx-font-size: 20px;          /* Make text bigger */
+}
+
+.check-box .box {
+    -fx-scale-x: 1.5;             /* Enlarge the box itself */
+    -fx-scale-y: 1.5;
+}

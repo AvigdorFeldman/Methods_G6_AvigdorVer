@@ -74,10 +74,12 @@ public class LoginController {
         boolean isConsoleChecked = consoleCheckBox.isSelected();
 
         if (isConsoleChecked) {
+        	consoleCheckBox.setStyle("-fx-text-fill: green;");
             if (!loginMethodComboBox.getItems().contains("Tag")) {
                 loginMethodComboBox.getItems().add("Tag");
             }
         } else {
+        	consoleCheckBox.setStyle("-fx-text-fill: red;");
             if (loginMethodComboBox.getItems().contains("Tag")) {
                 loginMethodComboBox.getItems().remove("Tag");
                 if ("Tag".equals(loginMethodComboBox.getValue())) {
@@ -270,7 +272,7 @@ public class LoginController {
             try {
                 FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("login.fxml"));
                 Parent loginRoot = loginLoader.load();
-                stage.setScene(new Scene(loginRoot, 400, 300));
+                stage.setScene(new Scene(loginRoot, 800, 650));
                 stage.setTitle("Connect to Server");
                 ipField.setText(controller.ip);
             } catch (Exception ex) {

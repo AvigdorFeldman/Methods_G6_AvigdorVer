@@ -183,7 +183,7 @@ public abstract class Controller {
             
             Stage stage = new Stage();
             stage.setTitle("Login");
-            stage.setScene(new Scene(root, 400, 300));
+            stage.setScene(new Scene(root, 800, 650));
             stage.show();
             LoginController backC = loader.getController();
             backC.setIpField(ip);

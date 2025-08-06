@@ -22,9 +22,9 @@
          <children>
             <Label graphicTextGap="6.0" styleClass="text-field" text="Monthly Report:" />
             <Label styleClass="form-label" text="Month:" />
-            <ComboBox fx:id="yearComboBox" prefWidth="150.0" />
+            <ComboBox fx:id="monthComboBox" maxWidth="150.0" prefWidth="150.0" />
             <Label contentDisplay="CENTER" styleClass="form-label" text="Year:" />
-            <ComboBox fx:id="monthComboBox" prefWidth="150.0" />
+            <ComboBox fx:id="yearComboBox" maxWidth="130.0" prefWidth="150.0" />
             <Button fx:id="showPDF" mnemonicParsing="false" onAction="#handleMonthlyReport" styleClass="button-blue" text="Show PDF" />
          </children>
       </HBox>

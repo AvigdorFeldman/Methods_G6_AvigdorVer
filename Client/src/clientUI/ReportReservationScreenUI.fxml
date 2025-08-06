@@ -39,9 +39,9 @@
 
         <HBox alignment="CENTER" spacing="15.0">
         	<Label styleClass="form-label" text="Month:" />
-    		<ComboBox fx:id="monthComboBox" prefWidth="120" />
+    		<ComboBox fx:id="monthComboBox" maxWidth="130.0" prefWidth="120" />
     		<Label styleClass="form-label" text="Year:" />
-    		<ComboBox fx:id="yearComboBox" prefWidth="90" />
+    		<ComboBox fx:id="yearComboBox" maxWidth="130.0" prefWidth="90" />
             <Button fx:id="sortBySubscriberIdButton" styleClass="button-blue" text="Sort by Subscriber ID" />
             <Button fx:id="sortByDateButton" styleClass="button-blue" text="Sort by Date" />
             <Button fx:id="exportCsvButton" styleClass="button-blue" text="Create Report" />
