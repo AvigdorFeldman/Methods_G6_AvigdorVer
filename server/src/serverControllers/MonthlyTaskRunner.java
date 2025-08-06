@@ -1,8 +1,11 @@
 package serverControllers;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+
 import jdbc.DataBaseQuery;
 
 /**
@@ -15,7 +18,7 @@ import jdbc.DataBaseQuery;
  */
 public class MonthlyTaskRunner implements Runnable {
 	private DataBaseQuery con;
-	
+	private Boolean startUp = true;
 	/**
 	 * Constructor of the class
 	 * 
@@ -38,14 +41,20 @@ public class MonthlyTaskRunner implements Runnable {
         while (true) {
             try {
             	LocalDateTime now = LocalDateTime.now();
-				if (now.getDayOfMonth() == 1 && now.toLocalTime().isBefore(LocalTime.of(0, 59))) {
+            	// Calculate previous month and year
+                LocalDate previousMonthDate = now.minusMonths(1).toLocalDate();
+                Month reportMonth = previousMonthDate.getMonth();
+                int reportYear = previousMonthDate.getYear();
+                
+				if (now.getDayOfMonth() == 1 && now.toLocalTime().isBefore(LocalTime.of(0, 59))||startUp) {
                     File reportsDir = new File("reports");
     				if (!reportsDir.exists()) {
     					reportsDir.mkdirs(); 
     				}
-                    MonthlyReport report = new MonthlyReport(con,now.getYear(),now.getMonth());
-                    File monthlyReportPdf = new File(reportsDir, "MonthlyReport_" + now.getMonth()+"_"+now.getYear() + ".pdf");
+                    MonthlyReport report = new MonthlyReport(con,reportYear,reportMonth);
+                    File monthlyReportPdf = new File(reportsDir, "MonthlyReport_" + reportMonth+"_"+reportYear + ".pdf");
                     report.getPDF(monthlyReportPdf);
+                    startUp = false;
                     // Sleep for 1 hour to avoid multiple triggers on the same day
                     Thread.sleep(60 * 60 * 1000); // 1 hour
                 } else {

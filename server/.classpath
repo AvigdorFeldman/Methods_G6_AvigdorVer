@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="client/|main/resources/" kind="src" path="src"/>
 	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="reports"/>
 	<classpathentry exported="true" kind="lib" path="mysql-connector-java-8.0.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="jakarta.activation-2.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="jakarta.mail-2.0.1.jar"/>
