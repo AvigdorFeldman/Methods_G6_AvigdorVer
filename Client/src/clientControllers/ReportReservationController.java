@@ -2,13 +2,19 @@ package clientControllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Year;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
+import logic.Reservation;
 import logic.SendObject;
 
 /**
@@ -23,7 +29,7 @@ import logic.SendObject;
 public class ReportReservationController extends ViewReservationController {
 
 	@FXML
-	private LineChart<Number, Number> reservationsLineChart;
+	private BarChart<String, Number> reservationsBarChart;
 
 	@FXML
 	private Button exportCsvButton;
@@ -52,7 +58,7 @@ public class ReportReservationController extends ViewReservationController {
 					 File reportFile = new File("reports/" + defaultName);
 					if (reportFile != null) {
 						File imageFile = new File("reports/ReservationsChart_"+ selectedMonth + "_" + selectedYear + ".png");
-						Util.saveChartAsImage(reservationsLineChart, imageFile);
+						Util.saveChartAsImage(reservationsBarChart, imageFile);
 						Util.exportToCSV(reservationTable, reportFile);
 						Util.sendReportFileToServer(reportFile, client, "File to server");
 						Util.sendReportFileToServer(imageFile, client, "File to server");
@@ -81,7 +87,6 @@ public class ReportReservationController extends ViewReservationController {
 				try {
 					client.sendToServer(new SendObject<String>("Get Reservation Report", today));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			});
@@ -100,41 +105,79 @@ public class ReportReservationController extends ViewReservationController {
 	@Override
 	protected void filterReservations() {
 		super.filterReservations(); // Call base logic
-		updateLineChart(); // Add chart functionality
+		updateBarChart(); // Add chart functionality
 	}
 
 	
-    /**
-     * Updates the line chart to display daily reservation counts for the selected month and year.
-     */
-	private void updateLineChart() {
-		reservationsLineChart.getData().clear();
+	private void updateBarChart() {
+	    reservationsBarChart.getData().clear(); // Clear existing data
 
-		String selectedMonth = monthComboBox.getValue();
-		Integer selectedYear = yearComboBox.getValue();
+	    String selectedMonth = monthComboBox.getValue();
+	    Integer selectedYear = yearComboBox.getValue();
 
-		if (selectedMonth == null || "All".equals(selectedMonth) || selectedYear == null || selectedYear == 0) {
-			reservationsLineChart.setTitle("Select specific month and year to see daily reservation count");
-			return;
-		}
+	    if (selectedMonth == null || "All".equals(selectedMonth) || selectedYear == null || selectedYear == 0) {
+	        reservationsBarChart.setTitle("Select a specific month and year to see daily reservation counts");
+	        return;
+	    }
 
-		int monthIndex = months.indexOf(selectedMonth); // January=1
-		int daysInMonth = java.time.Month.of(monthIndex).length(Year.isLeap(selectedYear));
+	    int monthIndex = months.indexOf(selectedMonth); // January=1
+	    YearMonth yearMonth = YearMonth.of(selectedYear, monthIndex);
+	    int daysInMonth = yearMonth.lengthOfMonth();
 
-		int[] counts = new int[daysInMonth + 1]; // 1-based indexing
-		filteredReservations.stream()
-				.filter(res -> res.getDate().getMonthValue() == monthIndex && res.getDate().getYear() == selectedYear)
-				.forEach(res -> counts[res.getDate().getDayOfMonth()]++);
+	    // Maps to hold counts for each day
+	    Map<String, Integer> activeCounts = new LinkedHashMap<>();
+	    Map<String, Integer> canceledCounts = new LinkedHashMap<>();
 
-		XYChart.Series<Number, Number> series = new XYChart.Series<>();
-		series.setName("Reservations per Day");
+	    // Initialize maps with days of the month
+	    for (int i = 1; i <= daysInMonth; i++) {
+	        String day = String.valueOf(i);
+	        activeCounts.put(day, 0);
+	        canceledCounts.put(day, 0);
+	    }
 
-		for (int day = 1; day <= daysInMonth; day++) {
-			series.getData().add(new XYChart.Data<>(day, counts[day]));
-		}
-		reservationsLineChart.getData().add(series);
-		reservationsLineChart.setTitle("Reservations in " + selectedMonth + " " + selectedYear);
-		
-		Platform.runLater(() -> reservationsLineChart.layout());
+	    if (filteredReservations != null) {
+	        for (Reservation reservation : filteredReservations) {
+	            LocalDate date = reservation.getDate();
+	            if (date.getYear() == selectedYear && date.getMonthValue() == monthIndex) {
+	                String day = String.valueOf(date.getDayOfMonth());
+	                if (reservation.getStartTime() == null) {
+	                    // Count as canceled if start time is null
+	                    canceledCounts.put(day, canceledCounts.get(day) + 1);
+	                } else if (reservation.getEndTime() != null) {
+	                    // Count as active if both start and end times are present
+	                    activeCounts.put(day, activeCounts.get(day) + 1);
+	                }
+	            }
+	        }
+	    }
+
+	    // Create Series for used and canceled reservations
+	    XYChart.Series<String, Number> usedSeries = new XYChart.Series<>();
+	    usedSeries.setName("Used Reservations");
+
+	    XYChart.Series<String, Number> canceledSeries = new XYChart.Series<>();
+	    canceledSeries.setName("Canceled Reservations");
+	    // Add data to the series
+	    for (int day = 1; day <= daysInMonth; day++) {
+	        String dayString = String.valueOf(day);
+	        int activeCount = activeCounts.get(dayString);
+	        int canceledCount = canceledCounts.get(dayString);
+	        usedSeries.getData().add(new XYChart.Data<>(dayString, activeCount));
+	        canceledSeries.getData().add(new XYChart.Data<>(dayString, canceledCount));
+	    }
+
+	    // Add both series to the chart
+	    reservationsBarChart.getData().add(usedSeries);
+	    reservationsBarChart.getData().add(canceledSeries);
+
+	    // Set chart title
+	    reservationsBarChart.setTitle("Reservations in " + selectedMonth + " " + selectedYear);
+
+	    // Ensure chart layout is updated on the JavaFX Application thread
+	    Platform.runLater(() -> reservationsBarChart.layout());
 	}
+
+
+
+
 }

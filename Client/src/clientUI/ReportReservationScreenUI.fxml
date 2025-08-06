@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -26,15 +27,14 @@
                 <TableColumn fx:id="colEndTime" prefWidth="120.0" text="End Time" />
             </columns>
         </TableView>
-        
-        <LineChart fx:id="reservationsLineChart" prefHeight="240.0" prefWidth="800.0">
-    		<xAxis>
-        		<NumberAxis label="Day of Month" />
-    		</xAxis>
-    		<yAxis>
-        		<NumberAxis label="Reservations" />
-    		</yAxis>
-		</LineChart>
+      <BarChart fx:id="reservationsBarChart" animated="false" barGap="0.0" title="Reservations Per Day">
+        <xAxis>
+          <CategoryAxis label="Days" tickLabelGap="0.0" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="Number of reservations" side="LEFT" />
+        </yAxis>
+      </BarChart>
         
 
         <HBox alignment="CENTER" spacing="15.0">
