@@ -34,8 +34,12 @@ public class BParkClient extends ObservableClient {
 	 */
 	@Override
 	protected void handleMessageFromServer(Object msg) {
-		if (messageListener != null) {
-			messageListener.onMessage(msg);
+		try {
+			if (messageListener != null) {
+				messageListener.onMessage(msg);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 

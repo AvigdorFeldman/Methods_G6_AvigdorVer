@@ -18,9 +18,9 @@
 	    <Button fx:id="openSubscribersReportButton" onAction="#openSubscribersReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="👥 View Subscribers" />
 	            
 	    <Button fx:id="openReservationReportButton" onAction="#openReservationReport" prefHeight="50" prefWidth="300" style="-fx-font-size: 14px;" styleClass="menu-button" text="📋 View Reservations" />
+      <Label graphicTextGap="6.0" styleClass="form-label" text="Monthly Report" />
       <HBox alignment="CENTER" spacing="15.0">
          <children>
-            <Label graphicTextGap="6.0" styleClass="text-field" text="Monthly Report:" />
             <Label styleClass="form-label" text="Month:" />
             <ComboBox fx:id="monthComboBox" maxWidth="150.0" prefWidth="150.0" />
             <Label contentDisplay="CENTER" styleClass="form-label" text="Year:" />

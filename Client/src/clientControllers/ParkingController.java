@@ -71,7 +71,7 @@ public class ParkingController {
 			} else if (action.equals("Session found")) {
 				if (obj instanceof Parkingsession)
 					timeExtendSession = (Parkingsession) obj;
-			}else if (action.contains("reservation")) {
+			}else if (action.contains("reservation")&&obj instanceof Reservation) {
 				reservation = (Reservation)obj;
 			}
 			responseReceived = true;
