@@ -116,7 +116,7 @@ public class AdminScreenController extends Controller{
 			SendObject<String> request = new SendObject<>("Get", "MonthlyReport_"+monthComboBox.getValue()+"_"+yearComboBox.getValue());
 			client.sendToServerSafely(request);
 			try{
-				Util.waitForServerResponse(5000, ()->response);
+				Util.waitForServerResponse(10000, ()->response);
 				File file = new File("reports/","MonthlyReport_"+monthComboBox.getValue()+"_"+yearComboBox.getValue()+".pdf");
 				if(!file.exists()) {
 					throw new Exception();
