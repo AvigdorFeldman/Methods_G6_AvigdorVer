@@ -14,6 +14,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.image.WritableImage;
 
@@ -134,7 +135,7 @@ public class MonthlyReport {
 					new Paragraph("Generated on: " + new Date()).setFontSize(10).setTextAlignment(TextAlignment.RIGHT));
 			// BarCharts creations
 			Image parkingsessionBarChart = createSessionsPerDayChartFX(parkingsessionList);
-			Image reservationBarChart = createReservationsPerDayChartFX(reservationList);
+			Image reservationBarChart = createReservationsPieChartFX(reservationList);
 			Image parkingSpotsParkingSessionChart = createParkingSessionsPerSpotChart(parkingsessionList,
 					parkingSpotList);
 			Image lateSubscriberChart = createLateSubscribersChartFX(parkingsessionList, subscriberList);
@@ -197,6 +198,7 @@ public class MonthlyReport {
 		// Exclude the "history" field if the type is subscriber
 		if (firstItem instanceof subscriber) {
 			allFields.removeIf(field -> field.getName().equalsIgnoreCase("history"));
+			allFields.removeIf(field -> field.getName().equalsIgnoreCase("loggedIn"));
 		}
 
 		List<String> fieldNames = allFields.stream().map(Field::getName).collect(Collectors.toList());
@@ -303,70 +305,48 @@ public class MonthlyReport {
 	}
 
 	/**
-     * Renders a stacked bar chart using JavaFX from multiple series of data.
-     *
-     * @param title       Chart title.
-     * @param xAxisLabel  Label for the X-axis.
-     * @param yAxisLabel  Label for the Y-axis.
-     * @param seriesData  Nested map representing data per series and category.
-     * @param chartWidth  Width of the chart.
-     * @param chartHeight Height of the chart.
-     * @return Image object to embed in a PDF.
-     * @throws Exception If JavaFX rendering fails.
+	 * Renders a pie chart using JavaFX based on a given data map.
+	 *
+	 * @param title  Chart title.
+	 * @param data   Data to plot.
+	 * @param width  Width of the chart.
+	 * @param height Height of the chart.
+	 * @return Image object to embed in a PDF.
+	 * @throws Exception If JavaFX rendering fails.
 	 */
 	@SuppressWarnings("unused")
-	private Image renderStackedBarChart(String title, String xAxisLabel, String yAxisLabel,
-			Map<String, Map<String, Integer>> seriesData, int chartWidth, int chartHeight) throws Exception {
-		final CountDownLatch latch = new CountDownLatch(1);
-		final BufferedImage[] chartImage = new BufferedImage[1];
+	private Image renderPieChart(String title, Map<String, Integer> data, int width, int height) throws Exception {
+	    final CountDownLatch latch = new CountDownLatch(1);
+	    final BufferedImage[] chartImage = new BufferedImage[1];
 
-		Platform.runLater(() -> {
-			try {
-				CategoryAxis xAxis = new CategoryAxis();
-				xAxis.setLabel(xAxisLabel);
+	    Platform.runLater(() -> {
+	        try {
+	            PieChart pieChart = new PieChart();
+	            pieChart.setTitle(title);
 
-				int max = seriesData.values().stream().flatMap(m -> m.values().stream()).max(Integer::compareTo)
-						.orElse(1);
+	            for (Map.Entry<String, Integer> entry : data.entrySet()) {
+	                PieChart.Data slice = new PieChart.Data(entry.getKey(), entry.getValue());
+	                pieChart.getData().add(slice);
+	            }
 
-				NumberAxis yAxis = new NumberAxis(0, max + 1, 1);
-				yAxis.setLabel(yAxisLabel);
-				yAxis.setTickUnit(1);
-				yAxis.setMinorTickCount(0);
+	            Scene scene = new Scene(pieChart, width, height);
+	            WritableImage fxImage = pieChart.snapshot(new SnapshotParameters(), null);
+	            chartImage[0] = javafx.embed.swing.SwingFXUtils.fromFXImage(fxImage, null);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            latch.countDown();
+	        }
+	    });
 
-				BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-				barChart.setTitle(title);
-				barChart.setCategoryGap(10);
-				barChart.setBarGap(0);
-				barChart.setPrefSize(chartWidth, chartHeight);
-
-				for (Map.Entry<String, Map<String, Integer>> seriesEntry : seriesData.entrySet()) {
-					XYChart.Series<String, Number> series = new XYChart.Series<>();
-					series.setName(seriesEntry.getKey());
-
-					for (Map.Entry<String, Integer> entry : seriesEntry.getValue().entrySet()) {
-						series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-					}
-
-					barChart.getData().add(series);
-				}
-
-				Scene scene = new Scene(barChart);
-				WritableImage fxImage = barChart.snapshot(new SnapshotParameters(), null);
-				chartImage[0] = javafx.embed.swing.SwingFXUtils.fromFXImage(fxImage, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				latch.countDown();
-			}
-		});
-
-		latch.await();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(chartImage[0], "png", baos);
-		byte[] imageBytes = baos.toByteArray();
-		ImageData imageData = ImageDataFactory.create(imageBytes);
-		return new Image(imageData).setWidth(UnitValue.createPercentValue(100));
+	    latch.await();
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    ImageIO.write(chartImage[0], "png", baos);
+	    byte[] imageBytes = baos.toByteArray();
+	    ImageData imageData = ImageDataFactory.create(imageBytes);
+	    return new Image(imageData).setWidth(UnitValue.createPercentValue(100));
 	}
+
 
 	/**
      * Creates a bar chart showing how many parking sessions occurred each day of the month.
@@ -397,39 +377,26 @@ public class MonthlyReport {
 	}
 
 	/**
-     * Creates a stacked bar chart of daily reservations (used vs canceled) for the month.
-     *
-     * @param reservations List of reservations.
-     * @return Image of the chart.
-     * @throws Exception If chart rendering fails.
+	 * Creates a pie chart showing the distribution of reservations (used vs canceled) for the month.
+	 *
+	 * @param reservations List of reservations.
+	 * @return Image of the chart.
+	 * @throws Exception If chart rendering fails.
 	 */
-	private Image createReservationsPerDayChartFX(List<Reservation> reservations) throws Exception {
-		YearMonth yearMonth = YearMonth.of(year, month.getValue());
-		int daysInMonth = yearMonth.lengthOfMonth();
+	private Image createReservationsPieChartFX(List<Reservation> reservations) throws Exception {
+	    Map<String, Integer> counts = new LinkedHashMap<>();
+	    counts.put("Used", 0);
+	    counts.put("Canceled", 0);
 
-		Map<String, Integer> activeCounts = new LinkedHashMap<>();
-		Map<String, Integer> canceledCounts = new LinkedHashMap<>();
+	    for (Reservation reservation : reservations) {
+	        if (reservation.getStartTime() == null) {
+	            counts.put("Canceled", counts.get("Canceled") + 1);
+	        } else {
+	            counts.put("Used", counts.get("Used") + 1);
+	        }
+	    }
 
-		for (int i = 1; i <= daysInMonth; i++) {
-			String day = String.valueOf(i);
-			activeCounts.put(day, 0);
-			canceledCounts.put(day, 0);
-		}
-
-		for (Reservation reservation : reservations) {
-			LocalDate date = reservation.getDate();
-			if (date.getYear() == year && date.getMonthValue() == month.getValue()) {
-				String day = String.valueOf(date.getDayOfMonth());
-				if (reservation.getStartTime() == null) {
-					canceledCounts.put(day, canceledCounts.get(day) + 1);
-				} else {
-					activeCounts.put(day, activeCounts.get(day) + 1);
-				}
-			}
-		}
-
-		return renderStackedBarChart("Reservations Per Day - " + month + " " + year, "Day", "Reservations",
-				Map.of("Used", activeCounts, "Canceled", canceledCounts), 800, 600);
+	    return renderPieChart("Reservations Distribution - " + month + " " + year, counts, 800, 600);
 	}
 
 	/**
@@ -495,4 +462,7 @@ public class MonthlyReport {
 		return renderBarChart("Parking Sessions per Spot - " + month + " " + year, "Parking Spot", "Sessions",
 				displayData, 800, 400);
 	}
+
 }
+
+
