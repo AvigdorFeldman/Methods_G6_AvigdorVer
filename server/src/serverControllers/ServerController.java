@@ -1,5 +1,6 @@
 package serverControllers;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -7,12 +8,12 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import ocsf.server.BparkServer;
 
 /**
  * The class implements the ServerController, handles GUI
@@ -35,8 +36,16 @@ public class ServerController {
 
 	private ObservableList<List<String>> clientData; // Returned list from the server of the clients
 
+	private BparkServer server = new BparkServer(this);;
+	
 	@FXML
 	public void initialize() {
+		try {
+			server.listen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// This method is called once the FXML has been loaded and initialized
 		setServerIP(); // Set the server IP when the scene is initialized
 
@@ -58,12 +67,14 @@ public class ServerController {
 	}
 
 	/**
-	 * @param e
 	 * @throws Exception
 	 * Closes the server application when button is pressed
 	 */
-	public void getExitButton(ActionEvent e) throws Exception {
+	public void getExitButton() throws Exception {
 		System.out.println("Closing application...");
+		server.sendToAllClients(new Exception("Server Shutdown"));
+		Thread.sleep(500);
+		server.close();
 		System.gc();
 		System.exit(0);
 	}

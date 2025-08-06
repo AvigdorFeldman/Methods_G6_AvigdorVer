@@ -112,9 +112,28 @@ public class BparkServer extends AbstractServer {
 		cancelOldReservationThread.start();
 	}
 
+	/**
+	 * Logs out all logged in users
+	 */
+	@SuppressWarnings("unchecked")
 	public void serverStopped() {
 		// Honestly never used it...
 		System.out.println("Server has stopped listening for connections.");
+		try {
+			SendObject<?> resultServerStop = SendObjectHandler.sendObjectHandle(new SendObject<String>("Get","all subscribers"), con);
+			if(resultServerStop.getObj() instanceof List<?>) {
+				List<subscriber> subscriberList = (List<subscriber>)resultServerStop.getObj();
+				for (subscriber subscriber : subscriberList) {
+					if(subscriber.getLoggedIn()) {
+						subscriber.setLoggedIn(false);
+						SendObjectHandler.sendObjectHandle(new SendObject<subscriber>("Update",subscriber), con);
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

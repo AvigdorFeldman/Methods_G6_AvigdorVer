@@ -2,6 +2,9 @@ package ocsf.client;
 
 import java.io.IOException;
 
+import clientControllers.ShowAlert;
+import javafx.application.Platform;
+import javafx.scene.control.Alert.AlertType;
 import logic.*;
 
 /**
@@ -35,11 +38,19 @@ public class BParkClient extends ObservableClient {
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		try {
-			if (messageListener != null) {
+			if(msg instanceof Exception) {
+				Exception e = (Exception)msg;
+				if(e.getMessage().equals("Server Shutdown"))
+					Platform.runLater(() -> {
+						ShowAlert.showAlert("Server Shutdown", "Close your app\nWait for administrator to inform you that the server is up again", AlertType.ERROR);
+					});
+			}
+			else if (messageListener != null) {
 				messageListener.onMessage(msg);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
+			
 		}
 	}
 

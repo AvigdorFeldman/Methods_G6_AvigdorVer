@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import ocsf.server.BparkServer;
 import serverControllers.ServerController;
 
 /**
@@ -48,16 +47,16 @@ public class ServerUI extends Application {
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent event) {
-					System.out.println("Closing application...");
-					System.gc();
-					System.exit(0);
+					try {
+						serverController.getExitButton();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 			primaryStage.show();
 
-			// Start the BparkServer
-			BparkServer server = new BparkServer(serverController);
-			server.listen();
 
 		} catch (IOException e) {
 			e.printStackTrace();
