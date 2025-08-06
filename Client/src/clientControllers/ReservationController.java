@@ -210,7 +210,7 @@ public class ReservationController extends Controller{
         
         // Build a simple payload like "2025-06-10 09:00 11:00"
 
-        Reservation reservation = new Reservation(0, sub.getId(), datePicker.getValue(),
+        Reservation reservation = new Reservation(sub.getId(), 0, datePicker.getValue(),
                 startTimeField.getText().trim(), endTimeField.getText().trim(),0);
         String payload = String.format("Create Reservation: %s %s %s", datePicker.getValue(),
                 startTimeField.getText().trim(), endTimeField.getText().trim());
@@ -305,8 +305,7 @@ public class ReservationController extends Controller{
 
         // Send delete reservation request to the server
         reservation.setStartTime(null);
-        Object reservationToSend[] = {reservation.getId(), reservation};
-        SendObject<Object[]> req = new SendObject<>("Update", reservationToSend);
+        SendObject<Reservation> req = new SendObject<>("Update", reservation);
         client.sendToServerSafely(req);
 
         getFutureReservationsFor();
@@ -328,10 +327,15 @@ public class ReservationController extends Controller{
         } else if (message instanceof SendObject<?>) {
             SendObject<?> sendObject = (SendObject<?>)message;
             if(sendObject.getObj() instanceof String) {
-            	if(((String)sendObject.getObj()).contains("Not")||((String)sendObject.getObjectMessage()).contains("Error"))
+            	if(((String)sendObject.getObj()).contains("Not")||((String)sendObject.getObjectMessage()).contains("No")||((String)sendObject.getObjectMessage()).contains("Error"))
             		Platform.runLater(() -> ShowAlert.showAlert("Failed", sendObject.getObjectMessage()+" "+sendObject.getObj(), AlertType.ERROR));
             	else {
-            		Platform.runLater(() -> ShowAlert.showSuccessAlert("Success", sendObject.getObjectMessage()+" "+sendObject.getObj()));
+            		Platform.runLater(() ->{
+            			if(sendObject.getObj().equals("Updated"))
+            				ShowAlert.showSuccessAlert("Success", "Reservation Deleted");
+            			else
+            				ShowAlert.showSuccessAlert("Success", sendObject.getObjectMessage()+" "+sendObject.getObj());
+            			});
             		clearForm();
             		if(!reservationIdField.getText().trim().isEmpty()) {
             			reservationIdField.clear();

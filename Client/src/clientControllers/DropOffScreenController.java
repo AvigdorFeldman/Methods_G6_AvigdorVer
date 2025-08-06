@@ -66,8 +66,10 @@ public class DropOffScreenController extends Controller {
 				codeWarningLabel.setText("Numeric value up to 6 digits");
 				codeWarningLabel.setVisible(true);
 			}
-			else
+			else {
 				codeWarningLabel.setVisible(false);
+				codeWarningLabel.setText("");
+			}
 		});
 	}
 

@@ -37,8 +37,10 @@ public class PickUpScreenController extends Controller{
 				codeWarningLabel.setText("Numeric value must be 6 digits");
 				codeWarningLabel.setVisible(true);
 			}
-			else
+			else {
 				codeWarningLabel.setVisible(false);
+				codeWarningLabel.setText("");
+			}
 		});
 	}
 	

@@ -689,7 +689,6 @@ public class DataBaseQuery extends MySQLConnection {
             "VALUES (?, ?, ?, ?, ?, ?)";
 
         int generatedId = -1;
-
         try (PreparedStatement ps = getCon().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, reservation.getSubscriberId());
             ps.setInt(2, reservation.getSpot());

@@ -66,10 +66,7 @@ public class TimeExtensionScreenController extends Controller {
 	 */
 	private Parkingsession session;
 
-	/**
-	 * Flag indicating if a session was recently extended.
-	 */
-	private boolean extendedSessionId = false;
+	private int highlightedSessionId;
 
 	/**
 	 * Initializes the screen with client and subscriber, sets up message listener and loads session data.
@@ -154,7 +151,7 @@ public class TimeExtensionScreenController extends Controller {
 
 				if (index >= 0 && index < items.size()) {
 					Parkingsession rowItem = items.get(index);
-					if (session != null && extendedSessionId && rowItem.getSessionId() == session.getSessionId()) {
+					if (rowItem.getSessionId() == highlightedSessionId) {
 						setStyle("-fx-background-color: #ffe599;"); // light yellow
 					} else {
 						setStyle(""); // reset
@@ -207,10 +204,10 @@ public class TimeExtensionScreenController extends Controller {
 	@FXML
 	private void handleLoadSession() throws Exception {
 		try {
+			highlightedSessionId = 0;
 			String parkingsessionId = ParkingsessionIdField.getText();
 			int parkingId = Integer.parseInt(parkingsessionId);
 			session = parkingController.getSessionById(parkingId);
-			extendedSessionId = false;
 			currentParkingSessionTable.refresh();
 			for (Parkingsession ps : currentParkingSessionTable.getItems()) {
 				if (ps.getSessionId() == session.getSessionId()) {
@@ -220,6 +217,7 @@ public class TimeExtensionScreenController extends Controller {
 			}
 		} catch (NumberFormatException e) {
 			ShowFail("Enter a valid Parkingsession");
+			highlightedSessionId = 0;
 		}
 	}
 
@@ -230,25 +228,28 @@ public class TimeExtensionScreenController extends Controller {
 	 */
 	@FXML
 	private void handleExtendTime() {
-		extendedSessionId = false;
 		long hour = hourSpinner.getValue();
 		long minute = minuteSpinner.getValue();
 		// Input validation
-		if (hour > 3 && minute > 0 || hour == 0 && minute == 0 || session == null) {
-			if (hour > 3 && minute > 0)
-				ShowFail("Time Extension must be up to 4 hours!");
-			else if (hour == 0 && minute == 0) {
+		if (hour > 3 && minute > 0 || hour == 0 && minute == 0 || ParkingsessionIdField.getText().isEmpty() || session == null) {
+			highlightedSessionId = 0;
+			if (hour > 3 && minute > 0) {
+				ShowFail("Time Extension must be up to 4 hours!");			
+			}else if (hour == 0 && minute == 0) {
 				ShowFail("Time Extension must be at least a minute!");
 			} else {
 				ShowFail("Session was not found");
+				session = null;
 			}
+			currentParkingSessionTable.refresh();
 		} else {
 			Date timeBefore = session.getOutTime();
-			session.setOutTime(new Date(session.getOutTime().getTime() + hour * 60 * 60 * 1000 + minute * 60 * 1000));
+			if(session!=null)
+				session.setOutTime(new Date(session.getOutTime().getTime() + hour * 60 * 60 * 1000 + minute * 60 * 1000));
 			try {
 				if (!ShowAlert.showConfirmation("Confirm Time Extension",
 						"Are you sure you want to extend time by " + hour + " hour(s) and " + minute + " minute(s)?")) {
-					extendedSessionId = false;
+					highlightedSessionId = 0;
 					session = null;
 					currentParkingSessionTable.refresh();
 
@@ -256,20 +257,23 @@ public class TimeExtensionScreenController extends Controller {
 				}
 				
 				// Updates the session
-				parkingController.ExtendTime(session);	
+				if(session != null)
+					parkingController.ExtendTime(session);	
 				Platform.runLater(() -> {
 					displayActiveSessions();
 					try {
 						handleLoadSession();
 					} catch (Exception e) {
 						ShowFail("Time hasn't extended");
+						session = null;
+						highlightedSessionId = 0;
 					}
 					currentParkingSessionTable.refresh();
-					if(!session.getOutTime().equals(timeBefore)) {			
+					if(!session.getOutTime().equals(timeBefore)) {	
+						highlightedSessionId = session.getSessionId();
 						ShowAlert.showSuccessAlert("Extended Time Success", "Time was successfully extended");
-						extendedSessionId = true;
+						currentParkingSessionTable.refresh();
 						clearForm();
-						session = null;
 					}
 					else {
 						ShowFail("Time could not be extended, the spot is reserved at that time");
@@ -305,6 +309,6 @@ public class TimeExtensionScreenController extends Controller {
      * @param string the error message to display
 	 */
 	public void ShowFail(String string) {
-		ShowAlert.showAlert("Error", string, AlertType.ERROR);
+		ShowAlert.showAlert("Error", string, AlertType.ERROR);		
 	}
 }
